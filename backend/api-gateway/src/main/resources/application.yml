@@ -1,0 +1,21 @@
+server:
+  port: 8081
+
+spring:
+  cloud:
+    gateway:
+      default-filters:
+        - RemoveRequestHeader=X-Forwarded-Host
+      routes:
+        - id: auth
+          uri: http://auth-service:8080
+          predicates:
+            - Path=/auth/**
+
+
+
+
+
+jwt:
+  # default if not set via env
+  secret: "${JWT_SECRET:VerySecretKeyThatShouldBeLongEnoughChangeMe}"

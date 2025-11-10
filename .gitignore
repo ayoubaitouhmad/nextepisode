@@ -1,0 +1,43 @@
+# Maven
+**/target/
+**/pom.xml.tag
+**/pom.xml.releaseBackup
+**/pom.xml.versionsBackup
+**/pom.xml.next
+**/release.properties
+**/dependency-reduced-pom.xml
+
+# Gradle
+**/.gradle/
+**/build/
+
+# IDEs
+**/.idea/
+**/*.iml
+**/.vscode/
+**/.settings/
+**/.classpath
+**/.project
+**/*.sw?
+**/.DS_Store
+
+# Spring Boot
+**/application-local.yml
+**/application-local.properties
+
+# Environment files
+**/.env
+**/.env.local
+
+# Logs
+**/logs/
+**/*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Node (for future Angular app)
+**/node_modules/
+**/dist/
+**/.angular/

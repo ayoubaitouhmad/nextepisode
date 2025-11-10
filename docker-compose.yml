@@ -1,0 +1,53 @@
+
+services:
+  # 1. AUTH SERVICE (Your Spring Boot Application)
+  auth-service:
+    container_name: auth-service
+    build:
+      context: ./backend/auth-service
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./backend/auth-service:/app # Mounts source code for live-reload
+      - ~/.m2:/root/.m2    # Speeds up builds by caching dependencies
+    environment:
+      - SPRING_DEVTOOLS_RESTART_ENABLED=true
+      - SPRING_DEVTOOLS_LIVERELOAD_ENABLED=true
+      - JWT_SECRET=VerySecretKeyThatShouldBeLongEnoughChangeMe
+      # Link environment variables for Spring Boot to connect to the DB
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/authdb
+      - SPRING_DATASOURCE_USERNAME=authdb
+      - SPRING_DATASOURCE_PASSWORD=authdb
+    depends_on:
+      - postgres # Ensures postgres starts before auth-service
+
+  # 2. POSTGRES DATABASE SERVICE
+  postgres:
+    image: postgres:15-alpine # Use a lightweight image
+    environment:
+      - POSTGRES_DB=authdb # Must match the database name in SPRING_DATASOURCE_URL
+      - POSTGRES_USER=authdb
+      - POSTGRES_PASSWORD=authdb
+    ports:
+      - "5432:5432" # Optional: Map port to host for direct access/tools
+    volumes:
+      - postgres_data:/var/lib/postgresql/data # Persist data across container restarts
+
+  api-gateway:
+    container_name: api-gateway
+    build:
+      context: ./backend/api-gateway
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    environment:
+      - JWT_SECRET=VerySecretKeyThatShouldBeLongEnoughChangeMe
+    volumes:
+      - ./backend/api-gateway:/app   # hot reload source code
+    depends_on:
+      - auth-service
+
+# 3. Define the volume for persistent data storage
+volumes:
+  postgres_data:
