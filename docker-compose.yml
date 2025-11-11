@@ -22,6 +22,28 @@ services:
     depends_on:
       - postgres # Ensures postgres starts before auth-service
 
+  tmdb-service:
+    container_name: tmdb-service
+    build:
+      context: ./backend/tmdb-service
+      dockerfile: Dockerfile
+    ports:
+      - "8083:8083"
+    volumes:
+      - ./backend/tmdb-service:/app
+      - ~/.m2:/root/.m2
+    environment:
+      - SPRING_DEVTOOLS_RESTART_ENABLED=true
+      - SPRING_DEVTOOLS_LIVERELOAD_ENABLED=true
+      - JWT_SECRET=VerySecretKeyThatShouldBeLongEnoughChangeMe
+      # Link environment variables for Spring Boot to connect to the DB
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/tmdb-service
+      - SPRING_DATASOURCE_USERNAME=tmdb-service
+      - SPRING_DATASOURCE_PASSWORD=tmdb-service
+    depends_on:
+      - postgres
+
+
   # 2. POSTGRES DATABASE SERVICE
   postgres:
     image: postgres:15-alpine # Use a lightweight image
