@@ -1,4 +1,4 @@
-package com.nextepisode.tmdb_service.dto;
+package com.nextepisode.tmdb_service.dto.movie;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;

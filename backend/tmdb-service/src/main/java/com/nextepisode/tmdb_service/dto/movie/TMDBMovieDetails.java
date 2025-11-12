@@ -1,4 +1,4 @@
-package com.nextepisode.tmdb_service.dto;
+package com.nextepisode.tmdb_service.dto.movie;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
@@ -6,7 +6,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class TMDBMovie {
+public class TMDBMovieDetails {
 
     @JsonProperty("adult")
     private boolean adult;
