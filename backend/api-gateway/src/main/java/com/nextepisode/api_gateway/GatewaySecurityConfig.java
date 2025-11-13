@@ -18,7 +18,7 @@ public class GatewaySecurityConfig {
                 .authorizeExchange(exchanges -> exchanges
                         .pathMatchers("/auth/**").permitAll()
                         .pathMatchers("/actuator/**").permitAll()
-                        .anyExchange().authenticated()
+                        .anyExchange().permitAll()
                 );
 
         return http.build();
