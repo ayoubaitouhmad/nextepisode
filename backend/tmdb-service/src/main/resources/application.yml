@@ -26,6 +26,7 @@ spring:
 # TMDB API Configuration
 tmdb:
   api:
+    token: "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI4MDgxNTY1ZmE5MGMwMzBkYWNhZmQ4YmM3MjQwODg0ZiIsIm5iZiI6MTY3NjY2NDQ4Ny4yOTYsInN1YiI6IjYzZWZkZWE3Y2FhY2EyMDBhMTlhNjU1NyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.5Lbprj-n6HfFkNN6euM9luzi9DUYuafyPJTP3Wy-xgw"
     key: ${TMDB_API_KEY:8081565fa90c030dacafd8bc7240884f}
     base-url: https://api.themoviedb.org/3
     image-base-url: https://image.tmdb.org/t/p
@@ -41,7 +42,9 @@ jwt:
 logging:
   level:
     com.nextepisode.tmdbservice: DEBUG
-    org.springframework.web: INFO
+    org.springframework.web: DEBUG
+    org.springframework.security: DEBUG
+    org.apache.coyote.http11: DEBUG
     org.hibernate.SQL: DEBUG
 
 # Actuator
@@ -49,7 +52,10 @@ management:
   endpoints:
     web:
       exposure:
-        include: health,info,metrics,mappings
+        include: health,info,metrics,mappings,httpexchanges
   endpoint:
     health:
       show-details: always
+  httpexchanges:
+    recording:
+      enabled: true
