@@ -1,28 +1,47 @@
 package com.nextepisode.tmdb_service.config;
 
+import org.springframework.beans.factory.annotation.Value;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.client.RestTemplate;
 
 @Configuration
 public class RestClientConfig {
 
+
+    @Value("${tmdb.api.key}")
+    private String TMDBApiKey;
+
+    @Value("${tmdb.api.token}")
+    private String TMDBApiToken;
+
+    @Value("${tmdb.api.base-url}")
+    private String TMDBBaseUrl;
+
+
+
+    private String authorizationToken() {;
+        return "Bearer " + TMDBApiToken;
+    }
+
+
+
+
+
+
+
     @Bean
-    public RestClient restTMDBMovieClient() {
+    public RestClient TMDBRestClient() {
         return RestClient.builder()
-                .baseUrl("https://api.themoviedb.org/3/movie")
-                .defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI4MDgxNTY1ZmE5MGMwMzBkYWNhZmQ4YmM3MjQwODg0ZiIsIm5iZiI6MTY3NjY2NDQ4Ny4yOTYsInN1YiI6IjYzZWZkZWE3Y2FhY2EyMDBhMTlhNjU1NyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.5Lbprj-n6HfFkNN6euM9luzi9DUYuafyPJTP3Wy-xgw")
+                .baseUrl(this.TMDBBaseUrl)
+                .defaultHeader(HttpHeaders.AUTHORIZATION, authorizationToken())
                 .build();
     }
 
-    @Bean
-    public RestClient restTMDBTvShowClient() {
-        return RestClient.builder()
-                .baseUrl("https://api.themoviedb.org/3/tv")
-                .defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI4MDgxNTY1ZmE5MGMwMzBkYWNhZmQ4YmM3MjQwODg0ZiIsIm5iZiI6MTY3NjY2NDQ4Ny4yOTYsInN1YiI6IjYzZWZkZWE3Y2FhY2EyMDBhMTlhNjU1NyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.5Lbprj-n6HfFkNN6euM9luzi9DUYuafyPJTP3Wy-xgw")
-                .build();
-    }
+
 }
 
 
