@@ -2,26 +2,26 @@ package com.nextepisode.tmdb_service.service.movie;
 
 import com.nextepisode.tmdb_service.dto.movie.TmdbMovieListResponse;
 import com.nextepisode.tmdb_service.dto.movie.filters.MovieDiscoverFilters;
+import com.nextepisode.tmdb_service.dto.movie.response.TMDBMovieGenres;
+
+import com.nextepisode.tmdb_service.service.BaseService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.util.UriBuilder;
 
 import java.net.URI;
-import java.util.Optional;
-import java.util.stream.Collectors;
+
 
 @Slf4j
 @Service
-public class TmdbMovieClientService {
-
-    private final RestClient TMDBMovieClient;
+public class TMDBMovieService  extends BaseService {
 
 
-    @Autowired
-    public TmdbMovieClientService(RestClient TMDBMovieClient) {
-        this.TMDBMovieClient = TMDBMovieClient;
+    public TMDBMovieService(RestClient TMDBClient) {
+        super(TMDBClient);
     }
 
     public TmdbMovieListResponse getPopularMovies(Integer page, String language) {
@@ -42,7 +42,7 @@ public class TmdbMovieClientService {
 
     public TmdbMovieListResponse fetchMovies(String path, Integer page, String language) {
         try {
-            return TMDBMovieClient.get().uri(
+            return TMDBClient.get().uri(
                             uriBuilder -> uriBuilder
                                     .path(path)
                                     .queryParam("page", validatePage(page))
@@ -66,9 +66,16 @@ public class TmdbMovieClientService {
     }
 
 
+
     public TmdbMovieListResponse getTrending(String timeWindow, String language) {
         try {
-            return TMDBMovieClient.get().uri(uriBuilder -> uriBuilder.path("/trending/movie/week").queryParam("time_window", timeWindow).queryParam("language", validateLanguage(language)).build()).retrieve().body(TmdbMovieListResponse.class);
+            return TMDBClient.get().uri(uriBuilder ->
+                            uriBuilder
+                                    .path("/trending/movie/week")
+                                    .queryParam("time_window", timeWindow)
+                                    .queryParam("language", validateLanguage(language))
+                                    .build())
+                    .retrieve().body(TmdbMovieListResponse.class);
 
         } catch (Exception e) {
             // Log error and handle appropriately
@@ -81,7 +88,7 @@ public class TmdbMovieClientService {
         log.info("Discovering movies filters - {}", filters.toString());
 
         try {
-            return TMDBMovieClient.get()
+            return TMDBClient.get()
                     .uri(uriBuilder -> buildDiscoverUri(uriBuilder, filters))
                     .retrieve()
                     .body(TmdbMovieListResponse.class);
@@ -129,6 +136,22 @@ public class TmdbMovieClientService {
         return uriBuilder.build();
     }
 
+    @Cacheable("movieGenres")
+    public TMDBMovieGenres getMovieGenres() {
+        try {
+            return TMDBClient.get()
+                    .uri(uriBuilder -> uriBuilder
+                            .path("/genre/movie/list")
+                            .queryParam("language", "en-US")
+                            .build()
+                    )
+                    .retrieve()
+                    .body(TMDBMovieGenres.class);
+        } catch (Exception e) {
+            log.error("Failed to discover movies", e);
+            throw new RuntimeException("Failed to discover movies", e);
+        }
+    }
 
 
 
