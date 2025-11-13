@@ -12,6 +12,10 @@ spring:
           predicates:
             - Path=/auth/**
 
+        - id: tmdb
+          uri: http://tmdb-service:8083
+          predicates:
+            - Path=/api/v1/tmdb/**
 
 
 
