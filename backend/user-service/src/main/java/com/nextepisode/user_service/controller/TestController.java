@@ -1,12 +1,11 @@
-package com.example.user_service.controller;
+package com.nextepisode.user_service.controller;
 
-import com.example.user_service.entity.User;
-import com.example.user_service.service.UserService;
+import com.nextepisode.user_service.entity.User;
+import com.nextepisode.user_service.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 

@@ -1,4 +1,4 @@
-package com.example.user_service.service;
+package com.nextepisode.user_service.service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

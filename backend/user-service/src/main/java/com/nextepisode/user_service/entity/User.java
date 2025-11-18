@@ -1,4 +1,4 @@
-package com.example.user_service.entity;
+package com.nextepisode.user_service.entity;
 
 
 
