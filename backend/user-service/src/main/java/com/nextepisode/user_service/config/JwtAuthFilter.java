@@ -1,6 +1,6 @@
-package com.example.user_service.config;
+package com.nextepisode.user_service.config;
 
-import com.example.user_service.service.JwtService;
+import com.nextepisode.user_service.service.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

@@ -1,7 +1,7 @@
-package com.example.user_service.service;
+package com.nextepisode.user_service.service;
 
-import com.example.user_service.entity.User;
-import com.example.user_service.repo.UserRepository;
+import com.nextepisode.user_service.entity.User;
+import com.nextepisode.user_service.repo.UserRepository;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
