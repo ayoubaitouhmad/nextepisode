@@ -1,4 +1,4 @@
-package com.example.testservice.entity;
+package com.example.user_service.entity;
 
 
 

@@ -1,6 +1,6 @@
-package com.example.testservice.config;
+package com.example.user_service.config;
 
-import com.example.testservice.service.JwtService;
+import com.example.user_service.service.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
