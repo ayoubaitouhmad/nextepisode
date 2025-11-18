@@ -1,4 +1,4 @@
-package com.example.testservice.config;
+package com.example.user_service.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
