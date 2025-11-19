@@ -6,6 +6,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,6 +16,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 
 import java.io.IOException;
 
+@Slf4j
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
@@ -28,16 +30,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         String path = request.getRequestURI();
+        log.debug("JWT Filter - Processing request: {}", path);
 
-        // On ne filtre pas /auth/**
-        if (path.startsWith("/auth")) {
+        // Skip JWT validation for auth endpoints (login, register)
+        // Using startsWith since servlet path is /api/v1/auth
+
+        if(path.equals("/login") || path.equals("/register") || path.equals("/actuator/**")) {
+            log.debug("Skipping JWT validation for auth endpoint: {}", path);
             filterChain.doFilter(request, response);
             return;
         }
 
+
+        // Extract JWT token from Authorization header
         String header = request.getHeader("Authorization");
         if (header == null || !header.startsWith("Bearer ")) {
-            // Pas de token -> on laisse la sécurité décider (401/403 si endpoint protégé)
+            log.debug("No Bearer token found for path: {}", path);
             filterChain.doFilter(request, response);
             return;
         }
@@ -47,19 +55,21 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         try {
             username = jwtService.extractUsername(token);
+            log.debug("Extracted username from token: {}", username);
         } catch (Exception e) {
-            // 🔴 Token invalide -> on renvoie NOUS-MÊME un JSON 401
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401
+            log.error("Failed to extract username from token: {}", e.getMessage());
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.setContentType("application/json");
             response.getWriter().write("{\"message\":\"Invalid or expired token\"}");
-            return; // IMPORTANT : on ne continue PAS la chaîne de filtres
+            return;
         }
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-
             try {
+                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+
                 if (jwtService.isTokenValid(token, userDetails.getUsername())) {
+                    log.debug("Token is valid for user: {}", username);
                     UsernamePasswordAuthenticationToken authToken =
                             new UsernamePasswordAuthenticationToken(
                                     userDetails,
@@ -68,9 +78,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                             );
                     authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authToken);
+                    log.debug("Authentication set for user: {}", username);
+                } else {
+                    log.warn("Token validation failed for user: {}", username);
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    response.setContentType("application/json");
+                    response.getWriter().write("{\"message\":\"Invalid or expired token\"}");
+                    return;
                 }
-            } catch (Exception ignored) {
-                // Si validation échoue ici, on peut faire pareil que plus haut
+            } catch (Exception e) {
+                log.error("Error during token validation: {}", e.getMessage());
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 response.setContentType("application/json");
                 response.getWriter().write("{\"message\":\"Invalid or expired token\"}");

@@ -3,12 +3,12 @@ server:
 
 spring:
   application:
-    name: user-service
+    name: auth-service
 
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/userdb}
-    username: ${SPRING_DATASOURCE_USERNAME:userdbuser}
-    password: ${SPRING_DATASOURCE_PASSWORD:userdbpass}
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/authdb}
+    username: ${SPRING_DATASOURCE_USERNAME:authdbuser}
+    password: ${SPRING_DATASOURCE_PASSWORD:authdbpass}
     driver-class-name: org.postgresql.Driver
 
   jpa:
@@ -22,7 +22,7 @@ spring:
 
   mvc:
     servlet:
-      path: /api/v1/user
+      path: /api/v1/auth
 
 security:
   jwt:
