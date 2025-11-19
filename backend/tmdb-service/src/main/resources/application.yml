@@ -1,14 +1,14 @@
 server:
-  port: 8083
+  port: ${SERVER_PORT:8080}
 
 spring:
   application:
     name: tmdb-service
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/test
-    username: root
-    password: root
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/tmdbdb}
+    username: ${SPRING_DATASOURCE_USERNAME:tmdbdbuser}
+    password: ${SPRING_DATASOURCE_PASSWORD:tmdbdbpass}
     driver-class-name: org.postgresql.Driver
 
   jpa:
@@ -19,11 +19,11 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
+
   mvc:
     servlet:
       path: /api/v1/tmdb
 
-# TMDB API Configuration
 tmdb:
   api:
     token: "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI4MDgxNTY1ZmE5MGMwMzBkYWNhZmQ4YmM3MjQwODg0ZiIsIm5iZiI6MTY3NjY2NDQ4Ny4yOTYsInN1YiI6IjYzZWZkZWE3Y2FhY2EyMDBhMTlhNjU1NyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.5Lbprj-n6HfFkNN6euM9luzi9DUYuafyPJTP3Wy-xgw"
@@ -34,28 +34,17 @@ tmdb:
   cache:
     ttl-days: 7
 
-# JWT Configuration
-jwt:
-  secret: ${JWT_SECRET:VerySecretKeyThatShouldBeLongEnoughChangeMe}
 
-# Logging
+
+security:
+  jwt:
+    secret: ${JWT_SECRET:VerySecretKeyThatShouldBeLongEnoughChangeMe}
+    expiration-ms: ${JWT_EXPIRATION_MS:3600000}
+
+
+
 logging:
   level:
-    com.nextepisode.tmdbservice: DEBUG
+    com.nextepisode: DEBUG
     org.springframework.web: DEBUG
     org.springframework.security: DEBUG
-    org.apache.coyote.http11: DEBUG
-    org.hibernate.SQL: DEBUG
-
-# Actuator
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health,info,metrics,mappings,httpexchanges
-  endpoint:
-    health:
-      show-details: always
-  httpexchanges:
-    recording:
-      enabled: true
