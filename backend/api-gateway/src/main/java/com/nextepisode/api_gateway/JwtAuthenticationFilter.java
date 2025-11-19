@@ -18,7 +18,7 @@ import java.security.Key;
 @Component
 public class JwtAuthenticationFilter implements WebFilter {
 
-    @Value("${jwt.secret}")
+    @Value("${security.jwt.secret}")
     private String secret;
 
     private Key getSigningKey() {
