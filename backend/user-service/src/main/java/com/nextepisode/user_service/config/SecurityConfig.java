@@ -25,7 +25,8 @@ public class SecurityConfig {
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/actuator/**").permitAll() // TODO : change it after testing
-                        .anyRequest().permitAll()
+                        .requestMatchers("/v3/**", "/swagger-ui/**").permitAll() // TODO : change it after testing
+                        .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 

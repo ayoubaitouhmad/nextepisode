@@ -37,15 +37,15 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class User {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Id @Column(unique = true, nullable = false)
+    private String username;
 
     private String firstName;
     private String lastName;
 
     @Column(unique = true, nullable = false)
     private String email;
-    private String password;
+
 
     private String avatar;
     private String role = "USER";
