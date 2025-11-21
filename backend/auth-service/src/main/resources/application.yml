@@ -4,6 +4,13 @@ server:
 spring:
   application:
     name: auth-service
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: true
+      poll-interval: 2s
+      quiet-period: 1s
 
   datasource:
     url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/authdb}
@@ -34,3 +41,4 @@ logging:
     com.nextepisode: DEBUG
     org.springframework.web: DEBUG
     org.springframework.security: DEBUG
+
