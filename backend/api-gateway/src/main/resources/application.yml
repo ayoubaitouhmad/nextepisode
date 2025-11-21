@@ -17,6 +17,25 @@ spring:
     gateway:
       default-filters:
         - RemoveRequestHeader=X-Forwarded-Host
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins:
+              - "http://localhost:4200"   # your frontend URL
+              - "http://127.0.0.1:4200"
+
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowedHeaders:
+              - "*"
+            exposedHeaders:
+              - "Authorization"
+            allowCredentials: true
+
       routes:
         - id: auth
           uri: http://auth-service:8080
