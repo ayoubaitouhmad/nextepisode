@@ -48,6 +48,26 @@ public enum ErrorCode {
             "Database operation failed",
             HttpStatus.INTERNAL_SERVER_ERROR
     ),
+    VALIDATION_FAILED(
+            "VAL_001",
+            "Input validation failed",
+            HttpStatus.BAD_REQUEST
+    ),
+    INVALID_EMAIL(
+            "VAL_002",
+            "Email must be a valid email address",
+            HttpStatus.BAD_REQUEST
+    ),
+    FIELD_REQUIRED(
+            "VAL_003",
+            "Required field is missing: {0}",
+            HttpStatus.BAD_REQUEST
+    ),
+    INVALID_INPUT(
+            "VAL_004",
+            "Invalid input: {0}",
+            HttpStatus.BAD_REQUEST
+    ),
 
     // General errors (5xx)
     INTERNAL_ERROR(
