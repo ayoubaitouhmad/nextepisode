@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --scrollbar-width: 6px;
+  --scrollbar-height: 8px;
+}
+
+html {
+  @apply h-full bg-neutral-900 text-white;
+}
+
+body {
+  @apply h-full font-sans;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  height: var(--scrollbar-height);
+  width: var(--scrollbar-width);
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-neutral-600 rounded;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-neutral-500;
+}

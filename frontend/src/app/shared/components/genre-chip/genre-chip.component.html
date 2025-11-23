@@ -1,0 +1,9 @@
+<button
+  (click)="onClick()"
+  [class.bg-amber-600]="selected"
+  [class.hover:bg-amber-500]="selected"
+  [class.bg-neutral-800]="!selected"
+  [class.hover:bg-neutral-700]="!selected"
+  class="px-3 py-1 rounded-full text-sm transition-colors">
+  {{ genre }}
+</button>

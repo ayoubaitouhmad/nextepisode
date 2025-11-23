@@ -1,0 +1,36 @@
+<main class="mx-auto max-w-[1400px] px-4 py-8 text-slate-200">
+  <header class="mb-8">
+    <h1 class="text-2xl font-semibold">Découvrir</h1>
+    <p class="text-slate-400">Nouveautés, populaires, mieux notés et primés.</p>
+  </header>
+
+  <ng-container *ngIf="!loading; else loadingTpl">
+    <section *ngFor="let s of sections" class="mb-10">
+      <div class="mb-3 flex items-center justify-between">
+        <h2 class="text-xl font-semibold">{{ s.title }}</h2>
+        <div class="space-x-2">
+          <button (click)="scrollRow(s.id,-1)" class="rounded bg-slate-700/70 px-3 py-1 hover:bg-slate-600">‹</button>
+          <button (click)="scrollRow(s.id, 1)" class="rounded bg-slate-700/70 px-3 py-1 hover:bg-slate-600">›</button>
+        </div>
+      </div>
+
+      <div [attr.id]="s.id" class="flex gap-4 overflow-x-auto scroll-smooth snap-x pb-2">
+        <a (click)="onOpenDetails(item)" *ngFor="let item of s.items" class="snap-start w-[260px] shrink-0"
+           href="javascript:void(0)" [title]="titleOf(item)">
+          <div class="aspect-[16/9] overflow-hidden rounded-lg bg-slate-800">
+            <img [src]="img(item.backdrop_path || item.poster_path)" [alt]="titleOf(item)" loading="lazy"
+                 class="h-full w-full object-cover"/>
+          </div>
+          <div class="mt-2 flex items-center justify-between">
+            <span class="line-clamp-1 text-sm">{{ titleOf(item) }}</span>
+            <span class="text-xs text-amber-400">★ {{ item.vote_average | number:'1.1-1' }}</span>
+          </div>
+        </a>
+      </div>
+    </section>
+  </ng-container>
+
+  <ng-template #loadingTpl>
+    <p class="text-slate-400">Chargement des sections…</p>
+  </ng-template>
+</main>
