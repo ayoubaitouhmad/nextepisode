@@ -52,6 +52,7 @@ public class SecurityConfig {
                         // Allow login and register without authentication
                         .requestMatchers("/login").permitAll()
                         .requestMatchers("/register").permitAll()
+                        .requestMatchers("/test").permitAll()
                         .requestMatchers("/actuator/**").permitAll()
                         // All other requests need authentication
                         .anyRequest().authenticated()
