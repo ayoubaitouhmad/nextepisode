@@ -58,7 +58,6 @@ export class AuthService {
 
   /** Create a new user */
   register(req: SignupRequest): Observable<User> {
-    console.log(req)
     return this.http.post<User>(
       `http://localhost:8081/api/v1/auth/register`,
       req,
@@ -70,14 +69,12 @@ export class AuthService {
 
   /** Log in and get a JWT + user info */
   login(req: LoginRequest): Observable<LoginResponse> {
-    console.log(req)
     return this.http.post<LoginResponse>(
       `http://localhost:8081/api/v1/auth/login`,
       req,
       {headers: new HttpHeaders({'Content-Type': 'application/json'})}
     ).pipe(
       tap(res => {
-        console.log(res)
         localStorage.setItem('jwt', res.token);
         localStorage.setItem("user", JSON.stringify(res.user));
         this._loggedIn$.next(true);
