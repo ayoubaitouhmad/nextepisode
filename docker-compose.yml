@@ -118,6 +118,26 @@ services:
     networks:
       - app-network
 
+  angular-frontend-service:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev  # Use development Dockerfile with HMR
+    ports:
+      - "4200:4200"  # Angular dev server port
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules  # Prevent overwriting node_modules
+    environment:
+      - NODE_ENV=development
+      - CHOKIDAR_USEPOLLING=true  # Enable file watching in Docker
+    depends_on:
+      - api-gateway
+    restart: unless-stopped
+    networks:
+      - app-network
+    stdin_open: true
+    tty: true
+
 volumes:
   postgres_data:
 

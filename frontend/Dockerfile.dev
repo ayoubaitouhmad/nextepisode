@@ -1,0 +1,18 @@
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy application files
+COPY . .
+
+# Expose port for Angular dev server
+EXPOSE 4200
+
+# Start Angular dev server with HMR
+CMD ["npm", "run", "start", "--", "--host", "0.0.0.0", "--poll", "2000", "--hmr"]

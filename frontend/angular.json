@@ -51,12 +51,18 @@
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "host": "0.0.0.0",
+            "port": 4200,
+            "hmr": true
+          },
           "configurations": {
             "production": {
               "buildTarget": "next-episode:build:production"
             },
             "development": {
-              "buildTarget": "next-episode:build:development"
+              "buildTarget": "next-episode:build:development",
+              "hmr": true
             }
           },
           "defaultConfiguration": "development"
