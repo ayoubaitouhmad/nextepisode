@@ -112,7 +112,7 @@ import {AuthService, SignupRequest} from '../../../../core/services/auth-service
 
           <button
             type="submit"
-            [disabled]="registrationForm.invalid"
+            [disabled]="registrationForm.invalid || loading"
             [ngClass]="{
               'w-full bg-blue-600 text-white rounded px-4 py-2 hover:bg-blue-700 transition' : true,
               'cursor-not-allowed' : registrationForm.invalid
@@ -160,9 +160,9 @@ export class SignupComponent {
     }
 
     this.registrationForm = this.fb.group({
-      username: ['johndoe', [Validators.required, Validators.minLength(4), Validators.maxLength(20)]],
-      email: ['johndoe@johndoe.com', [Validators.required, Validators.email]],
-      password: ['johndoejohndoe', [Validators.required, Validators.minLength(8), Validators.maxLength(20)]],
+      username: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(20)]],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(20)]],
     });
 
 
