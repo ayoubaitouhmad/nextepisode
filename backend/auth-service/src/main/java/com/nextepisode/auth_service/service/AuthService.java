@@ -9,10 +9,8 @@ import com.nextepisode.auth_service.exception.AuthenticationException;
 import com.nextepisode.auth_service.exception.ErrorCode;
 import com.nextepisode.auth_service.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
@@ -56,7 +54,7 @@ public class AuthService {
 
 
         if (!passwordEncoder.matches(req.getPassword(), u.getPassword())) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Invalid credentials");
+            throw new AuthenticationException(ErrorCode.INVALID_CREDENTIALS);
         }
 
         String token = jwtService.generateToken(u.getUsername());
