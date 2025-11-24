@@ -1,0 +1,96 @@
+<div class="h-full flex flex-col">
+
+  <header class="w-full border-b border-neutral-800">
+    <div class="mx-auto max-w-7xl px-4 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+
+        <nav class="hidden md:flex space-x-6 text-sm font-medium">
+          <a
+            routerLinkActive="text-amber-400"
+            [routerLinkActiveOptions]="{ exact: true }"
+            routerLink="/about" class="hover:text-amber-400">À propos</a>
+          <a
+            routerLinkActive="text-amber-400"
+            [routerLinkActiveOptions]="{ exact: true }"
+            routerLink="/compare" class="hover:text-amber-400">Comparer les services</a>
+
+          <a routerLink="/browse/discover"
+             routerLinkActive="text-amber-400"
+             [routerLinkActiveOptions]="{ exact: true }"
+             class="hover:text-amber-400">
+            Nouveautés, départs, catalogues
+          </a>
+
+
+        </nav>
+
+        <a routerLink="/" class="text-xl font-semibold tracking-wider">NextEpisode</a>
+
+        <nav *ngIf="isAuthenticated" class="navbar">
+          <div class="navbar-container">
+            <div class="navbar-right">
+
+              <div class="user-dropdown">
+                <button
+                  class="user-button"
+                  (click)="toggleDropdown()"
+                >
+                  <span class="user-name">{{ username }}</span>
+                  <svg
+                    class="chevron-icon"
+                    [class.rotated]="isDropdownOpen"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <polyline points="6,9 12,15 18,9"></polyline>
+                  </svg>
+                </button>
+
+                <div class="dropdown-menu bg-gray-800" [class.show]="isDropdownOpen">
+                  <div class="dropdown-content">
+                    <span
+                      class="dropdown-item"
+                      (click)="onProfile()"
+                    >
+                      Profil
+                    </span>
+                    <span
+                      class="dropdown-item"
+                      (click)="onLogout()"
+                    >
+                      Déconnexion
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </nav>
+
+        <div *ngIf="!isAuthenticated">
+          <a class="underline me-5" routerLink="/auth/login">
+            Connexion
+          </a>
+          <a class="underline" routerLink="/auth/signup">
+            Inscription
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 overflow-y-auto">
+    <div class="mx-auto max-w-7xl px-4 lg:px-8 py-10 space-y-10">
+      <router-outlet></router-outlet>
+    </div>
+  </main>
+
+  <footer class="py-6 text-center text-xs text-neutral-500 border-t border-neutral-800">
+    © 2025 NextEpisode
+  </footer>
+</div>

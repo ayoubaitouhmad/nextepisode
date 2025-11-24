@@ -1,0 +1,90 @@
+// Add hover effects and transitions for the list buttons
+.list-button {
+  transition: all 0.2s ease;
+  border-radius: 4px;
+  padding: 4px;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+
+  &.favorite {
+    &:hover {
+      color: #ef4444;
+      background-color: rgba(239, 68, 68, 0.1);
+    }
+
+    &.active {
+      color: #ef4444;
+    }
+  }
+
+  &.watched {
+    &:hover {
+      color: #22c55e;
+      background-color: rgba(34, 197, 94, 0.1);
+    }
+
+    &.active {
+      color: #22c55e;
+    }
+  }
+
+  &.watchlist {
+    &:hover {
+      color: #3b82f6;
+      background-color: rgba(59, 130, 246, 0.1);
+    }
+
+    &.active {
+      color: #3b82f6;
+    }
+  }
+}
+
+// Animation for button clicks
+@keyframes buttonPulse {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.2);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+.button-clicked {
+  animation: buttonPulse 0.3s ease;
+}
+
+// Tooltip styles for better UX
+.list-button {
+  position: relative;
+
+  &::after {
+    content: attr(aria-label);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #1f2937;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+    z-index: 10;
+  }
+
+  &:hover::after {
+    opacity: 1;
+  }
+}
+
