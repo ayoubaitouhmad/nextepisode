@@ -4,6 +4,13 @@ server:
 spring:
   application:
     name: user-service
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: true
+      poll-interval: 500ms
+      quiet-period: 100ms
 
   datasource:
     url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/userdb}
