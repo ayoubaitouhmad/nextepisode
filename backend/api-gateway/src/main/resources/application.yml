@@ -7,34 +7,34 @@ security:
     secret: ${JWT_SECRET:VerySecretKeyThatShouldBeLongEnoughChangeMe}
     expiration-ms: ${JWT_EXPIRATION_MS:3600000}
 
-
 spring:
   application:
     name: api-gateway
 
-
   cloud:
     gateway:
       default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin, RETAIN_UNIQUE
         - RemoveRequestHeader=X-Forwarded-Host
       globalcors:
         cors-configurations:
           '[/**]':
             allowedOrigins:
-              - "http://localhost:4200"   # your frontend URL
+              - "http://localhost:4200"
               - "http://127.0.0.1:4200"
-
             allowedMethods:
               - GET
               - POST
               - PUT
               - DELETE
               - OPTIONS
+              - PATCH
             allowedHeaders:
               - "*"
             exposedHeaders:
               - "Authorization"
             allowCredentials: true
+            maxAge: 3600
 
       routes:
         - id: auth
@@ -42,17 +42,15 @@ spring:
           predicates:
             - Path=/api/v1/auth/**
 
-        - id: tmdb
-          uri: http://tmdb-service:8080
-          predicates:
-            - Path=/api/v1/tmdb/**
-
         - id: user
           uri: http://user-service:8080
           predicates:
             - Path=/api/v1/user/**
 
-
+        - id: tmdb
+          uri: http://tmdb-service:8080
+          predicates:
+            - Path=/api/v1/tmdb/**
 
 logging:
   level:
