@@ -1,15 +1,22 @@
-FROM maven:3.9-eclipse-temurin-21-alpine
+FROM eclipse-temurin:17-jdk-alpine
+
+# Install Maven
+RUN apk add --no-cache maven
+
 WORKDIR /app
 
-# tools for file watching (optional but better)
-RUN apk add --no-cache bash inotify-tools
-
-# cache deps
+# Copy pom first to cache dependencies
 COPY pom.xml .
-RUN mvn -q -DskipTests dependency:go-offline
 
-# dev script
-COPY dev.sh /app/dev.sh
-RUN chmod +x /app/dev.sh
+# Download dependencies (keeps future builds faster)
+RUN mvn dependency:go-offline -B
 
-CMD ["/app/dev.sh"]
+# Copy source code
+COPY src ./src
+
+# Expose gateway port
+EXPOSE 8080
+
+# Run in dev mode (NO JAR, direct source execution)
+CMD ["mvn", "spring-boot:run"]
+
