@@ -1,8 +1,8 @@
 package com.nextepisode.api_gateway.security;
 
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
@@ -18,28 +18,59 @@ import org.springframework.security.web.server.context.NoOpServerSecurityContext
 public class SecurityConfig {
 
     /**
-     * Adapt this list to match your public endpoints
-     * (auth service, docs, health, etc.).
+     * Public endpoints that don't require authentication
      */
-    private static final String[] PUBLIC_PATHS = {"/actuator/health", "/actuator/info", "/api/v1/auth/**"};
+    private static final String[] PUBLIC_PATHS = {
+            "/actuator/health",
+            "/actuator/info",
+            "/api/v1/auth/**"
+    };
 
     @Bean
-    public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http, ReactiveAuthenticationManager authenticationManager, JwtServerAuthenticationConverter authenticationConverter, JwtAuthFailureHandler failureHandler) {
+    public SecurityWebFilterChain springSecurityFilterChain(
+            ServerHttpSecurity http,
+            ReactiveAuthenticationManager authenticationManager,
+            JwtServerAuthenticationConverter authenticationConverter,
+            JwtAuthFailureHandler failureHandler) {
 
+        // Configure JWT authentication filter
         AuthenticationWebFilter jwtWebFilter = new AuthenticationWebFilter(authenticationManager);
         jwtWebFilter.setServerAuthenticationConverter(authenticationConverter);
         jwtWebFilter.setSecurityContextRepository(NoOpServerSecurityContextRepository.getInstance());
-
-        // ✅ IMPORTANT: this is what makes gateway return your JSON 401
         jwtWebFilter.setAuthenticationFailureHandler(failureHandler);
 
-        return http.csrf(ServerHttpSecurity.CsrfSpec::disable).httpBasic(ServerHttpSecurity.HttpBasicSpec::disable).formLogin(ServerHttpSecurity.FormLoginSpec::disable).securityContextRepository(NoOpServerSecurityContextRepository.getInstance()).authorizeExchange(ex -> ex.pathMatchers(PUBLIC_PATHS).permitAll().anyExchange().authenticated()).addFilterAt(jwtWebFilter, SecurityWebFiltersOrder.AUTHENTICATION).build();
+        return http
+                // Disable CSRF for stateless API
+                .csrf(ServerHttpSecurity.CsrfSpec::disable)
+
+                // Disable default authentication methods
+                .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)
+                .formLogin(ServerHttpSecurity.FormLoginSpec::disable)
+
+                // Use stateless security context
+                .securityContextRepository(NoOpServerSecurityContextRepository.getInstance())
+
+                // Configure authorization rules
+                .authorizeExchange(exchanges -> exchanges
+                        // Allow all OPTIONS requests for CORS preflight
+                        .pathMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+
+                        // Allow public paths without authentication
+                        .pathMatchers(PUBLIC_PATHS).permitAll()
+
+                        // All other requests require authentication
+                        .anyExchange().authenticated()
+                )
+
+                // Add JWT filter
+                .addFilterAt(jwtWebFilter, SecurityWebFiltersOrder.AUTHENTICATION)
+
+                .build();
     }
 
-
     /**
-     * Useful if you validate passwords somewhere.
-     * Not strictly required in the gateway layer, but handy.
+     * Password encoder for validating passwords
+     * Uses BCrypt by default with delegating support for other encoders
      */
     @Bean
     public PasswordEncoder passwordEncoder() {
