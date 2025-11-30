@@ -54,6 +54,7 @@ public class User {
     private LocalDateTime updatedAt;
     private LocalDateTime lastLogin;
     private Boolean isActive = true;
+    private Boolean isDirty = false;
 
     // Additional profile fields
     private String bio;

@@ -6,12 +6,15 @@ import jakarta.validation.constraints.NotBlank;
 
 import java.time.LocalDate;
 
-public record UserProfileRequest(
+public record UserUpdateProfileRequest(
         String username,
+
         @NotBlank(message = "First name is required")
         String firstName,
+
         @NotBlank(message = "Last name is required")
         String lastName,
+
         @Email(message = "Email must be valid") @NotBlank(message = "Email is required")
         String email,
 
@@ -25,7 +28,9 @@ public record UserProfileRequest(
         @Nullable String preferredLanguage,
         @Nullable LocalDate timezone,
         @Nullable boolean notificationsEnabled,
-        @Nullable String profileVisibility,
-        @Nullable String createdAt
+        @Nullable String profileVisibility
 ) {
 }
+
+
+

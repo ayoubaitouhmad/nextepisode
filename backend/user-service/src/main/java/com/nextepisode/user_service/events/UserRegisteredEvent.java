@@ -58,5 +58,6 @@ public class UserRegisteredEvent {
      * Event version for backward compatibility
      */
     @JsonProperty("version")
+    @Builder.Default
     private String version = "1.0";
 }
