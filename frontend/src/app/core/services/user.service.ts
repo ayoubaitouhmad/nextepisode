@@ -6,10 +6,11 @@ import {AuthService} from './auth-service';
 import {environment} from '../../../environments/environment';
 
 export interface UserProfile {
-  id: number;
+  username: string;
   firstName: string;
   lastName: string;
   email: string;
+  isDirty: boolean;
   avatar?: string;
   bio?: string;
   location?: string;
@@ -48,7 +49,7 @@ export interface ProfileUpdateRequest {
   providedIn: 'root'
 })
 export class UserService {
-  private baseUrl = environment.apiUrl + '/users';
+  private baseUrl = environment.apiUrl + '/user';
   private currentUserSubject = new BehaviorSubject<UserProfile | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
 
@@ -65,7 +66,7 @@ export class UserService {
    */
   getCurrentUser(): Observable<UserProfile> {
     const headers = this.getAuthHeaders();
-    return this.http.get<UserProfile>(`${this.baseUrl}/profile`, {headers})
+    return this.http.get<UserProfile>(`${this.baseUrl}/me`, {headers})
       .pipe(
         tap(user => {
           this.currentUserSubject.next(user);
@@ -78,7 +79,7 @@ export class UserService {
    */
   updateProfile(profileData: ProfileUpdateRequest): Observable<UserProfile> {
     const headers = this.getAuthHeaders();
-    return this.http.put<UserProfile>(`${this.baseUrl}/profile`, profileData, {headers})
+    return this.http.put<UserProfile>(`${this.baseUrl}/me`, profileData, {headers})
       .pipe(
         tap(user => {
           this.currentUserSubject.next(user);
