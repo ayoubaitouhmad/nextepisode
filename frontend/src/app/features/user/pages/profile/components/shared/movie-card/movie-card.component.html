@@ -1,0 +1,33 @@
+<div class="movie-card">
+  <div class="movie-poster">
+    <img [src]="getMoviePosterUrl(movie.posterPath)" [alt]="movie.title" class="poster-image">
+    <div class="movie-overlay">
+      <!-- Rating badge for favorites -->
+      <div class="rating-badge" *ngIf="cardType === 'favorite' || cardType === 'watched'">
+        <svg class="star-icon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+          <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"></polygon>
+        </svg>
+        {{ movie.voteAverage }}
+      </div>
+
+      <!-- Watched indicator -->
+      <div class="watched-indicator" *ngIf="cardType === 'watched'">
+        <svg class="check-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="20,6 9,17 4,12"></polyline>
+        </svg>
+      </div>
+
+      <!-- Watchlist indicator -->
+      <div class="watchlist-indicator" *ngIf="cardType === 'watchlist'">
+        <svg class="clock-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12,6 12,12 16,14"></polyline>
+        </svg>
+      </div>
+    </div>
+  </div>
+  <div class="movie-info">
+    <h3 class="movie-title">{{ movie.title }}</h3>
+    <p class="movie-details">{{ getMovieYear(movie.releaseDate) }} • {{ getMovieGenres(movie.genres) }}</p>
+  </div>
+</div>
