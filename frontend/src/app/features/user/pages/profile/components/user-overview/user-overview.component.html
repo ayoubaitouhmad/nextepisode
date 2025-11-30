@@ -1,0 +1,161 @@
+<div class="overview-grid" *ngIf="currentUser">
+  <!-- User Info Card -->
+  <div class="info-card">
+    <div class="card-header">
+      <h3 class="card-title">Personal Information</h3>
+      <button class="edit-btn" (click)="onStartEditing()" *ngIf="!isEditingProfile">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+        </svg>
+        Edit
+      </button>
+    </div>
+
+    <!-- View Mode -->
+    <div class="user-info" *ngIf="!isEditingProfile">
+      <div class="info-item">
+        <span class="info-label">Full Name</span>
+        <span class="info-value">{{ getFullName() }}</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Email</span>
+        <span class="info-value">{{ currentUser.email }}</span>
+      </div>
+      <div class="info-item" *ngIf="currentUser.bio">
+        <span class="info-label">Bio</span>
+        <span class="info-value">{{ currentUser.bio }}</span>
+      </div>
+      <div class="info-item" *ngIf="currentUser.location">
+        <span class="info-label">Location</span>
+        <span class="info-value">{{ currentUser.location }}</span>
+      </div>
+      <div class="info-item" *ngIf="currentUser.website">
+        <span class="info-label">Website</span>
+        <a [href]="currentUser.website" class="info-value link" target="_blank">{{ currentUser.website }}</a>
+      </div>
+      <div class="info-item" *ngIf="currentUser.phone">
+        <span class="info-label">Phone</span>
+        <span class="info-value">{{ currentUser.phone }}</span>
+      </div>
+      <div class="info-item" *ngIf="currentUser.dateOfBirth">
+        <span class="info-label">Date of Birth</span>
+        <span class="info-value">{{ getFormattedDate(currentUser.dateOfBirth) }}</span>
+      </div>
+    </div>
+
+    <!-- Edit Mode -->
+    <div class="edit-form" *ngIf="isEditingProfile">
+      <div class="form-group">
+        <label class="form-label">Username</label>
+        <input type="text"
+               disabled
+               name="username"
+               [value]="editedProfile.username"
+               class="form-input disabled-input">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">First Name</label>
+        <input type="text" 
+               [(ngModel)]="editedProfile.firstName" 
+               (ngModelChange)="updateEditedProfile()"
+               class="form-input">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Last Name</label>
+        <input type="text" 
+               [(ngModel)]="editedProfile.lastName" 
+               (ngModelChange)="updateEditedProfile()"
+               class="form-input">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Bio</label>
+        <textarea [(ngModel)]="editedProfile.bio" 
+                  (ngModelChange)="updateEditedProfile()"
+                  class="form-textarea" 
+                  rows="3"
+                  placeholder="Tell us about yourself..."></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Location</label>
+        <input type="text" 
+               [(ngModel)]="editedProfile.location" 
+               (ngModelChange)="updateEditedProfile()"
+               class="form-input" 
+               placeholder="City, Country">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Website</label>
+        <input type="url" 
+               [(ngModel)]="editedProfile.website" 
+               (ngModelChange)="updateEditedProfile()"
+               class="form-input"
+               placeholder="https://yourwebsite.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Phone</label>
+        <input type="tel" 
+               [(ngModel)]="editedProfile.phone" 
+               (ngModelChange)="updateEditedProfile()"
+               class="form-input" 
+               placeholder="+1 234 567 8900">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Date of Birth</label>
+        <input type="date" 
+               [(ngModel)]="editedProfile.dateOfBirth" 
+               (ngModelChange)="updateEditedProfile()"
+               class="form-input">
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-primary" (click)="onSaveProfile()" [disabled]="loading">
+          <span *ngIf="loading">Saving...</span>
+          <span *ngIf="!loading">Save Changes</span>
+        </button>
+        <button class="btn btn-secondary" (click)="onCancelEditing()" [disabled]="loading">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Stats Card -->
+  <div class="stats-card">
+    <h3 class="card-title">Your Activity</h3>
+    <div class="stats-grid">
+      <div class="stat-box">
+        <div class="stat-icon favorite">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"></polygon>
+          </svg>
+        </div>
+        <div class="stat-content">
+          <span class="stat-number">{{ movieStatistics.favorites }}</span>
+          <span class="stat-text">Favorite Movies</span>
+        </div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-icon watched">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <polyline points="22,12 18,12 15,21 9,3 6,12 2,12"></polyline>
+          </svg>
+        </div>
+        <div class="stat-content">
+          <span class="stat-number">{{ movieStatistics.watched }}</span>
+          <span class="stat-text">Watched Movies</span>
+        </div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-icon watchlist">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12,6 12,12 16,14"></polyline>
+          </svg>
+        </div>
+        <div class="stat-content">
+          <span class="stat-number">{{ movieStatistics.watchlist }}</span>
+          <span class="stat-text">Watchlist</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

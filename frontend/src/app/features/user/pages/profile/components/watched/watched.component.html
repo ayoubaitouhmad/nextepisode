@@ -1,0 +1,78 @@
+<div class="watched-container">
+  <!-- Loading State -->
+  <div class="loading-state" *ngIf="loading">
+    <div class="spinner"></div>
+    <span>Loading watched content...</span>
+  </div>
+
+  <!-- Error Message -->
+  <div class="error-message" *ngIf="errorMessage">
+    {{ errorMessage }}
+  </div>
+
+  <div *ngIf="!loading">
+    <!-- Section Header -->
+    <div class="section-header">
+      <h2 class="section-title">
+        <svg class="section-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="22,12 18,12 15,21 9,3 6,12 2,12"></polyline>
+        </svg>
+        Recently Watched
+      </h2>
+    </div>
+
+    <!-- Movies Section -->
+    <div class="content-section" *ngIf="watchedMoviesGrouped.movies.length > 0">
+      <h3 class="content-section-title">
+        <svg class="movie-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect>
+          <line x1="7" y1="2" x2="7" y2="22"></line>
+          <line x1="17" y1="2" x2="17" y2="22"></line>
+          <line x1="2" y1="12" x2="22" y2="12"></line>
+          <line x1="2" y1="7" x2="7" y2="7"></line>
+          <line x1="2" y1="17" x2="7" y2="17"></line>
+          <line x1="17" y1="17" x2="22" y2="17"></line>
+          <line x1="17" y1="7" x2="22" y2="7"></line>
+        </svg>
+        Movies ({{ watchedMoviesGrouped.movies.length }})
+      </h3>
+      <div class="movies-grid">
+        <app-movie-card 
+          *ngFor="let movie of watchedMoviesGrouped.movies" 
+          [movie]="movie" 
+          cardType="watched">
+        </app-movie-card>
+      </div>
+    </div>
+
+    <!-- TV Series Section -->
+    <div class="content-section" *ngIf="watchedMoviesGrouped.tvSeries.length > 0">
+      <h3 class="content-section-title">
+        <svg class="tv-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+          <line x1="8" y1="21" x2="16" y2="21"></line>
+          <line x1="12" y1="17" x2="12" y2="21"></line>
+        </svg>
+        TV Series ({{ watchedMoviesGrouped.tvSeries.length }})
+      </h3>
+      <div class="movies-grid">
+        <app-movie-card 
+          *ngFor="let movie of watchedMoviesGrouped.tvSeries" 
+          [movie]="movie" 
+          cardType="watched">
+        </app-movie-card>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state" *ngIf="watchedMoviesGrouped.movies.length === 0 && watchedMoviesGrouped.tvSeries.length === 0">
+      <div class="empty-icon">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+          <polyline points="22,12 18,12 15,21 9,3 6,12 2,12"></polyline>
+        </svg>
+      </div>
+      <h3 class="empty-title">No watched content yet</h3>
+      <p class="empty-description">Mark movies and TV shows as watched to see them here.</p>
+    </div>
+  </div>
+</div>
