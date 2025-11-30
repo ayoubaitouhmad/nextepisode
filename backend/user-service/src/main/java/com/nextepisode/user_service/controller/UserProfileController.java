@@ -1,6 +1,6 @@
 package com.nextepisode.user_service.controller;
 
-import com.nextepisode.user_service.dto.UserProfileRequest;
+import com.nextepisode.user_service.dto.UserUpdateProfileRequest;
 import com.nextepisode.user_service.entity.User;
 import com.nextepisode.user_service.service.UserService;
 import jakarta.validation.Valid;
@@ -22,12 +22,12 @@ public class UserProfileController {
     }
 
 
-    @PostMapping
-    public User createOrUpdateUserProfile(
-            @Valid @RequestBody UserProfileRequest request,
+    @PutMapping
+    public User updateProfile(
+            @Valid @RequestBody UserUpdateProfileRequest request,
             @AuthenticationPrincipal String username
     ) {
-        return userService.createOrUpdateUser(request, username);
+        return userService.updateUser(request, username);
     }
 
     @GetMapping
