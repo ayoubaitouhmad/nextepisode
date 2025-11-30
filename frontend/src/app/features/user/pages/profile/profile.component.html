@@ -2,8 +2,7 @@
   <!-- Loading State -->
   <div class="loading-overlay" *ngIf="loading">
     <div class="loading-spinner">
-      <svg class="animate-spin" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-           stroke-width="2">
+      <svg class="animate-spin" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M21 12a9 9 0 11-6.219-8.56"></path>
       </svg>
       <span>Loading...</span>
@@ -11,7 +10,7 @@
   </div>
 
   <!-- Error Message -->
-  <div class="error-message" *ngIf="errorMessage" (click)="errorMessage = ''">
+  <div class="error-message" *ngIf="errorMessage" (click)="dismissError()">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
       <circle cx="12" cy="12" r="10"></circle>
       <line x1="15" y1="9" x2="9" y2="15"></line>
@@ -20,8 +19,18 @@
     {{ errorMessage }}
   </div>
 
+  <!-- Warning Message -->
+  <div class="warning-message" *ngIf="warningMessage" (click)="dismissWarning()">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="12" cy="12" r="10"></circle>
+      <line x1="12" y1="8" x2="12" y2="12"></line>
+      <line x1="12" y1="16" x2="12.01" y2="16"></line>
+    </svg>
+    {{ warningMessage }}
+  </div>
+
   <!-- Success Message -->
-  <div class="success-message" *ngIf="successMessage" (click)="successMessage = ''">
+  <div class="success-message" *ngIf="successMessage" (click)="dismissSuccess()">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
       <polyline points="20,6 9,17 4,12"></polyline>
     </svg>
@@ -34,8 +43,7 @@
       <div class="avatar-section">
         <img [src]="getAvatarUrl()" [alt]="getFullName()" class="profile-avatar">
         <div class="avatar-overlay" *ngIf="isEditingProfile">
-          <svg class="camera-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-               stroke-width="2">
+          <svg class="camera-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
             <circle cx="12" cy="13" r="4"></circle>
           </svg>
@@ -44,8 +52,7 @@
       <div class="user-details">
         <h1 class="user-name">{{ getFullName() }}</h1>
         <p class="inscription-date">
-          <svg class="calendar-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-               stroke-width="2">
+          <svg class="calendar-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
             <line x1="16" y1="2" x2="16" y2="6"></line>
             <line x1="8" y1="2" x2="8" y2="6"></line>
@@ -81,8 +88,7 @@
   <div class="tabs-container">
     <div class="tabs">
       <button class="tab-button" [class.active]="activeTab === 'overview'" (click)="setActiveTab('overview')">
-        <svg class="tab-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-             stroke-width="2">
+        <svg class="tab-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <rect x="3" y="3" width="7" height="7"></rect>
           <rect x="14" y="3" width="7" height="7"></rect>
           <rect x="14" y="14" width="7" height="7"></rect>
@@ -91,35 +97,28 @@
         Overview
       </button>
       <button class="tab-button" [class.active]="activeTab === 'favorites'" (click)="setActiveTab('favorites')">
-        <svg class="tab-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-             stroke-width="2">
-          <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26">
-          </polygon>
+        <svg class="tab-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"></polygon>
         </svg>
         Favorites
       </button>
       <button class="tab-button" [class.active]="activeTab === 'watched'" (click)="setActiveTab('watched')">
-        <svg class="tab-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-             stroke-width="2">
+        <svg class="tab-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <polyline points="22,12 18,12 15,21 9,3 6,12 2,12"></polyline>
         </svg>
         Watched
       </button>
       <button class="tab-button" [class.active]="activeTab === 'watchlist'" (click)="setActiveTab('watchlist')">
-        <svg class="tab-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-             stroke-width="2">
+        <svg class="tab-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <circle cx="12" cy="12" r="10"></circle>
           <polyline points="12,6 12,12 16,14"></polyline>
         </svg>
         Watchlist
       </button>
       <button class="tab-button" [class.active]="activeTab === 'settings'" (click)="setActiveTab('settings')">
-        <svg class="tab-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-             stroke-width="2">
+        <svg class="tab-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <circle cx="12" cy="12" r="3"></circle>
-          <path
-            d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1 1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
-          </path>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1 1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
         </svg>
         Settings
       </button>
@@ -129,550 +128,43 @@
   <!-- Tab Content -->
   <div class="tab-content">
     <!-- Overview Tab -->
-    <div class="tab-panel" *ngIf="activeTab === 'overview' && currentUser">
-      <div class="overview-grid">
-        <!-- User Info Card -->
-        <div class="info-card">
-          <div class="card-header">
-            <h3 class="card-title">Personal Information</h3>
-            <button class="edit-btn" (click)="startEditingProfile()" *ngIf="!isEditingProfile">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-              </svg>
-              Edit
-            </button>
-          </div>
-
-          <div class="user-info" *ngIf="!isEditingProfile">
-            <div class="info-item">
-              <span class="info-label">Full Name</span>
-              <span class="info-value">{{ getFullName() }}</span>
-            </div>
-            <div class="info-item">
-              <span class="info-label">Email</span>
-              <span class="info-value">{{ currentUser.email }}</span>
-            </div>
-            <div class="info-item" *ngIf="currentUser.bio">
-              <span class="info-label">Bio</span>
-              <span class="info-value">{{ currentUser.bio }}</span>
-            </div>
-            <div class="info-item" *ngIf="currentUser.location">
-              <span class="info-label">Location</span>
-              <span class="info-value">{{ currentUser.location }}</span>
-            </div>
-            <div class="info-item" *ngIf="currentUser.website">
-              <span class="info-label">Website</span>
-              <a [href]="currentUser.website" class="info-value link" target="_blank">{{ currentUser.website }}</a>
-            </div>
-            <div class="info-item" *ngIf="currentUser.phone">
-              <span class="info-label">Phone</span>
-              <span class="info-value">{{ currentUser.phone }}</span>
-            </div>
-            <div class="info-item" *ngIf="currentUser.dateOfBirth">
-              <span class="info-label">Date of Birth</span>
-              <span class="info-value">{{ getFormattedDate(currentUser.dateOfBirth) }}</span>
-            </div>
-          </div>
-
-          <div class="edit-form" *ngIf="isEditingProfile">
-            <div class="form-group">
-              <label class="form-label">First Name</label>
-              <input type="text" [(ngModel)]="editedProfile.firstName" class="form-input">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Last Name</label>
-              <input type="text" [(ngModel)]="editedProfile.lastName" class="form-input">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Bio</label>
-              <textarea [(ngModel)]="editedProfile.bio" class="form-textarea" rows="3"
-                        placeholder="Tell us about yourself..."></textarea>
-            </div>
-            <div class="form-group">
-              <label class="form-label">Location</label>
-              <input type="text" [(ngModel)]="editedProfile.location" class="form-input" placeholder="City, Country">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Website</label>
-              <input type="url" [(ngModel)]="editedProfile.website" class="form-input"
-                     placeholder="https://yourwebsite.com">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Phone</label>
-              <input type="tel" [(ngModel)]="editedProfile.phone" class="form-input" placeholder="+1 234 567 8900">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Date of Birth</label>
-              <input type="date" [(ngModel)]="editedProfile.dateOfBirth" class="form-input">
-            </div>
-            <div class="form-actions">
-              <button class="btn btn-primary" (click)="saveProfile()" [disabled]="loading">
-                <span *ngIf="loading">Saving...</span>
-                <span *ngIf="!loading">Save Changes</span>
-              </button>
-              <button class="btn btn-secondary" (click)="cancelEditing()" [disabled]="loading">Cancel</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Quick Stats Card -->
-        <div class="stats-card">
-          <h3 class="card-title">Your Activity</h3>
-          <div class="stats-grid">
-            <div class="stat-box">
-              <div class="stat-icon favorite">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                  <polygon
-                    points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26">
-                  </polygon>
-                </svg>
-              </div>
-              <div class="stat-content">
-                <span class="stat-number">{{ movieStatistics.favorites }}</span>
-                <span class="stat-text">Favorite Movies</span>
-              </div>
-            </div>
-            <div class="stat-box">
-              <div class="stat-icon watched">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                  <polyline points="22,12 18,12 15,21 9,3 6,12 2,12"></polyline>
-                </svg>
-              </div>
-              <div class="stat-content">
-                <span class="stat-number">{{ movieStatistics.watched }}</span>
-                <span class="stat-text">Watched Movies</span>
-              </div>
-            </div>
-            <div class="stat-box">
-              <div class="stat-icon watchlist">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                  <circle cx="12" cy="12" r="10"></circle>
-                  <polyline points="12,6 12,12 16,14"></polyline>
-                </svg>
-              </div>
-              <div class="stat-content">
-                <span class="stat-number">{{ movieStatistics.watchlist }}</span>
-                <span class="stat-text">Watchlist</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <app-user-overview
+      *ngIf="activeTab === 'overview'"
+      [currentUser]="currentUser"
+      [editedProfile]="editedProfile"
+      [movieStatistics]="movieStatistics"
+      [isEditingProfile]="isEditingProfile"
+      [loading]="loading"
+      (editedProfileChange)="onEditedProfileChange($event)"
+      (startEditing)="startEditingProfile()"
+      (saveProfile)="saveProfile()"
+      (cancelEditing)="cancelEditing()">
+    </app-user-overview>
 
     <!-- Favorites Tab -->
-    <div class="tab-panel" *ngIf="activeTab === 'favorites'">
-      <div class="section-header">
-        <h2 class="section-title">
-          <svg class="section-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-               stroke-width="2">
-            <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26">
-            </polygon>
-          </svg>
-          Your Favorite Movies & Shows
-        </h2>
-      </div>
-
-      <!-- Movies Section -->
-      <div class="content-section" *ngIf="favoriteMoviesGrouped.movies.length > 0">
-        <h3 class="content-section-title">
-          <svg class="movie-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-               stroke-width="2">
-            <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect>
-            <line x1="7" y1="2" x2="7" y2="22"></line>
-            <line x1="17" y1="2" x2="17" y2="22"></line>
-            <line x1="2" y1="12" x2="22" y2="12"></line>
-            <line x1="2" y1="7" x2="7" y2="7"></line>
-            <line x1="2" y1="17" x2="7" y2="17"></line>
-            <line x1="17" y1="17" x2="22" y2="17"></line>
-            <line x1="17" y1="7" x2="22" y2="7"></line>
-          </svg>
-          Movies ({{ favoriteMoviesGrouped.movies.length }})
-        </h3>
-        <div class="movies-grid">
-          <div class="movie-card" *ngFor="let movie of favoriteMoviesGrouped.movies">
-            <div class="movie-poster">
-              <img [src]="getMoviePosterUrl(movie.posterPath)" [alt]="movie.title" class="poster-image">
-              <div class="movie-overlay">
-                <div class="rating-badge">
-                  <svg class="star-icon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
-                    <polygon
-                      points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26">
-                    </polygon>
-                  </svg>
-                  {{ movie.voteAverage }}
-                </div>
-              </div>
-            </div>
-            <div class="movie-info">
-              <h3 class="movie-title">{{ movie.title }}</h3>
-              <p class="movie-details">{{ getMovieYear(movie.releaseDate) }} • {{ getMovieGenres(movie.genres) }}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- TV Series Section -->
-      <div class="content-section" *ngIf="favoriteMoviesGrouped.tvSeries.length > 0">
-        <h3 class="content-section-title">
-          <svg class="tv-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-               stroke-width="2">
-            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-            <line x1="8" y1="21" x2="16" y2="21"></line>
-            <line x1="12" y1="17" x2="12" y2="21"></line>
-          </svg>
-          TV Series ({{ favoriteMoviesGrouped.tvSeries.length }})
-        </h3>
-        <div class="movies-grid">
-          <div class="movie-card" *ngFor="let movie of favoriteMoviesGrouped.tvSeries">
-            <div class="movie-poster">
-              <img [src]="getMoviePosterUrl(movie.posterPath)" [alt]="movie.title" class="poster-image">
-              <div class="movie-overlay">
-                <div class="rating-badge">
-                  <svg class="star-icon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
-                    <polygon
-                      points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26">
-                    </polygon>
-                  </svg>
-                  {{ movie.voteAverage }}
-                </div>
-              </div>
-            </div>
-            <div class="movie-info">
-              <h3 class="movie-title">{{ movie.title }}</h3>
-              <p class="movie-details">{{ getMovieYear(movie.releaseDate) }} • {{ getMovieGenres(movie.genres) }}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Empty State -->
-      <div class="empty-state"
-           *ngIf="favoriteMoviesGrouped.movies.length === 0 && favoriteMoviesGrouped.tvSeries.length === 0">
-        <div class="empty-icon">
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
-            <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26">
-            </polygon>
-          </svg>
-        </div>
-        <h3 class="empty-title">No favorites yet</h3>
-        <p class="empty-description">Start adding movies and TV shows to your favorites to see them here.</p>
-      </div>
-    </div>
+    <app-favorites
+      *ngIf="activeTab === 'favorites'"
+      [isActive]="activeTab === 'favorites'">
+    </app-favorites>
 
     <!-- Watched Tab -->
-    <div class="tab-panel" *ngIf="activeTab === 'watched'">
-      <div class="section-header">
-        <h2 class="section-title">
-          <svg class="section-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-               stroke-width="2">
-            <polyline points="22,12 18,12 15,21 9,3 6,12 2,12"></polyline>
-          </svg>
-          Recently Watched
-        </h2>
-      </div>
-
-      <!-- Movies Section -->
-      <div class="content-section" *ngIf="watchedMoviesGrouped.movies.length > 0">
-        <h3 class="content-section-title">
-          <svg class="movie-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-               stroke-width="2">
-            <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect>
-            <line x1="7" y1="2" x2="7" y2="22"></line>
-            <line x1="17" y1="2" x2="17" y2="22"></line>
-            <line x1="2" y1="12" x2="22" y2="12"></line>
-            <line x1="2" y1="7" x2="7" y2="7"></line>
-            <line x1="2" y1="17" x2="7" y2="17"></line>
-            <line x1="17" y1="17" x2="22" y2="17"></line>
-            <line x1="17" y1="7" x2="22" y2="7"></line>
-          </svg>
-          Movies ({{ watchedMoviesGrouped.movies.length }})
-        </h3>
-        <div class="movies-grid">
-          <div class="movie-card" *ngFor="let movie of watchedMoviesGrouped.movies">
-            <div class="movie-poster">
-              <img [src]="getMoviePosterUrl(movie.posterPath)" [alt]="movie.title" class="poster-image">
-              <div class="movie-overlay">
-                <div class="rating-badge">
-                  <svg class="star-icon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
-                    <polygon
-                      points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26">
-                    </polygon>
-                  </svg>
-                  {{ movie.voteAverage }}
-                </div>
-                <div class="watched-indicator">
-                  <svg class="check-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                       stroke-width="2">
-                    <polyline points="20,6 9,17 4,12"></polyline>
-                  </svg>
-                </div>
-              </div>
-            </div>
-            <div class="movie-info">
-              <h3 class="movie-title">{{ movie.title }}</h3>
-              <p class="movie-details">{{ getMovieYear(movie.releaseDate) }} • {{ getMovieGenres(movie.genres) }}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- TV Series Section -->
-      <div class="content-section" *ngIf="watchedMoviesGrouped.tvSeries.length > 0">
-        <h3 class="content-section-title">
-          <svg class="tv-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-               stroke-width="2">
-            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-            <line x1="8" y1="21" x2="16" y2="21"></line>
-            <line x1="12" y1="17" x2="12" y2="21"></line>
-          </svg>
-          TV Series ({{ watchedMoviesGrouped.tvSeries.length }})
-        </h3>
-        <div class="movies-grid">
-          <div class="movie-card" *ngFor="let movie of watchedMoviesGrouped.tvSeries">
-            <div class="movie-poster">
-              <img [src]="getMoviePosterUrl(movie.posterPath)" [alt]="movie.title" class="poster-image">
-              <div class="movie-overlay">
-                <div class="rating-badge">
-                  <svg class="star-icon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
-                    <polygon
-                      points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26">
-                    </polygon>
-                  </svg>
-                  {{ movie.voteAverage }}
-                </div>
-                <div class="watched-indicator">
-                  <svg class="check-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                       stroke-width="2">
-                    <polyline points="20,6 9,17 4,12"></polyline>
-                  </svg>
-                </div>
-              </div>
-            </div>
-            <div class="movie-info">
-              <h3 class="movie-title">{{ movie.title }}</h3>
-              <p class="movie-details">{{ getMovieYear(movie.releaseDate) }} • {{ getMovieGenres(movie.genres) }}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Empty State -->
-      <div class="empty-state"
-           *ngIf="watchedMoviesGrouped.movies.length === 0 && watchedMoviesGrouped.tvSeries.length === 0">
-        <div class="empty-icon">
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
-            <polyline points="22,12 18,12 15,21 9,3 6,12 2,12"></polyline>
-          </svg>
-        </div>
-        <h3 class="empty-title">No watched content yet</h3>
-        <p class="empty-description">Mark movies and TV shows as watched to see them here.</p>
-      </div>
-    </div>
+    <app-watched
+      *ngIf="activeTab === 'watched'"
+      [isActive]="activeTab === 'watched'">
+    </app-watched>
 
     <!-- Watchlist Tab -->
-    <div class="tab-panel" *ngIf="activeTab === 'watchlist'">
-      <div class="section-header">
-        <h2 class="section-title">
-          <svg class="section-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-               stroke-width="2">
-            <circle cx="12" cy="12" r="10"></circle>
-            <polyline points="12,6 12,12 16,14"></polyline>
-          </svg>
-          My Watchlist
-        </h2>
-      </div>
-
-      <!-- Movies Section -->
-      <div class="content-section" *ngIf="toWatchMoviesGrouped.movies.length > 0">
-        <h3 class="content-section-title">
-          <svg class="movie-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-               stroke-width="2">
-            <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect>
-            <line x1="7" y1="2" x2="7" y2="22"></line>
-            <line x1="17" y1="2" x2="17" y2="22"></line>
-            <line x1="2" y1="12" x2="22" y2="12"></line>
-            <line x1="2" y1="7" x2="7" y2="7"></line>
-            <line x1="2" y1="17" x2="7" y2="17"></line>
-            <line x1="17" y1="17" x2="22" y2="17"></line>
-            <line x1="17" y1="7" x2="22" y2="7"></line>
-          </svg>
-          Movies ({{ toWatchMoviesGrouped.movies.length }})
-        </h3>
-        <div class="movies-grid">
-          <div class="movie-card" *ngFor="let movie of toWatchMoviesGrouped.movies">
-            <div class="movie-poster">
-              <img [src]="getMoviePosterUrl(movie.posterPath)" [alt]="movie.title" class="poster-image">
-              <div class="movie-overlay">
-                <div class="watchlist-indicator">
-                  <svg class="clock-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                       stroke-width="2">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <polyline points="12,6 12,12 16,14"></polyline>
-                  </svg>
-                </div>
-              </div>
-            </div>
-            <div class="movie-info">
-              <h3 class="movie-title">{{ movie.title }}</h3>
-              <p class="movie-details">{{ getMovieYear(movie.releaseDate) }} • {{ getMovieGenres(movie.genres) }}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- TV Series Section -->
-      <div class="content-section" *ngIf="toWatchMoviesGrouped.tvSeries.length > 0">
-        <h3 class="content-section-title">
-          <svg class="tv-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-               stroke-width="2">
-            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-            <line x1="8" y1="21" x2="16" y2="21"></line>
-            <line x1="12" y1="17" x2="12" y2="21"></line>
-          </svg>
-          TV Series ({{ toWatchMoviesGrouped.tvSeries.length }})
-        </h3>
-        <div class="movies-grid">
-          <div class="movie-card" *ngFor="let movie of toWatchMoviesGrouped.tvSeries">
-            <div class="movie-poster">
-              <img [src]="getMoviePosterUrl(movie.posterPath)" [alt]="movie.title" class="poster-image">
-              <div class="movie-overlay">
-                <div class="watchlist-indicator">
-                  <svg class="clock-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                       stroke-width="2">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <polyline points="12,6 12,12 16,14"></polyline>
-                  </svg>
-                </div>
-              </div>
-            </div>
-            <div class="movie-info">
-              <h3 class="movie-title">{{ movie.title }}</h3>
-              <p class="movie-details">{{ getMovieYear(movie.releaseDate) }} • {{ getMovieGenres(movie.genres) }}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Empty State -->
-      <div class="empty-state"
-           *ngIf="toWatchMoviesGrouped.movies.length === 0 && toWatchMoviesGrouped.tvSeries.length === 0">
-        <div class="empty-icon">
-          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
-            <circle cx="12" cy="12" r="10"></circle>
-            <polyline points="12,6 12,12 16,14"></polyline>
-          </svg>
-        </div>
-        <h3 class="empty-title">Your watchlist is empty</h3>
-        <p class="empty-description">Add movies and TV shows to your watchlist to see them here.</p>
-      </div>
-    </div>
+    <app-watchlist
+      *ngIf="activeTab === 'watchlist'"
+      [isActive]="activeTab === 'watchlist'">
+    </app-watchlist>
 
     <!-- Settings Tab -->
-    <div class="tab-panel" *ngIf="activeTab === 'settings'">
-      <div class="settings-container">
-        <!-- Account Settings -->
-        <div class="settings-card">
-          <h3 class="card-title">Account Settings</h3>
-
-          <div class="setting-item" *ngIf="!isChangingPassword">
-            <div class="setting-info">
-              <h4 class="setting-title">Change Password</h4>
-              <p class="setting-description">Update your account password for better security</p>
-            </div>
-            <button class="btn btn-outline" (click)="startChangingPassword()">
-              Change Password
-            </button>
-          </div>
-
-          <div class="password-form" *ngIf="isChangingPassword">
-            <h4 class="form-title">Change Password</h4>
-            <div class="form-group">
-              <label class="form-label">Current Password</label>
-              <input type="password" [(ngModel)]="passwordData.currentPassword" class="form-input"
-                     placeholder="Enter current password">
-            </div>
-            <div class="form-group">
-              <label class="form-label">New Password</label>
-              <input type="password" [(ngModel)]="passwordData.newPassword" class="form-input"
-                     placeholder="Enter new password">
-            </div>
-            <div class="form-group">
-              <label class="form-label">Confirm New Password</label>
-              <input type="password" [(ngModel)]="passwordData.confirmPassword" class="form-input"
-                     placeholder="Confirm new password">
-            </div>
-            <div class="form-actions">
-              <button class="btn btn-primary" (click)="savePassword()" [disabled]="loading">
-                <span *ngIf="loading">Updating...</span>
-                <span *ngIf="!loading">Update Password</span>
-              </button>
-              <button class="btn btn-secondary" (click)="cancelPasswordChange()" [disabled]="loading">Cancel</button>
-            </div>
-          </div>
-
-          <div class="setting-item">
-            <div class="setting-info">
-              <h4 class="setting-title">Delete Account</h4>
-              <p class="setting-description">Permanently delete your account and all associated data</p>
-            </div>
-            <button class="btn btn-danger" (click)="deleteAccount()" [disabled]="loading">
-              Delete Account
-            </button>
-          </div>
-        </div>
-
-        <!-- Privacy Settings -->
-        <div class="settings-card">
-          <h3 class="card-title">Privacy Settings</h3>
-          <div class="setting-item">
-            <div class="setting-info">
-              <h4 class="setting-title">Profile Visibility</h4>
-              <p class="setting-description">Control who can see your profile and activity</p>
-            </div>
-            <div class="toggle-switch">
-              <input type="checkbox" id="profile-visibility" class="toggle-input">
-              <label for="profile-visibility" class="toggle-label"></label>
-            </div>
-          </div>
-          <div class="setting-item">
-            <div class="setting-info">
-              <h4 class="setting-title">Activity Sharing</h4>
-              <p class="setting-description">Share your movie ratings and reviews</p>
-            </div>
-            <div class="toggle-switch">
-              <input type="checkbox" id="activity-sharing" class="toggle-input" checked>
-              <label for="activity-sharing" class="toggle-label"></label>
-            </div>
-          </div>
-        </div>
-
-        <!-- Notification Settings -->
-        <div class="settings-card">
-          <h3 class="card-title">Notification Settings</h3>
-          <div class="setting-item">
-            <div class="setting-info">
-              <h4 class="setting-title">Email Notifications</h4>
-              <p class="setting-description">Receive updates about new releases and recommendations</p>
-            </div>
-            <div class="toggle-switch">
-              <input type="checkbox" id="email-notifications" class="toggle-input" checked>
-              <label for="email-notifications" class="toggle-label"></label>
-            </div>
-          </div>
-          <div class="setting-item">
-            <div class="setting-info">
-              <h4 class="setting-title">Push Notifications</h4>
-              <p class="setting-description">Get instant notifications on your device</p>
-            </div>
-            <div class="toggle-switch">
-              <input type="checkbox" id="push-notifications" class="toggle-input">
-              <label for="push-notifications" class="toggle-label"></label>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <app-settings
+      *ngIf="activeTab === 'settings'"
+      [loading]="loading"
+      (changePassword)="onChangePassword($event)"
+      (deleteAccount)="onDeleteAccount()">
+    </app-settings>
   </div>
 </div>
