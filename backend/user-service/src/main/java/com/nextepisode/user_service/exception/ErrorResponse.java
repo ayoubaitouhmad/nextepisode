@@ -2,62 +2,87 @@ package com.nextepisode.user_service.exception;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.Map;
 
 /**
- * Standardized error response format.
- * This provides a consistent structure for all error responses.
+ * Standardized API error response format.
+ * <p>
+ * This ensures all errors returned by the API have a consistent structure,
+ * making it easier for clients to parse and handle errors uniformly.
+ * <p>
+ * Fields are only included in JSON if non-null (via JsonInclude.NON_NULL),
+ * keeping responses clean and only showing relevant information.
  */
-@Data
+@Getter
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ErrorResponse {
 
     /**
-     * Timestamp when the error occurred
+     * ISO-8601 timestamp when the error occurred.
+     * Using Instant for timezone-agnostic, sortable timestamps.
      */
-    private LocalDateTime timestamp;
+    private final Instant timestamp;
 
     /**
-     * HTTP status code
+     * HTTP status code (e.g., 400, 404, 500)
      */
-    private int status;
+    private final int status;
 
     /**
-     * Error type/category
+     * Error category for quick identification.
+     * Examples: "VALIDATION_ERROR", "NOT_FOUND", "INTERNAL_ERROR"
      */
-    private String error;
+    private final String type;
 
     /**
-     * Human-readable error message
+     * Machine-readable error code for client-side handling.
+     * Maps directly to ErrorCode enum values (e.g., "AUTH_001", "VAL_002")
      */
-    private String message;
+    private final String code;
 
     /**
-     * Additional detail about the error
+     * Human-readable error message suitable for display.
      */
-    private String detail;
+    private final String message;
 
     /**
-     * The request path that caused the error
+     * Additional context about the error (optional).
+     * Can contain more specific details without exposing internals.
      */
-    private String path;
+    private final String detail;
 
     /**
-     * Field-level validation errors (for validation failures)
+     * The API endpoint path that triggered the error.
      */
-    private Map<String, String> validationErrors;
+    private final String path;
 
     /**
-     * Unique error code for tracking (optional)
+     * Field-level validation errors.
+     * Key: field name, Value: error message for that field.
+     * Only populated for validation-type errors.
      */
-    private String errorCode;
+    private final Map<String, String> fieldErrors;
 
     /**
-     * Stack trace (only in development mode)
+     * Unique trace ID for debugging and log correlation.
+     * Useful for tracking errors across distributed systems.
      */
-    private String debugMessage;
+    private final String traceId;
+
+    /**
+     * Factory method for creating a simple error response.
+     */
+    public static ErrorResponse of(int status, String code, String message, String path) {
+        return ErrorResponse.builder()
+                .timestamp(Instant.now())
+                .status(status)
+                .code(code)
+                .message(message)
+                .path(path)
+                .build();
+    }
 }
