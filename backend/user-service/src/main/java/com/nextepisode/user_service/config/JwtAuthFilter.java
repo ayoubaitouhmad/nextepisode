@@ -1,8 +1,8 @@
 package com.nextepisode.user_service.config;
 
-import com.nextepisode.user_service.service.JwtService;
-import com.nextepisode.user_service.exception.ErrorResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nextepisode.user_service.exception.ErrorResponse;
+import com.nextepisode.user_service.service.JwtService;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.Collections;
 
 @Component
@@ -89,9 +89,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         response.setContentType("application/json");
 
         ErrorResponse errorResponse = ErrorResponse.builder()
-                .timestamp(LocalDateTime.now())
+                .timestamp(Instant.now())
                 .status(status)
-                .error(error)
+                .message(error)
                 .message(message)
                 .build();
 
