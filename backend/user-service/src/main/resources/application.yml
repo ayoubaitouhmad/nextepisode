@@ -55,7 +55,7 @@ spring:
 security:
   jwt:
     secret: ${JWT_SECRET:VerySecretKeyThatShouldBeLongEnoughChangeMe}
-    expiration-ms: ${JWT_EXPIRATION_MS:3600000}
+    expiration-ms: ${JWT_EXPIRATION_MS:43200000}
 
 logging:
   level:
