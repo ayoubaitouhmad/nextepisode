@@ -1,6 +1,6 @@
 package com.nextepisode.user_service.service;
 
-import com.nextepisode.user_service.dto.UserProfileRequest;
+import com.nextepisode.user_service.dto.UserUpdateProfileRequest;
 import com.nextepisode.user_service.entity.User;
 import com.nextepisode.user_service.exception.BusinessValidationException;
 import com.nextepisode.user_service.exception.ResourceNotFoundException;
@@ -42,7 +42,7 @@ public class UserService {
 
 
     @Transactional()
-    public User createUser(UserProfileRequest request, String username) {
+    public User createUser(UserUpdateProfileRequest request, String username) {
         log.info("Creating new user with username: {}", username);
 
         try {
@@ -66,22 +66,19 @@ public class UserService {
 
         } catch (Exception e) {
             log.error("Failed to create user: {}", e.getMessage(), e);
-            throw new BusinessValidationException(
-                    "Failed to create user",
-                    "An error occurred while creating the user profile. Please try again.",
-                    "USER_CREATION_FAILED"
-            );
+            throw new BusinessValidationException("Cannot cancel order", "Order has already shipped");
+
         }
 
 
     }
 
     @Transactional
-    public User updateUser(UserProfileRequest request, String username) {
+    public User updateUser(UserUpdateProfileRequest request, String username) {
         log.info("Updating user with username: {}", username);
-
+        User existingUser = this.getUserByUsername(username);
         try {
-            User existingUser = repo.findByUsername(username).get();
+
             existingUser.setEmail(request.email());
             existingUser.setFirstName(request.firstName());
             existingUser.setLastName(request.lastName());
@@ -96,21 +93,18 @@ public class UserService {
             existingUser.setNotificationsEnabled(request.notificationsEnabled());
             existingUser.setProfileVisibility(request.profileVisibility());
             existingUser.setUpdatedAt(LocalDateTime.now());
+            existingUser.setIsDirty(true);
             return repo.save(existingUser);
         } catch (Exception e) {
             log.error("Failed to update user: {}", e.getMessage(), e);
-            throw new BusinessValidationException(
-                    "Failed to update user",
-                    "An error occurred while updating the user profile. Please try again.",
-                    "USER_UPDATE_FAILED"
-            );
+            throw new BusinessValidationException("Cannot cancel order", "Order has already shipped");
         }
 
     }
 
 
     @Transactional
-    public User createOrUpdateUser(UserProfileRequest request, String username) {
+    public User createOrUpdateUser(UserUpdateProfileRequest request, String username) {
         log.info("Creating or updating user with username: {}", username);
 
         Optional<User> existingUser = repo.findByUsername(username);
