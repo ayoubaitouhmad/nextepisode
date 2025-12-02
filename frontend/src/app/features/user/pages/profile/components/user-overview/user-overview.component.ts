@@ -15,7 +15,7 @@ import {MovieStatistics} from '../../../../../../core/services/user-movie.servic
 export class UserOverviewComponent {
   @Input() currentUser: UserProfile | null = null;
   @Input() editedProfile: Partial<UserProfile> = {};
-  @Input() movieStatistics: MovieStatistics = { favorites: 0, watched: 0, watchlist: 0 };
+  @Input() movieStatistics: MovieStatistics = { favoriteCount:0,watchedCount:0,watchlistCount:0};
   @Input() isEditingProfile = false;
   @Input() loading = false;
 
