@@ -1,18 +1,14 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { NgIf } from '@angular/common';
-import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {NgIf} from '@angular/common';
+import {Router} from '@angular/router';
+import {Subscription} from 'rxjs';
 
-import { UserService, UserProfile, PasswordChangeRequest } from '../../../../core/services/user.service';
-import { AuthService } from '../../../../core/services/auth-service';
-import { UserMovieService, MovieStatistics } from '../../../../core/services/user-movie.service';
+import {PasswordChangeRequest, UserProfile, UserService} from '../../../../core/services/user.service';
+import {AuthService} from '../../../../core/services/auth-service';
+import {MovieStatistics, UserMovieService} from '../../../../core/services/user-movie.service';
 
 // Child components
-import { UserOverviewComponent } from './components/user-overview/user-overview.component';
-import { FavoritesComponent } from './components/favorites/favorites.component';
-import { WatchedComponent } from './components/watched/watched.component';
-import { WatchlistComponent } from './components/watchlist/watchlist.component';
-import { SettingsComponent } from './components/settings/settings.component';
+import {UserOverviewComponent} from './components/user-overview/user-overview.component';
 
 type TabType = 'overview' | 'favorites' | 'watched' | 'watchlist' | 'settings';
 
@@ -21,17 +17,13 @@ type TabType = 'overview' | 'favorites' | 'watched' | 'watchlist' | 'settings';
   standalone: true,
   imports: [
     NgIf,
-    UserOverviewComponent,
-    FavoritesComponent,
-    WatchedComponent,
-    WatchlistComponent,
-    SettingsComponent
+    UserOverviewComponent
   ],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit, OnDestroy {
-  @ViewChild(SettingsComponent) settingsComponent!: SettingsComponent;
+
 
   activeTab: TabType = 'overview';
   isEditingProfile = false;
@@ -55,13 +47,14 @@ export class ProfileComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private router: Router,
     private userMovieService: UserMovieService
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.userSubscription = this.userService.currentUser$.subscribe(user => {
       this.currentUser = user;
       if (user) {
-        this.editedProfile = { ...user };
+        this.editedProfile = {...user};
       }
     });
 
@@ -84,7 +77,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.userService.getCurrentUser().subscribe({
       next: (user) => {
         this.currentUser = user;
-        this.editedProfile = { ...user };
+        this.editedProfile = {...user};
         this.loading = false;
 
         if (!user.isDirty) {
@@ -102,6 +95,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   loadMovieStatistics(): void {
     this.userMovieService.getUserMovieStatistics().subscribe({
       next: (statistics) => {
+        console.log(statistics)
         this.movieStatistics = statistics;
       },
       error: (error) => {
@@ -122,7 +116,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   // Profile editing methods
   startEditingProfile(): void {
     if (this.currentUser) {
-      this.editedProfile = { ...this.currentUser };
+      this.editedProfile = {...this.currentUser};
       this.isEditingProfile = true;
       this.clearMessages();
     }
@@ -137,7 +131,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.userService.updateProfile(this.editedProfile).subscribe({
       next: (updatedUser) => {
         this.currentUser = updatedUser;
-        this.editedProfile = { ...updatedUser };
+        this.editedProfile = {...updatedUser};
         this.isEditingProfile = false;
         this.successMessage = 'Profile updated successfully!';
         this.loading = false;
@@ -152,7 +146,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   cancelEditing(): void {
     if (this.currentUser) {
-      this.editedProfile = { ...this.currentUser };
+      this.editedProfile = {...this.currentUser};
     }
     this.isEditingProfile = false;
     this.clearMessages();
@@ -172,9 +166,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
         this.successMessage = 'Password changed successfully!';
         this.loading = false;
         // Notify settings component of success
-        if (this.settingsComponent) {
-          this.settingsComponent.onPasswordChangeSuccess();
-        }
+        // if (this.settingsComponent) {
+        //   this.settingsComponent.onPasswordChangeSuccess();
+        // }
       },
       error: (error) => {
         console.error('Failed to change password:', error);
