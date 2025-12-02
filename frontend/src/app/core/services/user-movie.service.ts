@@ -16,9 +16,9 @@ export interface MovieStatus {
 }
 
 export interface MovieStatistics {
-  favorites: number;
-  watched: number;
-  watchlist: number;
+  favoriteCount: number;
+  watchedCount: number;
+  watchlistCount: number;
 }
 
 export interface DetailedMovieStatistics {
@@ -66,7 +66,7 @@ export interface MovieDto {
 })
 export class UserMovieService {
 
-  private apiUrl = `${environment.apiUrl}/movies`;
+  private apiUrl = `${environment.apiUrl}/user/movies`;
 
   constructor(private http: HttpClient) {
   }
@@ -183,7 +183,7 @@ export class UserMovieService {
    * Get user's movie statistics (counts by category)
    */
   getUserMovieStatistics(): Observable<MovieStatistics> {
-    return this.http.get<MovieStatistics>(`${this.apiUrl}/user/statistics`);
+    return this.http.get<MovieStatistics>(`${this.apiUrl}/stats`);
   }
 
   /**
