@@ -37,9 +37,9 @@ export class ProfileComponent implements OnInit, OnDestroy {
   private userSubscription: Subscription | null = null;
 
   movieStatistics: MovieStatistics = {
-    favorites: 0,
-    watched: 0,
-    watchlist: 0
+    favoriteCount:0,
+    watchedCount:0,
+    watchlistCount:0
   };
 
   constructor(
