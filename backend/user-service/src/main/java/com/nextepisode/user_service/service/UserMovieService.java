@@ -2,6 +2,7 @@ package com.nextepisode.user_service.service;
 
 import com.nextepisode.user_service.dto.MovieListResponse;
 import com.nextepisode.user_service.dto.MovieResponse;
+import com.nextepisode.user_service.dto.UserMovieStats;
 import com.nextepisode.user_service.repo.UserMovieRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,6 +37,12 @@ public class UserMovieService {
         log.debug("Finding user:{} watchlist movies, page:{}", username, pageable.getPageNumber());
         Page<MovieResponse> page = repo.findUserWatchlistMovies(username, pageable);
         return buildMovieListResponse(page);
+    }
+
+
+    @Transactional(readOnly = true)
+    public UserMovieStats getUserMoviesStats(String username){
+        return  repo.getUserMovieStats(username);
     }
 
     private MovieListResponse buildMovieListResponse(Page<MovieResponse> page) {

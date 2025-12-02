@@ -1,6 +1,7 @@
 package com.nextepisode.user_service.repo;
 
 import com.nextepisode.user_service.dto.MovieResponse;
+import com.nextepisode.user_service.dto.UserMovieStats;
 import com.nextepisode.user_service.entity.UserMovie;
 import com.nextepisode.user_service.entity.UserMovieId;
 import org.springframework.data.domain.Page;
@@ -25,5 +26,12 @@ public interface UserMovieRepository extends JpaRepository<UserMovie, UserMovieI
             "FROM Movie m JOIN UserMovie um ON um.movie.id = m.id " +
             "WHERE um.user.username = :username AND um.inWatchlist = true")
     Page<MovieResponse> findUserWatchlistMovies(@Param("username") String username, Pageable pageable);
+
+    @Query("SELECT " +
+            "SUM(CASE WHEN um.isFavorite = true THEN 1 ELSE 0 END) AS favoriteCount, " +
+            "SUM(CASE WHEN um.inWatchlist = true THEN 1 ELSE 0 END) AS watchlistCount, " +
+            "SUM(CASE WHEN um.watched = true THEN 1 ELSE 0 END) AS watchedCount " +
+            "FROM UserMovie um WHERE um.user.username = :username")
+    UserMovieStats getUserMovieStats(@Param("username") String username);
 
 }

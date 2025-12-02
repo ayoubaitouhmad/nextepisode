@@ -2,6 +2,7 @@ package com.nextepisode.user_service.controller;
 
 import com.nextepisode.user_service.config.ApiPaths;
 import com.nextepisode.user_service.dto.MovieListResponse;
+import com.nextepisode.user_service.dto.UserMovieStats;
 import com.nextepisode.user_service.service.UserMovieService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -49,5 +50,13 @@ public class UserMovieController {
         Pageable pageable = PageRequest.of(page, size, Sort.by("um.createdAt").descending());
         return userMovieService.getUserWatchlistMovies(username, pageable);
     }
+
+    @GetMapping("/stats")
+    public UserMovieStats watchlistMovies(
+            @AuthenticationPrincipal String username
+    ) {
+        return userMovieService.getUserMoviesStats(username);
+    }
+
 
 }
