@@ -1,5 +1,6 @@
 package com.nextepisode.user_service.controller;
 
+import com.nextepisode.user_service.config.ApiPaths;
 import com.nextepisode.user_service.dto.UserUpdateProfileRequest;
 import com.nextepisode.user_service.entity.User;
 import com.nextepisode.user_service.service.UserService;
@@ -9,8 +10,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-@RequestMapping("me")
 @RestController
+@RequestMapping(ApiPaths.BASE + "/me")
 @Validated
 public class UserProfileController {
 
