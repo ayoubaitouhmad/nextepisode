@@ -1,5 +1,5 @@
 <div class="profile-container">
-  <!-- Loading State -->
+
   <div class="loading-overlay" *ngIf="loading">
     <div class="loading-spinner">
       <svg class="animate-spin" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -9,8 +9,7 @@
     </div>
   </div>
 
-  <!-- Error Message -->
-  <div class="error-message" *ngIf="errorMessage" (click)="dismissError()">
+  <div class="error-message" *ngIf="errorMessage" (click)="errorMessage = ''">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
       <circle cx="12" cy="12" r="10"></circle>
       <line x1="15" y1="9" x2="9" y2="15"></line>
@@ -19,25 +18,13 @@
     {{ errorMessage }}
   </div>
 
-  <!-- Warning Message -->
-  <div class="warning-message" *ngIf="warningMessage" (click)="dismissWarning()">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <circle cx="12" cy="12" r="10"></circle>
-      <line x1="12" y1="8" x2="12" y2="12"></line>
-      <line x1="12" y1="16" x2="12.01" y2="16"></line>
-    </svg>
-    {{ warningMessage }}
-  </div>
-
-  <!-- Success Message -->
-  <div class="success-message" *ngIf="successMessage" (click)="dismissSuccess()">
+  <div class="success-message" *ngIf="successMessage" (click)="successMessage = ''">
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
       <polyline points="20,6 9,17 4,12"></polyline>
     </svg>
     {{ successMessage }}
   </div>
 
-  <!-- Profile Header -->
   <div class="profile-header" *ngIf="currentUser">
     <div class="profile-info">
       <div class="avatar-section">
@@ -84,7 +71,6 @@
     </div>
   </div>
 
-  <!-- Navigation Tabs -->
   <div class="tabs-container">
     <div class="tabs">
       <button class="tab-button" [class.active]="activeTab === 'overview'" (click)="setActiveTab('overview')">
@@ -125,46 +111,45 @@
     </div>
   </div>
 
-  <!-- Tab Content -->
   <div class="tab-content">
-    <!-- Overview Tab -->
-    <app-user-overview
-      *ngIf="activeTab === 'overview'"
-      [currentUser]="currentUser"
-      [editedProfile]="editedProfile"
-      [movieStatistics]="movieStatistics"
-      [isEditingProfile]="isEditingProfile"
-      [loading]="loading"
-      (editedProfileChange)="onEditedProfileChange($event)"
-      (startEditing)="startEditingProfile()"
-      (saveProfile)="saveProfile()"
-      (cancelEditing)="cancelEditing()">
-    </app-user-overview>
+    <div class="tab-panel" *ngIf="activeTab === 'overview' && currentUser">
+      <app-user-overview
+        [currentUser]="currentUser"
+        [editedProfile]="editedProfile"
+        [movieStatistics]="movieStatistics"
+        [isEditingProfile]="isEditingProfile"
+        [loading]="loading"
+        (startEditing)="startEditingProfile()"
+        (saveProfile)="saveProfile()"
+        (cancelEditing)="cancelEditing()"
+        (editedProfileChange)="onEditedProfileChange($event)">
+      </app-user-overview>
+    </div>
 
-<!--    &lt;!&ndash; Favorites Tab &ndash;&gt;-->
-<!--    <app-favorites-->
-<!--      *ngIf="activeTab === 'favorites'"-->
-<!--      [isActive]="activeTab === 'favorites'">-->
-<!--    </app-favorites>-->
+    <div class="tab-panel" *ngIf="activeTab === 'favorites'">
+      <app-favorites></app-favorites>
+    </div>
 
-<!--    &lt;!&ndash; Watched Tab &ndash;&gt;-->
-<!--    <app-watched-->
-<!--      *ngIf="activeTab === 'watched'"-->
-<!--      [isActive]="activeTab === 'watched'">-->
-<!--    </app-watched>-->
+    <div class="tab-panel" *ngIf="activeTab === 'watched'">
+      <app-watched></app-watched>
+    </div>
 
-<!--    &lt;!&ndash; Watchlist Tab &ndash;&gt;-->
-<!--    <app-watchlist-->
-<!--      *ngIf="activeTab === 'watchlist'"-->
-<!--      [isActive]="activeTab === 'watchlist'">-->
-<!--    </app-watchlist>-->
+    <div class="tab-panel" *ngIf="activeTab === 'watchlist'">
+      <app-watchlist></app-watchlist>
+    </div>
 
-<!--    &lt;!&ndash; Settings Tab &ndash;&gt;-->
-<!--    <app-settings-->
-<!--      *ngIf="activeTab === 'settings'"-->
-<!--      [loading]="loading"-->
-<!--      (changePassword)="onChangePassword($event)"-->
-<!--      (deleteAccount)="onDeleteAccount()">-->
-<!--    </app-settings>-->
+    <div class="tab-panel" *ngIf="activeTab === 'settings'">
+      <app-settings
+        [isChangingPassword]="isChangingPassword"
+        [passwordData]="passwordData"
+        [loading]="loading"
+        (startChangingPassword)="startChangingPassword()"
+        (savePassword)="savePassword()"
+        (cancelPasswordChange)="cancelPasswordChange()"
+        (deleteAccount)="deleteAccount()"
+        (passwordDataChange)="onPasswordDataChange($event)">
+      </app-settings>
+    </div>
   </div>
+
 </div>

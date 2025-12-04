@@ -1,0 +1,98 @@
+<div class="settings-container">
+
+  <div class="settings-card">
+    <h3 class="card-title">Account Settings</h3>
+
+    <div class="setting-item" *ngIf="!isChangingPassword">
+      <div class="setting-info">
+        <h4 class="setting-title">Change Password</h4>
+        <p class="setting-description">Update your account password for better security</p>
+      </div>
+      <button class="btn btn-outline" (click)="onStartChangingPassword()">
+        Change Password
+      </button>
+    </div>
+
+    <div class="password-form" *ngIf="isChangingPassword">
+      <h4 class="form-title">Change Password</h4>
+      <div class="form-group">
+        <label class="form-label">Current Password</label>
+        <input type="password" [(ngModel)]="passwordData.currentPassword" (ngModelChange)="onPasswordDataChange()" class="form-input" placeholder="Enter current password">
+      </div>
+      <div class="form-group">
+        <label class="form-label">New Password</label>
+        <input type="password" [(ngModel)]="passwordData.newPassword" (ngModelChange)="onPasswordDataChange()" class="form-input" placeholder="Enter new password">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Confirm New Password</label>
+        <input type="password" [(ngModel)]="passwordData.confirmPassword" (ngModelChange)="onPasswordDataChange()" class="form-input" placeholder="Confirm new password">
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-primary" (click)="onSavePassword()" [disabled]="loading">
+          <span *ngIf="loading">Updating...</span>
+          <span *ngIf="!loading">Update Password</span>
+        </button>
+        <button class="btn btn-secondary" (click)="onCancelPasswordChange()" [disabled]="loading">Cancel</button>
+      </div>
+    </div>
+
+    <div class="setting-item">
+      <div class="setting-info">
+        <h4 class="setting-title">Delete Account</h4>
+        <p class="setting-description">Permanently delete your account and all associated data</p>
+      </div>
+      <button class="btn btn-danger" (click)="onDeleteAccount()" [disabled]="loading">
+        Delete Account
+      </button>
+    </div>
+  </div>
+
+  <div class="settings-card">
+    <h3 class="card-title">Privacy Settings</h3>
+    <div class="setting-item">
+      <div class="setting-info">
+        <h4 class="setting-title">Profile Visibility</h4>
+        <p class="setting-description">Control who can see your profile and activity</p>
+      </div>
+      <div class="toggle-switch">
+        <input type="checkbox" id="profile-visibility" class="toggle-input">
+        <label for="profile-visibility" class="toggle-label"></label>
+      </div>
+    </div>
+    <div class="setting-item">
+      <div class="setting-info">
+        <h4 class="setting-title">Activity Sharing</h4>
+        <p class="setting-description">Share your movie ratings and reviews</p>
+      </div>
+      <div class="toggle-switch">
+        <input type="checkbox" id="activity-sharing" class="toggle-input" checked>
+        <label for="activity-sharing" class="toggle-label"></label>
+      </div>
+    </div>
+  </div>
+
+  <div class="settings-card">
+    <h3 class="card-title">Notification Settings</h3>
+    <div class="setting-item">
+      <div class="setting-info">
+        <h4 class="setting-title">Email Notifications</h4>
+        <p class="setting-description">Receive updates about new releases and recommendations</p>
+      </div>
+      <div class="toggle-switch">
+        <input type="checkbox" id="email-notifications" class="toggle-input" checked>
+        <label for="email-notifications" class="toggle-label"></label>
+      </div>
+    </div>
+    <div class="setting-item">
+      <div class="setting-info">
+        <h4 class="setting-title">Push Notifications</h4>
+        <p class="setting-description">Get instant notifications on your device</p>
+      </div>
+      <div class="toggle-switch">
+        <input type="checkbox" id="push-notifications" class="toggle-input">
+        <label for="push-notifications" class="toggle-label"></label>
+      </div>
+    </div>
+  </div>
+
+</div>

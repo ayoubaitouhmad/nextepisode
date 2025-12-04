@@ -44,7 +44,6 @@
   }
 }
 
-/* User Info */
 .user-info {
   display: flex;
   flex-direction: column;
@@ -84,7 +83,6 @@
   }
 }
 
-/* Edit Form */
 .edit-form {
   display: flex;
   flex-direction: column;
@@ -95,24 +93,25 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
 }
 
 .form-label {
   font-weight: 500;
   color: rgba(255, 255, 255, 0.9);
   font-size: 0.875rem;
+  display: block;
 }
 
 .form-input,
 .form-textarea {
   width: 100%;
   padding: 0.75rem;
-  background: rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 0.5rem;
   color: white;
-  font-size: 0.875rem;
+  font-size: 0.95rem;
   transition: all 0.2s ease;
 
   &::placeholder {
@@ -122,13 +121,8 @@
   &:focus {
     outline: none;
     border-color: #3b82f6;
+    background-color: rgba(255, 255, 255, 0.15);
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-  }
-
-  &.disabled-input {
-    opacity: 0.75;
-    background: rgba(255, 255, 255, 0.05);
-    cursor: not-allowed;
   }
 }
 
@@ -147,36 +141,36 @@
   padding: 0.75rem 1.5rem;
   border-radius: 0.5rem;
   font-weight: 500;
+  font-size: 0.875rem;
   cursor: pointer;
-  border: none;
   transition: all 0.2s ease;
+  border: none;
 
   &:disabled {
     opacity: 0.6;
     cursor: not-allowed;
   }
+}
 
-  &.btn-primary {
-    background: #3b82f6;
-    color: white;
+.btn-primary {
+  background-color: #3b82f6;
+  color: white;
 
-    &:hover:not(:disabled) {
-      background: #2563eb;
-    }
-  }
-
-  &.btn-secondary {
-    background: rgba(255, 255, 255, 0.1);
-    color: white;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-
-    &:hover:not(:disabled) {
-      background: rgba(255, 255, 255, 0.2);
-    }
+  &:hover:not(:disabled) {
+    background-color: #2563eb;
   }
 }
 
-/* Stats Grid */
+.btn-secondary {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+
+  &:hover:not(:disabled) {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+}
+
 .stats-grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -237,5 +231,58 @@
 @media (max-width: 1024px) {
   .overview-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .info-card,
+  .stats-card {
+    padding: 1.25rem;
+  }
+
+  .card-title {
+    font-size: 1.1rem;
+  }
+
+  .info-item {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .info-value {
+    text-align: left;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .btn {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .stat-box {
+    padding: 0.75rem;
+  }
+
+  .stat-icon {
+    width: 40px;
+    height: 40px;
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+  .stat-number {
+    font-size: 1.25rem;
+  }
+
+  .stat-text {
+    font-size: 0.8rem;
   }
 }

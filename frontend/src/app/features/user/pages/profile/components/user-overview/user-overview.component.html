@@ -1,5 +1,5 @@
-<div class="overview-grid" *ngIf="currentUser">
-  <!-- User Info Card -->
+<div class="overview-grid">
+
   <div class="info-card">
     <div class="card-header">
       <h3 class="card-title">Personal Information</h3>
@@ -12,8 +12,7 @@
       </button>
     </div>
 
-    <!-- View Mode -->
-    <div class="user-info" *ngIf="!isEditingProfile">
+    <div class="user-info" *ngIf="!isEditingProfile && currentUser">
       <div class="info-item">
         <span class="info-label">Full Name</span>
         <span class="info-value">{{ getFullName() }}</span>
@@ -44,69 +43,34 @@
       </div>
     </div>
 
-    <!-- Edit Mode -->
     <div class="edit-form" *ngIf="isEditingProfile">
       <div class="form-group">
-        <label class="form-label">Username</label>
-        <input type="text"
-               disabled
-               name="username"
-               [value]="editedProfile.username"
-               class="form-input disabled-input">
-      </div>
-
-      <div class="form-group">
         <label class="form-label">First Name</label>
-        <input type="text"
-               [(ngModel)]="editedProfile.firstName"
-               (ngModelChange)="updateEditedProfile()"
-               class="form-input">
+        <input type="text" [(ngModel)]="editedProfile.firstName" (ngModelChange)="onProfileChange()" class="form-input">
       </div>
       <div class="form-group">
         <label class="form-label">Last Name</label>
-        <input type="text"
-               [(ngModel)]="editedProfile.lastName"
-               (ngModelChange)="updateEditedProfile()"
-               class="form-input">
+        <input type="text" [(ngModel)]="editedProfile.lastName" (ngModelChange)="onProfileChange()" class="form-input">
       </div>
       <div class="form-group">
         <label class="form-label">Bio</label>
-        <textarea [(ngModel)]="editedProfile.bio"
-                  (ngModelChange)="updateEditedProfile()"
-                  class="form-textarea"
-                  rows="3"
-                  placeholder="Tell us about yourself..."></textarea>
+        <textarea [(ngModel)]="editedProfile.bio" (ngModelChange)="onProfileChange()" class="form-textarea" rows="3" placeholder="Tell us about yourself..."></textarea>
       </div>
       <div class="form-group">
         <label class="form-label">Location</label>
-        <input type="text"
-               [(ngModel)]="editedProfile.location"
-               (ngModelChange)="updateEditedProfile()"
-               class="form-input"
-               placeholder="City, Country">
+        <input type="text" [(ngModel)]="editedProfile.location" (ngModelChange)="onProfileChange()" class="form-input" placeholder="City, Country">
       </div>
       <div class="form-group">
         <label class="form-label">Website</label>
-        <input type="url"
-               [(ngModel)]="editedProfile.website"
-               (ngModelChange)="updateEditedProfile()"
-               class="form-input"
-               placeholder="https://yourwebsite.com">
+        <input type="url" [(ngModel)]="editedProfile.website" (ngModelChange)="onProfileChange()" class="form-input" placeholder="https://yourwebsite.com">
       </div>
       <div class="form-group">
         <label class="form-label">Phone</label>
-        <input type="tel"
-               [(ngModel)]="editedProfile.phone"
-               (ngModelChange)="updateEditedProfile()"
-               class="form-input"
-               placeholder="+1 234 567 8900">
+        <input type="tel" [(ngModel)]="editedProfile.phone" (ngModelChange)="onProfileChange()" class="form-input" placeholder="+1 234 567 8900">
       </div>
       <div class="form-group">
         <label class="form-label">Date of Birth</label>
-        <input type="date"
-               [(ngModel)]="editedProfile.dateOfBirth"
-               (ngModelChange)="updateEditedProfile()"
-               class="form-input">
+        <input type="date" [(ngModel)]="editedProfile.dateOfBirth" (ngModelChange)="onProfileChange()" class="form-input">
       </div>
       <div class="form-actions">
         <button class="btn btn-primary" (click)="onSaveProfile()" [disabled]="loading">
@@ -118,7 +82,6 @@
     </div>
   </div>
 
-  <!-- Quick Stats Card -->
   <div class="stats-card">
     <h3 class="card-title">Your Activity</h3>
     <div class="stats-grid">
@@ -158,4 +121,5 @@
       </div>
     </div>
   </div>
+
 </div>
