@@ -2,8 +2,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {UserProfile} from '../../../../../../core/services/user.service';
-import {MovieStatistics} from '../../../../../../core/services/user-movie.service';
-
+import {MovieStatistics} from '../movie.model';
 
 @Component({
   selector: 'app-user-overview',
@@ -15,18 +14,21 @@ import {MovieStatistics} from '../../../../../../core/services/user-movie.servic
 export class UserOverviewComponent {
   @Input() currentUser: UserProfile | null = null;
   @Input() editedProfile: Partial<UserProfile> = {};
-  @Input() movieStatistics: MovieStatistics = { favoriteCount:0,watchedCount:0,watchlistCount:0};
+  @Input() movieStatistics: MovieStatistics = {
+    favoriteCount: 0,
+    watchedCount: 0,
+    watchlistCount: 0
+  };
   @Input() isEditingProfile = false;
   @Input() loading = false;
 
-  @Output() editedProfileChange = new EventEmitter<Partial<UserProfile>>();
-  @Output() startEditing = new EventEmitter<void>();
   @Output() saveProfile = new EventEmitter<void>();
   @Output() cancelEditing = new EventEmitter<void>();
+  @Output() startEditing = new EventEmitter<void>();
+  @Output() editedProfileChange = new EventEmitter<Partial<UserProfile>>();
 
   getFullName(): string {
     if (!this.currentUser) return '';
-    if (!this.currentUser.isDirty) return this.currentUser.username;
     return `${this.currentUser.firstName} ${this.currentUser.lastName}`.trim();
   }
 
@@ -45,6 +47,7 @@ export class UserOverviewComponent {
   }
 
   onSaveProfile(): void {
+    this.editedProfileChange.emit(this.editedProfile);
     this.saveProfile.emit();
   }
 
@@ -52,7 +55,7 @@ export class UserOverviewComponent {
     this.cancelEditing.emit();
   }
 
-  updateEditedProfile(): void {
+  onProfileChange(): void {
     this.editedProfileChange.emit(this.editedProfile);
   }
 }

@@ -1,46 +1,61 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, OnDestroy} from '@angular/core';
 import {NgIf} from '@angular/common';
+import {FormsModule} from '@angular/forms';
 import {Router} from '@angular/router';
 import {Subscription} from 'rxjs';
 
-import {PasswordChangeRequest, UserProfile, UserService} from '../../../../core/services/user.service';
-import {AuthService} from '../../../../core/services/auth-service';
-import {MovieStatistics, UserMovieService} from '../../../../core/services/user-movie.service';
 
-// Child components
 import {UserOverviewComponent} from './components/user-overview/user-overview.component';
+import {FavoritesComponent} from './components/favorites/favorites.component';
+import {WatchedComponent} from './components/watched/watched.component';
+import {WatchlistComponent} from './components/watchlist/watchlist.component';
+import {SettingsComponent} from './components/settings/settings.component';
+import {PasswordChangeRequest, UserProfile, UserService} from '../../../../core/services/user.service';
+import {MovieStatistics} from './components/movie.model';
+import {UserMovieService} from '../../../../core/services/user-movie.service';
+import {AuthService} from '../../../../core/services/auth-service';
 
-type TabType = 'overview' | 'favorites' | 'watched' | 'watchlist' | 'settings';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
   imports: [
     NgIf,
-    UserOverviewComponent
+    FormsModule,
+    UserOverviewComponent,
+    FavoritesComponent,
+    WatchedComponent,
+    WatchlistComponent,
+    SettingsComponent
   ],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit, OnDestroy {
 
-
-  activeTab: TabType = 'overview';
-  isEditingProfile = false;
-  loading = false;
-  errorMessage = '';
-  successMessage = '';
-  warningMessage = '';
-
+  activeTab: 'overview' | 'favorites' | 'watched' | 'watchlist' | 'settings' = 'overview';
   currentUser: UserProfile | null = null;
   editedProfile: Partial<UserProfile> = {};
   private userSubscription: Subscription | null = null;
 
-  movieStatistics: MovieStatistics = {
-    favoriteCount:0,
-    watchedCount:0,
-    watchlistCount:0
+  isEditingProfile = false;
+  isChangingPassword = false;
+
+  passwordData: PasswordChangeRequest = {
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: ''
   };
+
+  movieStatistics: MovieStatistics = {
+    favoriteCount: 0,
+    watchedCount: 0,
+    watchlistCount: 0
+  };
+
+  loading = false;
+  errorMessage = '';
+  successMessage = '';
 
   constructor(
     private userService: UserService,
@@ -55,14 +70,13 @@ export class ProfileComponent implements OnInit, OnDestroy {
       this.currentUser = user;
       if (user) {
         this.editedProfile = {...user};
+        this.loadMovieStatistics();
       }
     });
 
     if (!this.currentUser) {
       this.loadCurrentUser();
     }
-
-    this.loadMovieStatistics();
   }
 
   ngOnDestroy(): void {
@@ -73,16 +87,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   loadCurrentUser(): void {
     this.loading = true;
-
     this.userService.getCurrentUser().subscribe({
       next: (user) => {
         this.currentUser = user;
         this.editedProfile = {...user};
         this.loading = false;
-
-        if (!user.isDirty) {
-          this.warningMessage = 'Please complete your profile';
-        }
       },
       error: (error) => {
         console.error('Failed to load user profile:', error);
@@ -95,8 +104,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
   loadMovieStatistics(): void {
     this.userMovieService.getUserMovieStatistics().subscribe({
       next: (statistics) => {
-        console.log(statistics)
-        this.movieStatistics = statistics;
+        this.movieStatistics = {
+          favoriteCount: (statistics as any).favoriteCount ?? (statistics as any).favorites ?? 0,
+          watchedCount: (statistics as any).watchedCount ?? (statistics as any).watched ?? 0,
+          watchlistCount: (statistics as any).watchlistCount ?? (statistics as any).watchlist ?? 0
+        };
       },
       error: (error) => {
         console.error('Failed to load movie statistics:', error);
@@ -104,16 +116,13 @@ export class ProfileComponent implements OnInit, OnDestroy {
     });
   }
 
-  setActiveTab(tab: TabType): void {
+  setActiveTab(tab: 'overview' | 'favorites' | 'watched' | 'watchlist' | 'settings'): void {
     this.activeTab = tab;
-
-    // Refresh statistics when switching to movie tabs
-    if (tab === 'favorites' || tab === 'watched' || tab === 'watchlist') {
+    if (tab === 'favorites' || tab === 'watched' || tab === 'watchlist' || tab === 'overview') {
       this.loadMovieStatistics();
     }
   }
 
-  // Profile editing methods
   startEditingProfile(): void {
     if (this.currentUser) {
       this.editedProfile = {...this.currentUser};
@@ -156,19 +165,40 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.editedProfile = profile;
   }
 
-  // Password change methods
-  onChangePassword(passwordData: PasswordChangeRequest): void {
+  startChangingPassword(): void {
+    this.passwordData = {
+      currentPassword: '',
+      newPassword: '',
+      confirmPassword: ''
+    };
+    this.isChangingPassword = true;
+    this.clearMessages();
+  }
+
+  savePassword(): void {
+    if (this.passwordData.newPassword !== this.passwordData.confirmPassword) {
+      this.errorMessage = 'New password and confirmation password do not match.';
+      return;
+    }
+
+    if (this.passwordData.newPassword.length < 6) {
+      this.errorMessage = 'New password must be at least 6 characters long.';
+      return;
+    }
+
     this.loading = true;
     this.clearMessages();
 
-    this.userService.changePassword(passwordData).subscribe({
+    this.userService.changePassword(this.passwordData).subscribe({
       next: () => {
+        this.isChangingPassword = false;
+        this.passwordData = {
+          currentPassword: '',
+          newPassword: '',
+          confirmPassword: ''
+        };
         this.successMessage = 'Password changed successfully!';
         this.loading = false;
-        // Notify settings component of success
-        // if (this.settingsComponent) {
-        //   this.settingsComponent.onPasswordChangeSuccess();
-        // }
       },
       error: (error) => {
         console.error('Failed to change password:', error);
@@ -178,25 +208,43 @@ export class ProfileComponent implements OnInit, OnDestroy {
     });
   }
 
-  // Account deletion
-  onDeleteAccount(): void {
-    this.loading = true;
-    this.userService.deleteAccount().subscribe({
-      next: () => {
-        this.router.navigate(['/auth/login']);
-      },
-      error: (error) => {
-        console.error('Failed to delete account:', error);
-        this.errorMessage = 'Failed to delete account. Please try again.';
-        this.loading = false;
-      }
-    });
+  cancelPasswordChange(): void {
+    this.isChangingPassword = false;
+    this.passwordData = {
+      currentPassword: '',
+      newPassword: '',
+      confirmPassword: ''
+    };
+    this.clearMessages();
   }
 
-  // Helper methods
+  onPasswordDataChange(data: PasswordChangeRequest): void {
+    this.passwordData = data;
+  }
+
+  deleteAccount(): void {
+    if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+      this.loading = true;
+      this.userService.deleteAccount().subscribe({
+        next: () => {
+          this.router.navigate(['/auth/login']);
+        },
+        error: (error) => {
+          console.error('Failed to delete account:', error);
+          this.errorMessage = 'Failed to delete account. Please try again.';
+          this.loading = false;
+        }
+      });
+    }
+  }
+
+  private clearMessages(): void {
+    this.errorMessage = '';
+    this.successMessage = '';
+  }
+
   getFullName(): string {
     if (!this.currentUser) return '';
-    if (!this.currentUser.isDirty) return this.currentUser.username;
     return `${this.currentUser.firstName} ${this.currentUser.lastName}`.trim();
   }
 
@@ -208,7 +256,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   getFormattedDate(dateString: string): string {
-    if (!dateString) return '';
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', {
       year: 'numeric',
@@ -220,22 +267,5 @@ export class ProfileComponent implements OnInit, OnDestroy {
   getProfileCompletionPercentage(): number {
     if (!this.currentUser) return 0;
     return this.userService.getProfileCompletionPercentage(this.currentUser);
-  }
-
-  private clearMessages(): void {
-    this.errorMessage = '';
-    this.successMessage = '';
-  }
-
-  dismissError(): void {
-    this.errorMessage = '';
-  }
-
-  dismissWarning(): void {
-    this.warningMessage = '';
-  }
-
-  dismissSuccess(): void {
-    this.successMessage = '';
   }
 }
