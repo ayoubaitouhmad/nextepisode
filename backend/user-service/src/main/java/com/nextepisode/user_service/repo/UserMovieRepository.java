@@ -12,17 +12,17 @@ import org.springframework.data.repository.query.Param;
 
 public interface UserMovieRepository extends JpaRepository<UserMovie, UserMovieId> {
 
-    @Query("SELECT NEW com.nextepisode.user_service.dto.MovieResponse(m.id, m.title, um.createdAt) " +
+    @Query("SELECT NEW com.nextepisode.user_service.dto.MovieResponse(m , um.createdAt) " +
             "FROM Movie m JOIN UserMovie um ON um.movie.id = m.id " +
             "WHERE um.user.username = :username AND um.isFavorite = true")
     Page<MovieResponse> findUserFavoriteMovies(@Param("username") String username, Pageable pageable);
 
-    @Query("SELECT NEW com.nextepisode.user_service.dto.MovieResponse(m.id, m.title, um.createdAt, um.watchedAt) " +
+    @Query("SELECT NEW com.nextepisode.user_service.dto.MovieResponse(m , um.createdAt , um.watchedAt) " +
             "FROM Movie m JOIN UserMovie um ON um.movie.id = m.id " +
             "WHERE um.user.username = :username AND um.watched = true")
     Page<MovieResponse> findUserWatchedMovies(@Param("username") String username, Pageable pageable);
 
-    @Query("SELECT NEW com.nextepisode.user_service.dto.MovieResponse(m.id, m.title, um.createdAt) " +
+    @Query("SELECT NEW com.nextepisode.user_service.dto.MovieResponse(m , um.createdAt) " +
             "FROM Movie m JOIN UserMovie um ON um.movie.id = m.id " +
             "WHERE um.user.username = :username AND um.inWatchlist = true")
     Page<MovieResponse> findUserWatchlistMovies(@Param("username") String username, Pageable pageable);
