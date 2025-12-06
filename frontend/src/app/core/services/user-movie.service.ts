@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {environment} from '../../../environments/environment';
+import {UserMovieList} from '../models/movie/movie.model';
 
 export interface UserMovieRequest {
   tmdbId: number;
@@ -70,6 +71,24 @@ export class UserMovieService {
 
   constructor(private http: HttpClient) {
   }
+
+
+  /**
+   * Get user's movie statistics (counts by category)
+   */
+  getUserMovieStatistics(): Observable<MovieStatistics> {
+    return this.http.get<MovieStatistics>(`${this.apiUrl}/stats`);
+  }
+
+  /**
+   * Get user's movie statistics (counts by category)
+   */
+  getUserFavoriteMovies(): Observable<UserMovieList> {
+    return this.http.get<UserMovieList>(`${this.apiUrl}/favorite`);
+  }
+
+
+  /**************************************************/
 
   /**
    * Add or remove a movie from user's category
@@ -179,12 +198,6 @@ export class UserMovieService {
     });
   }
 
-  /**
-   * Get user's movie statistics (counts by category)
-   */
-  getUserMovieStatistics(): Observable<MovieStatistics> {
-    return this.http.get<MovieStatistics>(`${this.apiUrl}/stats`);
-  }
 
   /**
    * Get detailed user's movie statistics with type breakdown

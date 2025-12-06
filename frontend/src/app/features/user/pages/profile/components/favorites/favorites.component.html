@@ -27,7 +27,7 @@
 
 <ng-container *ngIf="!loading && !errorMessage">
 
-  <div class="content-section" *ngIf="favoriteMoviesGrouped.movies.length > 0">
+  <div class="content-section" *ngIf="favoriteMovies.results.length > 0">
     <h3 class="content-section-title">
       <svg class="movie-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect>
@@ -39,11 +39,11 @@
         <line x1="17" y1="17" x2="22" y2="17"></line>
         <line x1="17" y1="7" x2="22" y2="7"></line>
       </svg>
-      Movies ({{ favoriteMoviesGrouped.movies.length }})
+      Movies ({{ favoriteMovies.results.length }})
     </h3>
     <div class="movies-grid">
       <app-movie-card
-        *ngFor="let movie of favoriteMoviesGrouped.movies"
+        *ngFor="let movie of favoriteMovies.results"
         [movie]="movie"
         type="favorite">
       </app-movie-card>
@@ -60,11 +60,11 @@
       TV Series ({{ favoriteMoviesGrouped.tvSeries.length }})
     </h3>
     <div class="movies-grid">
-      <app-movie-card
+      <app-tv-card
         *ngFor="let movie of favoriteMoviesGrouped.tvSeries"
         [movie]="movie"
         type="favorite">
-      </app-movie-card>
+      </app-tv-card>
     </div>
   </div>
 

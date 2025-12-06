@@ -42,11 +42,11 @@
       Movies ({{ watchedMoviesGrouped.movies.length }})
     </h3>
     <div class="movies-grid">
-      <app-movie-card
+      <app-tv-card
         *ngFor="let movie of watchedMoviesGrouped.movies"
         [movie]="movie"
         type="watched">
-      </app-movie-card>
+      </app-tv-card>
     </div>
   </div>
 
@@ -60,11 +60,11 @@
       TV Series ({{ watchedMoviesGrouped.tvSeries.length }})
     </h3>
     <div class="movies-grid">
-      <app-movie-card
+      <app-tv-card
         *ngFor="let movie of watchedMoviesGrouped.tvSeries"
         [movie]="movie"
         type="watched">
-      </app-movie-card>
+      </app-tv-card>
     </div>
   </div>
 
