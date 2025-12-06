@@ -1,4 +1,4 @@
-import {Component, OnInit, OnDestroy} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {NgIf} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {Router} from '@angular/router';
@@ -7,8 +7,6 @@ import {Subscription} from 'rxjs';
 
 import {UserOverviewComponent} from './components/user-overview/user-overview.component';
 import {FavoritesComponent} from './components/favorites/favorites.component';
-import {WatchedComponent} from './components/watched/watched.component';
-import {WatchlistComponent} from './components/watchlist/watchlist.component';
 import {SettingsComponent} from './components/settings/settings.component';
 import {PasswordChangeRequest, UserProfile, UserService} from '../../../../core/services/user.service';
 import {MovieStatistics} from './components/movie.model';
@@ -24,8 +22,6 @@ import {AuthService} from '../../../../core/services/auth-service';
     FormsModule,
     UserOverviewComponent,
     FavoritesComponent,
-    WatchedComponent,
-    WatchlistComponent,
     SettingsComponent
   ],
   templateUrl: './profile.component.html',
@@ -63,6 +59,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     private router: Router,
     private userMovieService: UserMovieService
   ) {
+    console.clear();
   }
 
   ngOnInit(): void {
