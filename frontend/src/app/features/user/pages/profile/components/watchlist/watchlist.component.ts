@@ -1,23 +1,18 @@
-import { Component, OnInit } from '@angular/core';
-import { NgFor, NgIf } from '@angular/common';
-import { MovieCardComponent } from '../shared/movie-card/movie-card.component';
-import {
-  MovieDto,
-  GroupedMovies,
-  STATIC_WATCHLIST_MOVIES,
-  groupMoviesByType
-} from '../movie.model';
+import {Component, OnInit} from '@angular/core';
+import {NgFor, NgIf} from '@angular/common';
+import {GroupedMovies, groupMoviesByType, MovieDto, STATIC_WATCHLIST_MOVIES} from '../movie.model';
+import {TvCardComponent} from '../shared/tv-card/tv-card.component';
 
 @Component({
   selector: 'app-watchlist',
   standalone: true,
-  imports: [NgFor, NgIf, MovieCardComponent],
+  imports: [NgFor, NgIf, TvCardComponent],
   templateUrl: './watchlist.component.html',
   styleUrls: ['./watchlist.component.scss']
 })
 export class WatchlistComponent implements OnInit {
   watchlistMovies: MovieDto[] = [];
-  watchlistMoviesGrouped: GroupedMovies = { movies: [], tvSeries: [] };
+  watchlistMoviesGrouped: GroupedMovies = {movies: [], tvSeries: []};
   loading = false;
   errorMessage = '';
 

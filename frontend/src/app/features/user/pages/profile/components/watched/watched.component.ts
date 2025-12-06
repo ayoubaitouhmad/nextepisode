@@ -1,23 +1,23 @@
-import { Component, OnInit } from '@angular/core';
-import { NgFor, NgIf } from '@angular/common';
-import { MovieCardComponent } from '../shared/movie-card/movie-card.component';
+import {Component, OnInit} from '@angular/core';
+import {NgFor, NgIf} from '@angular/common';
 import {
   MovieDto,
   GroupedMovies,
   STATIC_WATCHED_MOVIES,
   groupMoviesByType
 } from '../movie.model';
+import {TvCardComponent} from '../shared/tv-card/tv-card.component';
 
 @Component({
   selector: 'app-watched',
   standalone: true,
-  imports: [NgFor, NgIf, MovieCardComponent],
+  imports: [NgFor, NgIf, TvCardComponent],
   templateUrl: './watched.component.html',
   styleUrls: ['./watched.component.scss']
 })
 export class WatchedComponent implements OnInit {
   watchedMovies: MovieDto[] = [];
-  watchedMoviesGrouped: GroupedMovies = { movies: [], tvSeries: [] };
+  watchedMoviesGrouped: GroupedMovies = {movies: [], tvSeries: []};
   loading = false;
   errorMessage = '';
 

@@ -4,25 +4,25 @@ import { MovieDto, getMoviePosterUrl, getMovieYear, getMovieGenres } from '../..
 import {getUserMovieGenreAsString, UserMovie} from '../../../../../../../core/models/movie/movie.model';
 
 @Component({
-  selector: 'app-movie-card',
+  selector: 'app-tv-card',
   standalone: true,
   imports: [NgIf],
-  templateUrl: './movie-card.component.html',
-  styleUrls: ['./movie-card.component.scss']
+  templateUrl: './tv-card.component.html',
+  styleUrls: ['./tv-card.component.scss']
 })
-export class MovieCardComponent {
-  @Input() movie!: UserMovie;
+export class TvCardComponent {
+  @Input() movie!: MovieDto;
   @Input() type: 'favorite' | 'watched' | 'watchlist' = 'favorite';
 
   getPosterUrl(): string {
-    return getMoviePosterUrl(this.movie.poster_path);
+    return getMoviePosterUrl(this.movie.posterPath);
   }
 
   getYear(): string {
-    return getMovieYear(this.movie.release_date);
+    return getMovieYear(this.movie.releaseDate);
   }
 
   getGenres(): string {
-    return getUserMovieGenreAsString(this.movie.genres);
+    return getMovieGenres(this.movie.genres);
   }
 }
