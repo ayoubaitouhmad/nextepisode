@@ -1,14 +1,14 @@
 package com.nextepisode.user_service.service;
 
 import com.nextepisode.user_service.dto.UserUpdateProfileRequest;
-import com.nextepisode.user_service.entity.User;
+import com.nextepisode.user_service.entity.user.User;
 import com.nextepisode.user_service.exception.BusinessValidationException;
 import com.nextepisode.user_service.exception.ResourceNotFoundException;
 import com.nextepisode.user_service.repo.UserRepository;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Optional;

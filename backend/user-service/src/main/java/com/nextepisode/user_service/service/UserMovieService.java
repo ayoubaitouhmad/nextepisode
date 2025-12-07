@@ -2,7 +2,7 @@ package com.nextepisode.user_service.service;
 
 import com.nextepisode.user_service.dto.MovieListResponse;
 import com.nextepisode.user_service.dto.MovieResponse;
-import com.nextepisode.user_service.dto.UserMovieStats;
+import com.nextepisode.user_service.dto.UserMovieTvStats;
 import com.nextepisode.user_service.repo.UserMovieRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,33 +16,33 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class UserMovieService {
 
-    private final UserMovieRepository repo;
+    private final UserMovieRepository userMovieRepository;
 
     @Transactional(readOnly = true)
     public MovieListResponse getUserFavoriteMovies(String username, Pageable pageable) {
         log.debug("Finding user:{} favorite movies, page:{}", username, pageable.getPageNumber());
-        Page<MovieResponse> page = repo.findUserFavoriteMovies(username, pageable);
+        Page<MovieResponse> page = userMovieRepository.findUserFavoriteMovies(username, pageable);
         return buildMovieListResponse(page);
     }
 
     @Transactional(readOnly = true)
     public MovieListResponse getUserWatchedMovies(String username, Pageable pageable) {
         log.debug("Finding user:{} watched movies, page:{}", username, pageable.getPageNumber());
-        Page<MovieResponse> page = repo.findUserWatchedMovies(username, pageable);
+        Page<MovieResponse> page = userMovieRepository.findUserWatchedMovies(username, pageable);
         return buildMovieListResponse(page);
     }
 
     @Transactional(readOnly = true)
     public MovieListResponse getUserWatchlistMovies(String username, Pageable pageable) {
         log.debug("Finding user:{} watchlist movies, page:{}", username, pageable.getPageNumber());
-        Page<MovieResponse> page = repo.findUserWatchlistMovies(username, pageable);
+        Page<MovieResponse> page = userMovieRepository.findUserWatchlistMovies(username, pageable);
         return buildMovieListResponse(page);
     }
 
 
     @Transactional(readOnly = true)
-    public UserMovieStats getUserMoviesStats(String username){
-        return  repo.getUserMovieStats(username);
+    public UserMovieTvStats getUserMoviesStats(String username) {
+        return userMovieRepository.getUserMovieStats(username);
     }
 
     private MovieListResponse buildMovieListResponse(Page<MovieResponse> page) {

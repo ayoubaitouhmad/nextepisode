@@ -1,7 +1,8 @@
 package com.nextepisode.user_service.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.nextepisode.user_service.entity.Movie;
+import com.nextepisode.user_service.entity.movie.Movie;
+import com.nextepisode.user_service.entity.movie.MovieGenre;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -58,7 +59,7 @@ public class MovieResponse {
     }
 
 
-    private List<Genre> buildGenres(List<com.nextepisode.user_service.entity.Genre> genres) {
+    private List<Genre> buildGenres(List<MovieGenre> genres) {
 
         return genres.stream().map(
                 genre ->
