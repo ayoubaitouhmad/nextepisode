@@ -1,5 +1,6 @@
-package com.nextepisode.user_service.entity;
+package com.nextepisode.user_service.entity.user;
 
+import com.nextepisode.user_service.entity.movie.Movie;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
