@@ -1,7 +1,5 @@
 package com.nextepisode.user_service.service;
 
-import com.nextepisode.user_service.dto.MovieListResponse;
-import com.nextepisode.user_service.dto.MovieResponse;
 import com.nextepisode.user_service.dto.TvListResponse;
 import com.nextepisode.user_service.dto.TvResponse;
 import com.nextepisode.user_service.repo.UserTvRepository;
@@ -11,16 +9,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.naming.ldap.PagedResultsControl;
-
 @Service
 @Slf4j
 public class UserTvService {
-    private UserTvRepository userTvRepository;
+    private final UserTvRepository userTvRepository;
+
     public UserTvService(UserTvRepository userTvRepository) {
         this.userTvRepository = userTvRepository;
     }
-
 
 
     @Transactional(readOnly = true)
@@ -39,9 +35,6 @@ public class UserTvService {
                 .totalResults(page.getTotalElements())
                 .build();
     }
-
-
-
 
 
 }
