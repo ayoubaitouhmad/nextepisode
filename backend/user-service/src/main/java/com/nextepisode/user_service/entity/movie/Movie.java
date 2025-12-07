@@ -1,4 +1,4 @@
-package com.nextepisode.user_service.entity;
+package com.nextepisode.user_service.entity.movie;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -30,19 +30,18 @@ public class Movie {
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
-            name = "movie_genre",  // Dedicated join table
+            name = "movie_genre",
             joinColumns = @JoinColumn(name = "movie_id"),
             inverseJoinColumns = @JoinColumn(name = "genre_id")
     )
-    private List<Genre> genres = new ArrayList<>();
+    private List<MovieGenre> genres = new ArrayList<>();
 
-    // Helper methods for managing the bidirectional relationship
-    public void addGenre(Genre genre) {
+    public void addGenre(MovieGenre genre) {
         this.genres.add(genre);
         genre.getMovies().add(this);
     }
 
-    public void removeGenre(Genre genre) {
+    public void removeGenre(MovieGenre genre) {
         this.genres.remove(genre);
         genre.getMovies().remove(this);
     }
