@@ -1,7 +1,7 @@
-package com.nextepisode.user_service.entity;
+package com.nextepisode.user_service.entity.user;
 
 
-
+import com.nextepisode.user_service.entity.tv.Tv;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,23 +10,8 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-
-
-//public class User {
-//    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private Long id;
-//
-//    @Column(unique = true, nullable = false)
-//    private String username;
-//
-//    @Column(nullable = false)
-//    private String password; // stored hashed
-//
-//    @Column(unique = true)
-//    private String email;
-//
-//    private String role = "USER";
-//}
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Entity
@@ -37,7 +22,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class User {
 
-    @Id @Column(unique = true, nullable = false)
+    @Id
+    @Column(unique = true, nullable = false)
     private String username;
 
     private String firstName;
@@ -68,6 +54,13 @@ public class User {
     private String profileVisibility = "public"; // public, private, friends
 
 
+//    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+//    @JoinTable(
+//            name = "user_tvs",
+//            joinColumns = @JoinColumn(name = "tv_id"),
+//            inverseJoinColumns = @JoinColumn(name = "genre_id")
+//    )
+//    private List<Tv> tvs = new ArrayList<>();
 
 
 }
