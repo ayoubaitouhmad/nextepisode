@@ -1,4 +1,4 @@
-package com.nextepisode.user_service.entity;
+package com.nextepisode.user_service.entity.user;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
