@@ -1,6 +1,6 @@
 package com.nextepisode.user_service.dto;
 
-public interface UserMovieStats {
+public interface UserMovieTvStats {
     Long getFavoriteCount();
 
     Long getWatchlistCount();
