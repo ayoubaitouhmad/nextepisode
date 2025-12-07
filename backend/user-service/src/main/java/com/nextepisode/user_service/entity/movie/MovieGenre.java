@@ -1,4 +1,4 @@
-package com.nextepisode.user_service.entity;
+package com.nextepisode.user_service.entity.movie;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -9,11 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "genres")  // Separate table for genre definitions
+@Table(name = "movie_genres")  // Separate table for genre definitions
 @Getter
 @Setter
 @NoArgsConstructor
-public class Genre {
+public class MovieGenre {
 
     @Id
     private Long id;
@@ -24,7 +24,7 @@ public class Genre {
     @ManyToMany(mappedBy = "genres", fetch = FetchType.LAZY)
     private List<Movie> movies = new ArrayList<>();
 
-    public Genre(Long id, String name) {
+    public MovieGenre(Long id, String name) {
         this.id = id;
         this.name = name;
     }
@@ -33,7 +33,7 @@ public class Genre {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Genre genre)) return false;
+        if (!(o instanceof MovieGenre genre)) return false;
         return id != null && id.equals(genre.getId());
     }
 
