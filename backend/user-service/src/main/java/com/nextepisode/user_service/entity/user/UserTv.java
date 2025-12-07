@@ -1,5 +1,7 @@
-package com.nextepisode.user_service.entity;
+package com.nextepisode.user_service.entity.user;
 
+import com.nextepisode.user_service.entity.movie.Movie;
+import com.nextepisode.user_service.entity.tv.Tv;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,15 +11,15 @@ import lombok.Setter;
 import java.time.Instant;
 
 @Entity
-@Table(name = "user_movies")
+@Table(name = "user_tvs")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserMovie {
+public class UserTv {
 
     @EmbeddedId
-    private UserMovieId id = new UserMovieId();
+    private UserTvId id = new UserTvId();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("userUsername")
@@ -25,9 +27,9 @@ public class UserMovie {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("movieId")
-    @JoinColumn(name = "movie_id", nullable = false)
-    private Movie movie;
+    @MapsId("tvId")
+    @JoinColumn(name = "tv_id", nullable = false)
+    private Tv tv;
 
     @Column(name = "is_favorite")
     private boolean isFavorite = false;
@@ -58,17 +60,11 @@ public class UserMovie {
         updatedAt = Instant.now();
     }
 
-    // Convenience constructor
-    public UserMovie(User user, Movie movie) {
-        this.user = user;
-        this.movie = movie;
-        this.id = new UserMovieId(user.getUsername(), movie.getId());
-    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof UserMovie that)) return false;
+        if (!(o instanceof UserTv that)) return false;
         return id != null && id.equals(that.getId());
     }
 

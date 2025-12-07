@@ -1,9 +1,9 @@
 package com.nextepisode.user_service.repo;
 
 import com.nextepisode.user_service.dto.MovieResponse;
-import com.nextepisode.user_service.dto.UserMovieStats;
-import com.nextepisode.user_service.entity.UserMovie;
-import com.nextepisode.user_service.entity.UserMovieId;
+import com.nextepisode.user_service.dto.UserMovieTvStats;
+import com.nextepisode.user_service.entity.user.UserMovie;
+import com.nextepisode.user_service.entity.user.UserMovieId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -32,6 +32,6 @@ public interface UserMovieRepository extends JpaRepository<UserMovie, UserMovieI
             "SUM(CASE WHEN um.inWatchlist = true THEN 1 ELSE 0 END) AS watchlistCount, " +
             "SUM(CASE WHEN um.watched = true THEN 1 ELSE 0 END) AS watchedCount " +
             "FROM UserMovie um WHERE um.user.username = :username")
-    UserMovieStats getUserMovieStats(@Param("username") String username);
+    UserMovieTvStats getUserMovieStats(@Param("username") String username);
 
 }

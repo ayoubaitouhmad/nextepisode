@@ -1,7 +1,7 @@
 package com.nextepisode.user_service.events;
 
 import com.nextepisode.user_service.config.RabbitMQConfig;
-import com.nextepisode.user_service.entity.User;
+import com.nextepisode.user_service.entity.user.User;
 import com.nextepisode.user_service.repo.UserRepository;
 import com.nextepisode.user_service.service.UserService;
 import lombok.RequiredArgsConstructor;

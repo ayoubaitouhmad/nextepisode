@@ -1,8 +1,7 @@
 package com.nextepisode.user_service.repo;
 
 
-
-import com.nextepisode.user_service.entity.User;
+import com.nextepisode.user_service.entity.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

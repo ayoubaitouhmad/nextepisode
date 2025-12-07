@@ -3,6 +3,8 @@ package com.nextepisode.user_service.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.nextepisode.user_service.entity.movie.Movie;
 import com.nextepisode.user_service.entity.movie.MovieGenre;
+import com.nextepisode.user_service.entity.tv.TVGenre;
+import com.nextepisode.user_service.entity.tv.Tv;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,13 +17,13 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class MovieResponse {
+public class TvResponse {
 
     @JsonProperty("id")
     private Long id;
 
-    @JsonProperty("title")
-    private String title;
+    @JsonProperty("name")
+    private String name;
 
     @JsonProperty("created_at")
     private Instant createdAt;
@@ -39,27 +41,27 @@ public class MovieResponse {
     private List<Genre> genres;
 
 
-    public MovieResponse( Movie movie , Instant createdAt) {
-        this.id = movie.getId();
-        this.title = movie.getTitle();
+    public TvResponse(Tv tv , Instant createdAt) {
+        this.id = tv.getId();
+        this.name = tv.getName();
         this.createdAt = createdAt;
-        this.releaseDate = movie.getReleaseDate();
-        this.genres =buildGenres(movie.getGenres());
-        this.posterPath = movie.getPosterPath();
+        this.releaseDate = tv.getReleaseDate();
+        this.genres =buildGenres(tv.getGenres());
+        this.posterPath = tv.getPosterPath();
     }
 
-    public MovieResponse( Movie movie , Instant createdAt , Instant watchedAt) {
-        this.id = movie.getId();
-        this.title = movie.getTitle();
+    public TvResponse(Tv tv , Instant createdAt , Instant watchedAt) {
+        this.id = tv.getId();
+        this.name = tv.getName();
         this.createdAt = createdAt;
+        this.releaseDate = tv.getReleaseDate();
+        this.genres =buildGenres(tv.getGenres());
+        this.posterPath = tv.getPosterPath();
         this.watchedAt = watchedAt;
-        this.releaseDate = movie.getReleaseDate();
-        this.genres =buildGenres(movie.getGenres());
-        this.posterPath = movie.getPosterPath();
     }
 
 
-    private List<Genre> buildGenres(List<MovieGenre> genres) {
+    private List<Genre> buildGenres(List<TVGenre> genres) {
 
         return genres.stream().map(
                 genre ->

@@ -1,4 +1,4 @@
-package com.nextepisode.user_service.entity;
+package com.nextepisode.user_service.entity.user;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
@@ -15,26 +15,26 @@ import java.util.Objects;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserMovieId implements Serializable {
+public class UserTvId implements Serializable {
 
     @Column(name = "user_username")
     private String userUsername;
 
-    @Column(name = "movie_id")
-    private Long movieId;
+    @Column(name = "tv_id")
+    private Long tvId;
 
     // CRITICAL: equals and hashCode are required for composite keys
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        UserMovieId that = (UserMovieId) o;
+        UserTvId that = (UserTvId) o;
         return Objects.equals(userUsername, that.userUsername) &&
-                Objects.equals(movieId, that.movieId);
+                Objects.equals(tvId, that.tvId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userUsername, movieId);
+        return Objects.hash(userUsername, tvId);
     }
 }
