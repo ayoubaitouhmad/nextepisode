@@ -2,7 +2,8 @@ package com.nextepisode.user_service.controller;
 
 import com.nextepisode.user_service.config.ApiPaths;
 import com.nextepisode.user_service.dto.UserUpdateProfileRequest;
-import com.nextepisode.user_service.entity.User;
+
+import com.nextepisode.user_service.entity.user.User;
 import com.nextepisode.user_service.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
