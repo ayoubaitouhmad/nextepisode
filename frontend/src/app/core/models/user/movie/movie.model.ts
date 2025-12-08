@@ -1,7 +1,27 @@
-export interface Genre {
+import {Genre} from '../shared/shared-dtos';
+
+export interface Movie {
   id: number;
-  name: string;
+  tmdbId: number;
+  title: string;
+  overview: string;
+  posterPath: string;
+  backdropPath: string;
+  releaseDate: string;
+  voteAverage: number;
+  voteCount: number;
+  originalLanguage: string;
+  originalTitle: string;
+  adult: boolean;
+  status: string;
+  tagline: string;
+  runtime: number;
+  genres: string[];
+  type: string; // 'movie' or 'tv'
+  category: string;
+  isInUserList: boolean;
 }
+
 
 export interface UserMovie {
   id: number;
