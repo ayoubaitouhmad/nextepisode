@@ -14,9 +14,9 @@ import org.springframework.data.repository.query.Param;
 public interface UserTvRepository extends JpaRepository<UserTv, UserTvId> {
 
 
-    @Query("SELECT NEW com.nextepisode.user_service.dto.TvResponse(t , um.createdAt) " +
-            "FROM Tv t JOIN UserTv um ON um.tv.id = t.id " +
-            "WHERE um.user.username = :username AND um.isFavorite = true")
+    @Query("SELECT NEW com.nextepisode.user_service.dto.TvResponse(t , ut.createdAt) " +
+            "FROM Tv t JOIN UserTv ut ON ut.tv.id = t.id " +
+            "WHERE ut.user.username = :username AND ut.isFavorite = true")
     Page<TvResponse> findUserFavoriteShows(@Param("username") String username, Pageable pageable);
 
     @Query("SELECT NEW com.nextepisode.user_service.dto.TvResponse(t , ut.createdAt , ut.watchedAt) " +

@@ -27,7 +27,7 @@ public class UserTvController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size
     ) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by("um.createdAt").descending());
+        Pageable pageable = PageRequest.of(page, size, Sort.by("ut.createdAt").descending());
         return userTvService.getUserFavoriteShows(username, pageable);
     }
 
@@ -37,7 +37,7 @@ public class UserTvController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size
     ) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by("um.createdAt").descending());
+        Pageable pageable = PageRequest.of(page, size, Sort.by("ut.createdAt").descending());
         return userTvService.getUserWatchedShows(username, pageable);
     }
 
@@ -47,7 +47,7 @@ public class UserTvController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size
     ) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by("um.createdAt").descending());
+        Pageable pageable = PageRequest.of(page, size, Sort.by("ut.createdAt").descending());
         return userTvService.getUserWatchlistShows(username, pageable);
     }
 
