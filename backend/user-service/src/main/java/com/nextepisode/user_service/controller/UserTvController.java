@@ -56,7 +56,7 @@ public class UserTvController {
     public UserMovieTvStats watchlistMovies(
             @AuthenticationPrincipal String username
     ) {
-        return userTvService.getUserMoviesStats(username);
+        return userTvService.getUserShowsStats(username);
     }
 
 
