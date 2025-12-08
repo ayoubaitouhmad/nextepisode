@@ -11,8 +11,8 @@ import {ContentFilters} from '../../../../core/models/content-filters';
 import {TvSeriesService} from '../../../../core/services/tv-series.service';
 import {TvSeries} from '../../../../core/models/TMDTvSeries';
 import {MovieService} from '../../../../core/services/movie.service';
-import {UserMovieService} from '../../../../core/services/user-movie.service';
-import {AuthService} from '../../../../core/services/auth-service';
+import {UserMovieService} from '../../../../core/services/user/movie/user-movie.service';
+import {AuthService} from '../../../../core/services/auth/auth-service';
 
 @Component({
   selector: 'app-movie-list',

@@ -2,7 +2,7 @@ import {Component, HostListener, OnDestroy, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {Router, RouterLink, RouterLinkActive, RouterOutlet} from '@angular/router';
 import {SearchBarComponent} from '../../../shared/components/search-bar/search-bar.component';
-import {AuthService} from '../../services/auth-service';
+import {AuthService} from '../../services/auth/auth-service';
 import {routes} from '../../../app.routes';
 import {Subscription} from 'rxjs';
 

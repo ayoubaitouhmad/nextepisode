@@ -1,7 +1,8 @@
-import { Component, Input } from '@angular/core';
-import { NgIf } from '@angular/common';
-import { MovieDto, getMoviePosterUrl, getMovieYear, getMovieGenres } from '../../movie.model';
-import {getUserMovieGenreAsString, UserMovie} from '../../../../../../../core/models/movie/movie.model';
+import {Component, Input} from '@angular/core';
+import {NgIf} from '@angular/common';
+import {getMovieGenres, getMoviePosterUrl, getMovieYear, MovieDto} from '../../movie.model';
+import {UserTvShow} from '../../../../../../../core/models/user/tv/tv.model';
+import {getUserMovieGenreAsString} from '../../../../../../../core/models/user/shared/shared-dtos';
 
 @Component({
   selector: 'app-tv-card',
@@ -11,18 +12,18 @@ import {getUserMovieGenreAsString, UserMovie} from '../../../../../../../core/mo
   styleUrls: ['./tv-card.component.scss']
 })
 export class TvCardComponent {
-  @Input() movie!: MovieDto;
+  @Input() tvShow!: UserTvShow;
   @Input() type: 'favorite' | 'watched' | 'watchlist' = 'favorite';
 
   getPosterUrl(): string {
-    return getMoviePosterUrl(this.movie.posterPath);
+    return getMoviePosterUrl(this.tvShow.poster_path);
   }
 
   getYear(): string {
-    return getMovieYear(this.movie.releaseDate);
+    return getMovieYear(this.tvShow.release_date);
   }
 
   getGenres(): string {
-    return getMovieGenres(this.movie.genres);
+    return getUserMovieGenreAsString(this.tvShow.genres);
   }
 }

@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { NgIf } from '@angular/common';
 import { MovieDto, getMoviePosterUrl, getMovieYear, getMovieGenres } from '../../movie.model';
-import {getUserMovieGenreAsString, UserMovie} from '../../../../../../../core/models/movie/movie.model';
+import {getUserMovieGenreAsString, UserMovie} from '../../../../../../../core/models/user/movie/movie.model';
 
 @Component({
   selector: 'app-movie-card',

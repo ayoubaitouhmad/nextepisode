@@ -5,8 +5,8 @@ import {TMDBService} from '../../../../core/services/tmdb.service';
 import {ImageService} from '../../../../core/services/imageService';
 import {StreamingService} from '../../../../core/models/streaming-service';
 import {TvSeries} from '../../../../core/models/TMDTvSeries';
-import {UserMovieService, MovieStatus} from '../../../../core/services/user-movie.service';
-import {AuthService} from '../../../../core/services/auth-service';
+import {UserMovieService, MovieStatus} from '../../../../core/services/user/movie/user-movie.service';
+import {AuthService} from '../../../../core/services/auth/auth-service';
 import {Router} from '@angular/router';
 
 @Component({

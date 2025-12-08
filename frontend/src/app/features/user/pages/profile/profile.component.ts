@@ -8,10 +8,13 @@ import {Subscription} from 'rxjs';
 import {UserOverviewComponent} from './components/user-overview/user-overview.component';
 import {FavoritesComponent} from './components/favorites/favorites.component';
 import {SettingsComponent} from './components/settings/settings.component';
-import {PasswordChangeRequest, UserProfile, UserService} from '../../../../core/services/user.service';
+import {PasswordChangeRequest, UserProfile, UserService} from '../../../../core/services/user/user.service';
 import {MovieStatistics} from './components/movie.model';
-import {UserMovieService} from '../../../../core/services/user-movie.service';
-import {AuthService} from '../../../../core/services/auth-service';
+import {UserMovieService} from '../../../../core/services/user/movie/user-movie.service';
+import {AuthService} from '../../../../core/services/auth/auth-service';
+import {UserTvService} from '../../../../core/services/user/tv/user-tv.service';
+import {WatchedComponent} from './components/watched/watched.component';
+import {WatchlistComponent} from './components/watchlist/watchlist.component';
 
 
 @Component({
@@ -22,7 +25,9 @@ import {AuthService} from '../../../../core/services/auth-service';
     FormsModule,
     UserOverviewComponent,
     FavoritesComponent,
-    SettingsComponent
+    SettingsComponent,
+    WatchedComponent,
+    WatchlistComponent
   ],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss']
@@ -57,7 +62,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private authService: AuthService,
     private router: Router,
-    private userMovieService: UserMovieService
+    private userMovieService: UserMovieService,
+    private userTvService: UserTvService
   ) {
     console.clear();
   }
@@ -67,7 +73,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
       this.currentUser = user;
       if (user) {
         this.editedProfile = {...user};
-        this.loadMovieStatistics();
+        this.loadStats();
       }
     });
 
@@ -98,6 +104,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
     });
   }
 
+  loadStats():void{
+    this.loadMovieStatistics();
+    this.loadTvShowsStatistics();
+  }
   loadMovieStatistics(): void {
     this.userMovieService.getUserMovieStatistics().subscribe({
       next: (statistics) => {
@@ -112,11 +122,24 @@ export class ProfileComponent implements OnInit, OnDestroy {
       }
     });
   }
+  loadTvShowsStatistics(): void {
+    this.userTvService.getUserTvShowsStatistics().subscribe({
+      next: (statistics) => {
+        console.log(statistics)
+        this.movieStatistics.favoriteCount += statistics.favoriteCount ?? (statistics as any).favoriteCount ?? 0;
+        this.movieStatistics.watchedCount += statistics.watchedCount ?? (statistics as any).watchedCount ?? 0;
+        this.movieStatistics.watchedCount += statistics.watchedCount ?? (statistics as any).watchedCount ?? 0;
+      },
+      error: (error) => {
+        console.error('Failed to load movie statistics:', error);
+      }
+    });
+  }
 
   setActiveTab(tab: 'overview' | 'favorites' | 'watched' | 'watchlist' | 'settings'): void {
     this.activeTab = tab;
     if (tab === 'favorites' || tab === 'watched' || tab === 'watchlist' || tab === 'overview') {
-      this.loadMovieStatistics();
+      this.loadStats();
     }
   }
 

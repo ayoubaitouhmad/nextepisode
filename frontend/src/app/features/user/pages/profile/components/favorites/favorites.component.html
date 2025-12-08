@@ -50,19 +50,19 @@
     </div>
   </div>
 
-  <div class="content-section" *ngIf="favoriteMoviesGrouped.tvSeries.length > 0">
+  <div class="content-section" *ngIf="favoriteTvShows.results.length > 0">
     <h3 class="content-section-title">
       <svg class="tv-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
         <line x1="8" y1="21" x2="16" y2="21"></line>
         <line x1="12" y1="17" x2="12" y2="21"></line>
       </svg>
-      TV Series ({{ favoriteMoviesGrouped.tvSeries.length }})
+      TV Series ({{ favoriteTvShows.results.length }})
     </h3>
     <div class="movies-grid">
       <app-tv-card
-        *ngFor="let movie of favoriteMoviesGrouped.tvSeries"
-        [movie]="movie"
+        *ngFor="let tvShow of favoriteTvShows.results"
+        [tvShow]="tvShow"
         type="favorite">
       </app-tv-card>
     </div>
