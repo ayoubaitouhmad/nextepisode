@@ -8,10 +8,10 @@ import {Subscription} from 'rxjs';
 import {UserOverviewComponent} from './components/user-overview/user-overview.component';
 import {FavoritesComponent} from './components/favorites/favorites.component';
 import {SettingsComponent} from './components/settings/settings.component';
-import {PasswordChangeRequest, UserProfile, UserService} from '../../../../core/services/user.service';
+import {PasswordChangeRequest, UserProfile, UserService} from '../../../../core/services/user/user.service';
 import {MovieStatistics} from './components/movie.model';
-import {UserMovieService} from '../../../../core/services/user-movie.service';
-import {AuthService} from '../../../../core/services/auth-service';
+import {UserMovieService} from '../../../../core/services/user/movie/user-movie.service';
+import {AuthService} from '../../../../core/services/auth/auth-service';
 import {UserTvService} from '../../../../core/services/user/tv/user-tv.service';
 
 

@@ -2,7 +2,8 @@ import {Component} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {Router, RouterModule} from '@angular/router';
-import {AuthService, SignupRequest} from '../../../../core/services/auth-service';
+import {AuthService} from '../../../../core/services/auth/auth-service';
+import {SignupRequest} from '../../../../core/models/auth/auth.model';
 
 
 @Component({

@@ -1,6 +1,6 @@
 import {Router, Routes} from '@angular/router';
 import {Component} from '@angular/core';
-import {AuthService} from '../../core/services/auth-service';
+import {AuthService} from '../../core/services/auth/auth-service';
 
 export const AUTH_ROUTES: Routes = [
   {

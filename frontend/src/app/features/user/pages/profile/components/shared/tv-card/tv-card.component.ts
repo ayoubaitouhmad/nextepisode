@@ -1,8 +1,8 @@
 import {Component, Input} from '@angular/core';
 import {NgIf} from '@angular/common';
 import {getMovieGenres, getMoviePosterUrl, getMovieYear, MovieDto} from '../../movie.model';
-import {UserTvShow} from '../../../../../../../core/models/tv/tv.model';
-import {getUserMovieGenreAsString} from '../../../../../../../core/models/shared/shared-dtos';
+import {UserTvShow} from '../../../../../../../core/models/user/tv/tv.model';
+import {getUserMovieGenreAsString} from '../../../../../../../core/models/user/shared/shared-dtos';
 
 @Component({
   selector: 'app-tv-card',

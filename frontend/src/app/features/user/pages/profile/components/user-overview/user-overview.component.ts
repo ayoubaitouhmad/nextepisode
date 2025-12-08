@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import {UserProfile} from '../../../../../../core/services/user.service';
+import {UserProfile} from '../../../../../../core/services/user/user.service';
 import {MovieStatistics} from '../movie.model';
 
 @Component({

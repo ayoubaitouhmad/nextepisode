@@ -4,7 +4,8 @@ import {CommonModule} from '@angular/common';
 import {RouterModule, Router} from '@angular/router';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 
-import {AuthService, LoginRequest} from '../../../../core/services/auth-service';
+import {AuthService} from '../../../../core/services/auth/auth-service';
+import {LoginRequest} from '../../../../core/models/auth/auth.model';
 
 @Component({
   selector: 'app-login',

@@ -1,10 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {NgFor, NgIf} from '@angular/common';
-import {UserMovieList} from '../../../../../../core/models/movie/movie.model';
-import {UserMovieService} from '../../../../../../core/services/user-movie.service';
+import {UserMovieList} from '../../../../../../core/models/user/movie/movie.model';
+import {UserMovieService} from '../../../../../../core/services/user/movie/user-movie.service';
 import {TvCardComponent} from '../shared/tv-card/tv-card.component';
 import {MovieCardComponent} from '../shared/movie-card/movie-card.component';
-import {UserTvShowList} from '../../../../../../core/models/tv/tv.model';
+import {UserTvShowList} from '../../../../../../core/models/user/tv/tv.model';
 import {UserTvService} from '../../../../../../core/services/user/tv/user-tv.service';
 
 @Component({
