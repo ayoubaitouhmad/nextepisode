@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {environment} from '../../../environments/environment';
-import {UserMovieList} from '../models/movie/movie.model';
+import {environment} from '../../../../../environments/environment';
+import {UserMovieList} from '../../../models/user/movie/movie.model';
 
 export interface UserMovieRequest {
   tmdbId: number;
