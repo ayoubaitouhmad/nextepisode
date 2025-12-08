@@ -13,6 +13,8 @@ import {MovieStatistics} from './components/movie.model';
 import {UserMovieService} from '../../../../core/services/user/movie/user-movie.service';
 import {AuthService} from '../../../../core/services/auth/auth-service';
 import {UserTvService} from '../../../../core/services/user/tv/user-tv.service';
+import {WatchedComponent} from './components/watched/watched.component';
+import {WatchlistComponent} from './components/watchlist/watchlist.component';
 
 
 @Component({
@@ -23,7 +25,9 @@ import {UserTvService} from '../../../../core/services/user/tv/user-tv.service';
     FormsModule,
     UserOverviewComponent,
     FavoritesComponent,
-    SettingsComponent
+    SettingsComponent,
+    WatchedComponent,
+    WatchlistComponent
   ],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss']
