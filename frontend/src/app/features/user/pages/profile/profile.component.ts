@@ -12,6 +12,7 @@ import {PasswordChangeRequest, UserProfile, UserService} from '../../../../core/
 import {MovieStatistics} from './components/movie.model';
 import {UserMovieService} from '../../../../core/services/user-movie.service';
 import {AuthService} from '../../../../core/services/auth-service';
+import {UserTvService} from '../../../../core/services/user/tv/user-tv.service';
 
 
 @Component({
@@ -29,7 +30,7 @@ import {AuthService} from '../../../../core/services/auth-service';
 })
 export class ProfileComponent implements OnInit, OnDestroy {
 
-  activeTab: 'overview' | 'favorites' | 'watched' | 'watchlist' | 'settings' = 'overview';
+  activeTab: 'overview' | 'favorites' | 'watched' | 'watchlist' | 'settings' = 'favorites';
   currentUser: UserProfile | null = null;
   editedProfile: Partial<UserProfile> = {};
   private userSubscription: Subscription | null = null;
@@ -57,7 +58,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private authService: AuthService,
     private router: Router,
-    private userMovieService: UserMovieService
+    private userMovieService: UserMovieService,
+    private userTvService: UserTvService
   ) {
     console.clear();
   }
@@ -68,6 +70,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
       if (user) {
         this.editedProfile = {...user};
         this.loadMovieStatistics();
+        this.loadTvShowsStatistics();
       }
     });
 
@@ -106,6 +109,20 @@ export class ProfileComponent implements OnInit, OnDestroy {
           watchedCount: (statistics as any).watchedCount ?? (statistics as any).watched ?? 0,
           watchlistCount: (statistics as any).watchlistCount ?? (statistics as any).watchlist ?? 0
         };
+      },
+      error: (error) => {
+        console.error('Failed to load movie statistics:', error);
+      }
+    });
+  }
+
+
+  loadTvShowsStatistics(): void {
+    this.userTvService.getUserTvShowsStatistics().subscribe({
+      next: (statistics) => {
+        this.movieStatistics.favoriteCount += statistics.favoriteCount ?? (statistics as any).favoriteCount ?? 0;
+        this.movieStatistics.watchedCount += statistics.watchedCount ?? (statistics as any).watchedCount ?? 0;
+        this.movieStatistics.watchedCount += statistics.watchedCount ?? (statistics as any).watchedCount ?? 0;
       },
       error: (error) => {
         console.error('Failed to load movie statistics:', error);
