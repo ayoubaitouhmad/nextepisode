@@ -1,6 +1,6 @@
 <div class="movie-card">
   <div class="movie-poster">
-    <img [src]="getPosterUrl()" [alt]="movie.title" class="poster-image">
+    <img [src]="getPosterUrl()" [alt]="tvShow.name" class="poster-image">
     <div class="movie-overlay">
 
       <!-- Rating Badge - favorite type -->
@@ -38,7 +38,7 @@
   </div>
 
   <div class="movie-info">
-    <h3 class="movie-title">{{ movie.title }}</h3>
+    <h3 class="movie-title">{{ tvShow.name }}</h3>
     <p class="movie-details">{{ getYear() }} • {{ getGenres() }}</p>
   </div>
 </div>
