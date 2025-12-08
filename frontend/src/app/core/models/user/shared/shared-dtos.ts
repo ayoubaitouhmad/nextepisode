@@ -16,3 +16,19 @@ export function getUserMovieGenreAsString(genres: Genre[]) {
   }
   return genres.map(genre => genre.name).join(", ");
 }
+
+
+export interface TitleStatus {
+  isFavorite: boolean;
+  isWatched: boolean;
+  isInWatchlist: boolean;
+}
+
+
+export interface UserTitleRequest {
+  tmdbId: number;
+  category: 'FAVORITE' | 'WATCHED' | 'WATCHLIST';
+  action: 'ADD' | 'REMOVE';
+}
+
+

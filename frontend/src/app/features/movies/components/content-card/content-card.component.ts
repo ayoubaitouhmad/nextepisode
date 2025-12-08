@@ -1,13 +1,9 @@
-import {Component, Input, Output, EventEmitter, inject, OnInit} from '@angular/core';
-import {CommonModule, NgOptimizedImage} from '@angular/common';
+import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
+import {CommonModule} from '@angular/common';
 import {Movie} from '../../../../core/models/movie.model';
-import {TMDBService} from '../../../../core/services/tmdb.service';
-import {ImageService} from '../../../../core/services/imageService';
-import {StreamingService} from '../../../../core/models/streaming-service';
 import {TvSeries} from '../../../../core/models/TMDTvSeries';
-import {UserMovieService, MovieStatus} from '../../../../core/services/user/movie/user-movie.service';
+import {UserMovieService} from '../../../../core/services/user/movie/user-movie.service';
 import {AuthService} from '../../../../core/services/auth/auth-service';
-import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-content-card',
@@ -161,7 +157,7 @@ export class ContentCardComponent implements OnInit {
     // Check if movie is in user's lists by calling the backend API
     if (this.content && 'id' in this.content) {
       this.userMovieService.checkMovieStatus(parseInt(this.content.id)).subscribe({
-        next: (status: MovieStatus) => {
+        next: (status: any) => {
           this.isInFavorites = status.isFavorite;
           this.isInWatched = status.isWatched;
           this.isInWatchlist = status.isInWatchlist;
