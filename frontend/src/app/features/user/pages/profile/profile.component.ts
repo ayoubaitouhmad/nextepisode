@@ -30,7 +30,7 @@ import {UserTvService} from '../../../../core/services/user/tv/user-tv.service';
 })
 export class ProfileComponent implements OnInit, OnDestroy {
 
-  activeTab: 'overview' | 'favorites' | 'watched' | 'watchlist' | 'settings' = 'favorites';
+  activeTab: 'overview' | 'favorites' | 'watched' | 'watchlist' | 'settings' = 'overview';
   currentUser: UserProfile | null = null;
   editedProfile: Partial<UserProfile> = {};
   private userSubscription: Subscription | null = null;
@@ -69,8 +69,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
       this.currentUser = user;
       if (user) {
         this.editedProfile = {...user};
-        this.loadMovieStatistics();
-        this.loadTvShowsStatistics();
+        this.loadStats();
       }
     });
 
@@ -101,6 +100,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
     });
   }
 
+  loadStats():void{
+    this.loadMovieStatistics();
+    this.loadTvShowsStatistics();
+  }
   loadMovieStatistics(): void {
     this.userMovieService.getUserMovieStatistics().subscribe({
       next: (statistics) => {
@@ -115,11 +118,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
       }
     });
   }
-
-
   loadTvShowsStatistics(): void {
     this.userTvService.getUserTvShowsStatistics().subscribe({
       next: (statistics) => {
+        console.log(statistics)
         this.movieStatistics.favoriteCount += statistics.favoriteCount ?? (statistics as any).favoriteCount ?? 0;
         this.movieStatistics.watchedCount += statistics.watchedCount ?? (statistics as any).watchedCount ?? 0;
         this.movieStatistics.watchedCount += statistics.watchedCount ?? (statistics as any).watchedCount ?? 0;
@@ -133,7 +135,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   setActiveTab(tab: 'overview' | 'favorites' | 'watched' | 'watchlist' | 'settings'): void {
     this.activeTab = tab;
     if (tab === 'favorites' || tab === 'watched' || tab === 'watchlist' || tab === 'overview') {
-      this.loadMovieStatistics();
+      this.loadStats();
     }
   }
 
