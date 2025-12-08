@@ -2,6 +2,7 @@ package com.nextepisode.user_service.service;
 
 import com.nextepisode.user_service.dto.TvListResponse;
 import com.nextepisode.user_service.dto.TvResponse;
+import com.nextepisode.user_service.dto.UserMovieTvStats;
 import com.nextepisode.user_service.repo.UserTvRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -20,9 +21,24 @@ public class UserTvService {
 
 
     @Transactional(readOnly = true)
-    public TvListResponse getUserFavoriteMovies(String username, Pageable pageable) {
-        log.debug("Finding user:{} favorite movies, page:{}", username, pageable.getPageNumber());
-        Page<TvResponse> page = userTvRepository.findUserFavoriteMovies(username, pageable);
+    public TvListResponse getUserFavoriteShows(String username, Pageable pageable) {
+        log.debug("Finding user:{} favorite shows, page:{}", username, pageable.getPageNumber());
+        Page<TvResponse> page = userTvRepository.findUserFavoriteShows(username, pageable);
+        return buildMovieListResponse(page);
+    }
+
+
+    @Transactional(readOnly = true)
+    public TvListResponse getUserWatchedShows(String username, Pageable pageable) {
+        log.debug("Finding user:{} watched shows, page:{}", username, pageable.getPageNumber());
+        Page<TvResponse> page = userTvRepository.findUserWatchedShows(username, pageable);
+        return buildMovieListResponse(page);
+    }
+
+    @Transactional(readOnly = true)
+    public TvListResponse getUserWatchlistShows(String username, Pageable pageable) {
+        log.debug("Finding user:{} watchlist shows, page:{}", username, pageable.getPageNumber());
+        Page<TvResponse> page = userTvRepository.findUserWatchlistShows(username, pageable);
         return buildMovieListResponse(page);
     }
 
@@ -36,5 +52,10 @@ public class UserTvService {
                 .build();
     }
 
+
+    @Transactional(readOnly = true)
+    public UserMovieTvStats getUserShowsStats(String username) {
+        return userTvRepository.getUserMovieStats(username);
+    }
 
 }
