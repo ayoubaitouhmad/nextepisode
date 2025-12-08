@@ -28,7 +28,7 @@
 
 <ng-container *ngIf="!loading && !errorMessage">
 
-  <div class="content-section" *ngIf="watchlistMoviesGrouped.movies.length > 0">
+  <div class="content-section" *ngIf="watchListMovies.results.length > 0">
     <h3 class="content-section-title">
       <svg class="movie-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect>
@@ -40,31 +40,31 @@
         <line x1="17" y1="17" x2="22" y2="17"></line>
         <line x1="17" y1="7" x2="22" y2="7"></line>
       </svg>
-      Movies ({{ watchlistMoviesGrouped.movies.length }})
+      Movies ({{ watchListMovies.results.length }})
     </h3>
     <div class="movies-grid">
-      <app-tv-card
-        *ngFor="let movie of watchlistMoviesGrouped.movies"
+      <app-movie-card
+        *ngFor="let movie of watchListMovies.results"
         [movie]="movie"
-        type="watchlist">
-      </app-tv-card>
+        type="favorite">
+      </app-movie-card>
     </div>
   </div>
 
-  <div class="content-section" *ngIf="watchlistMoviesGrouped.tvSeries.length > 0">
+  <div class="content-section" *ngIf="watchListTvShows.results.length > 0">
     <h3 class="content-section-title">
       <svg class="tv-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
         <line x1="8" y1="21" x2="16" y2="21"></line>
         <line x1="12" y1="17" x2="12" y2="21"></line>
       </svg>
-      TV Series ({{ watchlistMoviesGrouped.tvSeries.length }})
+      TV Series ({{ watchListTvShows.results.length }})
     </h3>
     <div class="movies-grid">
       <app-tv-card
-        *ngFor="let movie of watchlistMoviesGrouped.tvSeries"
-        [movie]="movie"
-        type="watchlist">
+        *ngFor="let tvShow of watchListTvShows.results"
+        [tvShow]="tvShow"
+        type="favorite">
       </app-tv-card>
     </div>
   </div>
