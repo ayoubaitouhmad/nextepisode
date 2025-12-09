@@ -1,8 +1,8 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { NgIf } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {NgIf} from '@angular/common';
+import {FormsModule} from '@angular/forms';
 import {UserProfile} from '../../../../../../core/services/user/user.service';
-import {MovieStatistics} from '../movie.model';
+import {UserMoviesAndTvShowStats} from '../../../../../../core/models/user/shared/shared-dtos';
 
 @Component({
   selector: 'app-user-overview',
@@ -14,7 +14,7 @@ import {MovieStatistics} from '../movie.model';
 export class UserOverviewComponent {
   @Input() currentUser: UserProfile | null = null;
   @Input() editedProfile: Partial<UserProfile> = {};
-  @Input() movieStatistics: MovieStatistics = {
+  @Input() userMoviesAndTvShowStats: UserMoviesAndTvShowStats = {
     favoriteCount: 0,
     watchedCount: 0,
     watchlistCount: 0
