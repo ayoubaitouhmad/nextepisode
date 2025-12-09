@@ -1,6 +1,11 @@
 package com.nextepisode.user_service;
 
-import com.nextepisode.user_service.entity.*;
+
+import com.nextepisode.user_service.entity.movie.Movie;
+import com.nextepisode.user_service.entity.movie.MovieGenre;
+import com.nextepisode.user_service.entity.user.User;
+import com.nextepisode.user_service.entity.user.UserMovie;
+import com.nextepisode.user_service.entity.user.UserMovieId;
 import com.nextepisode.user_service.repo.GenreRepository;
 import com.nextepisode.user_service.repo.MovieRepository;
 import com.nextepisode.user_service.repo.UserMovieRepository;
@@ -43,38 +48,38 @@ public class UserServiceApplication {
             userRepository.deleteAll();
 
             log.info("Starting database seeding...");
-            List<Genre> genres = seedGenres(genreRepository);
+            List<MovieGenre> genres = seedGenres(genreRepository);
             List<User> users = seedUsers(userRepository);
-            List<Movie> movies = seedMovies(genres , movieRepository);
-            seedUserMovies(users, movies , userMovieRepository);
+            List<Movie> movies = seedMovies(genres, movieRepository);
+            seedUserMovies(users, movies, userMovieRepository);
             log.info("Created {} genres, {} users, {} movies", genres.size(), users.size(), movies.size());
 
         };
     }
 
-    private List<Genre> seedGenres(GenreRepository genreRepository) {
+    private List<MovieGenre> seedGenres(GenreRepository genreRepository) {
         log.info("Seeding genres...");
 
-        List<Genre> genres = Arrays.asList(
-                new Genre(28L, "Action"),
-                new Genre(12L, "Adventure"),
-                new Genre(16L, "Animation"),
-                new Genre(35L, "Comedy"),
-                new Genre(80L, "Crime"),
-                new Genre(99L, "Documentary"),
-                new Genre(18L, "Drama"),
-                new Genre(10751L, "Family"),
-                new Genre(14L, "Fantasy"),
-                new Genre(36L, "History"),
-                new Genre(27L, "Horror"),
-                new Genre(10402L, "Music"),
-                new Genre(9648L, "Mystery"),
-                new Genre(10749L, "Romance"),
-                new Genre(878L, "Science Fiction"),
-                new Genre(10770L, "TV Movie"),
-                new Genre(53L, "Thriller"),
-                new Genre(10752L, "War"),
-                new Genre(37L, "Western")
+        List<MovieGenre> genres = Arrays.asList(
+                new MovieGenre(28L, "Action"),
+                new MovieGenre(12L, "Adventure"),
+                new MovieGenre(16L, "Animation"),
+                new MovieGenre(35L, "Comedy"),
+                new MovieGenre(80L, "Crime"),
+                new MovieGenre(99L, "Documentary"),
+                new MovieGenre(18L, "Drama"),
+                new MovieGenre(10751L, "Family"),
+                new MovieGenre(14L, "Fantasy"),
+                new MovieGenre(36L, "History"),
+                new MovieGenre(27L, "Horror"),
+                new MovieGenre(10402L, "Music"),
+                new MovieGenre(9648L, "Mystery"),
+                new MovieGenre(10749L, "Romance"),
+                new MovieGenre(878L, "Science Fiction"),
+                new MovieGenre(10770L, "TV Movie"),
+                new MovieGenre(53L, "Thriller"),
+                new MovieGenre(10752L, "War"),
+                new MovieGenre(37L, "Western")
         );
 
         return genreRepository.saveAll(genres);
@@ -84,7 +89,7 @@ public class UserServiceApplication {
         log.info("Seeding users...");
 
         List<User> users = Arrays.asList(
-                createUser("ayoubaitx", "ayoub", "ait", "ayoub.ait@example.com",  "Movie enthusiast and critic", "New York, USA"),
+                createUser("ayoubaitx", "ayoub", "ait", "ayoub.ait@example.com", "Movie enthusiast and critic", "New York, USA"),
                 createUser("jane_smith", "Jane", "Smith", "jane.smith@example.com", "Film director and writer", "Los Angeles, USA"),
                 createUser("mike_wilson", "Mike", "Wilson", "mike.wilson@example.com", "Casual movie watcher", "Chicago, USA"),
                 createUser("sarah_jones", "Sarah", "Jones", "sarah.jones@example.com", "Horror movie fanatic", "Austin, USA"),
@@ -130,11 +135,11 @@ public class UserServiceApplication {
         return LocalDate.now().minusYears(age).minusDays(random.nextInt(365));
     }
 
-    private List<Movie> seedMovies(List<Genre> genres , MovieRepository movieRepository) {
+    private List<Movie> seedMovies(List<MovieGenre> genres, MovieRepository movieRepository) {
         log.info("Seeding movies...");
 
-        Map<String, Genre> genreMap = new HashMap<>();
-        for (Genre genre : genres) {
+        Map<String, MovieGenre> genreMap = new HashMap<>();
+        for (MovieGenre genre : genres) {
             genreMap.put(genre.getName(), genre);
         }
 
@@ -202,9 +207,9 @@ public class UserServiceApplication {
             movie.setReleaseDate(Instant.parse((int) data[3] + "-06-15T00:00:00Z"));
 
             List<String> genreNames = (List<String>) data[4];
-            List<Genre> movieGenres = new ArrayList<>();
+            List<MovieGenre> movieGenres = new ArrayList<>();
             for (String genreName : genreNames) {
-                Genre genre = genreMap.get(genreName);
+                MovieGenre genre = genreMap.get(genreName);
                 if (genre != null) {
                     movieGenres.add(genre);
                 }
@@ -217,7 +222,7 @@ public class UserServiceApplication {
         return movieRepository.saveAll(movies);
     }
 
-    private void seedUserMovies(List<User> users, List<Movie> movies , UserMovieRepository userMovieRepository ) {
+    private void seedUserMovies(List<User> users, List<Movie> movies, UserMovieRepository userMovieRepository) {
         log.info("Seeding user-movie relationships...");
 
         Random random = new Random();
