@@ -9,12 +9,12 @@ import {UserOverviewComponent} from './components/user-overview/user-overview.co
 import {FavoritesComponent} from './components/favorites/favorites.component';
 import {SettingsComponent} from './components/settings/settings.component';
 import {PasswordChangeRequest, UserProfile, UserService} from '../../../../core/services/user/user.service';
-import {MovieStatistics} from './components/movie.model';
 import {UserMovieService} from '../../../../core/services/user/movie/user-movie.service';
 import {AuthService} from '../../../../core/services/auth/auth-service';
 import {UserTvService} from '../../../../core/services/user/tv/user-tv.service';
 import {WatchedComponent} from './components/watched/watched.component';
 import {WatchlistComponent} from './components/watchlist/watchlist.component';
+import {UserMoviesAndTvShowStats} from '../../../../core/models/user/shared/shared-dtos';
 
 
 @Component({
@@ -48,7 +48,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     confirmPassword: ''
   };
 
-  movieStatistics: MovieStatistics = {
+  moviesAndTvShowStats: UserMoviesAndTvShowStats = {
     favoriteCount: 0,
     watchedCount: 0,
     watchlistCount: 0
@@ -66,6 +66,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     private userTvService: UserTvService
   ) {
     console.clear();
+
   }
 
   ngOnInit(): void {
@@ -73,13 +74,15 @@ export class ProfileComponent implements OnInit, OnDestroy {
       this.currentUser = user;
       if (user) {
         this.editedProfile = {...user};
-        this.loadStats();
+
       }
     });
 
     if (!this.currentUser) {
       this.loadCurrentUser();
+      this.loadStats();
     }
+
   }
 
   ngOnDestroy(): void {
@@ -104,31 +107,33 @@ export class ProfileComponent implements OnInit, OnDestroy {
     });
   }
 
-  loadStats():void{
+  loadStats(): void {
     this.loadMovieStatistics();
     this.loadTvShowsStatistics();
   }
+
   loadMovieStatistics(): void {
     this.userMovieService.getUserMovieStatistics().subscribe({
       next: (statistics) => {
-        this.movieStatistics = {
-          favoriteCount: (statistics as any).favoriteCount ?? (statistics as any).favorites ?? 0,
-          watchedCount: (statistics as any).watchedCount ?? (statistics as any).watched ?? 0,
-          watchlistCount: (statistics as any).watchlistCount ?? (statistics as any).watchlist ?? 0
-        };
+
+        this.moviesAndTvShowStats.favoriteCount += statistics.favoriteCount;
+        this.moviesAndTvShowStats.watchedCount += statistics.watchedCount;
+        this.moviesAndTvShowStats.watchlistCount += statistics.watchlistCount;
+
       },
       error: (error) => {
         console.error('Failed to load movie statistics:', error);
       }
     });
   }
+
   loadTvShowsStatistics(): void {
     this.userTvService.getUserTvShowsStatistics().subscribe({
       next: (statistics) => {
-        console.log(statistics)
-        this.movieStatistics.favoriteCount += statistics.favoriteCount ?? (statistics as any).favoriteCount ?? 0;
-        this.movieStatistics.watchedCount += statistics.watchedCount ?? (statistics as any).watchedCount ?? 0;
-        this.movieStatistics.watchedCount += statistics.watchedCount ?? (statistics as any).watchedCount ?? 0;
+        this.moviesAndTvShowStats.favoriteCount += statistics.favoriteCount;
+        this.moviesAndTvShowStats.watchedCount += statistics.watchedCount;
+        this.moviesAndTvShowStats.watchlistCount += statistics.watchlistCount;
+
       },
       error: (error) => {
         console.error('Failed to load movie statistics:', error);
@@ -138,9 +143,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   setActiveTab(tab: 'overview' | 'favorites' | 'watched' | 'watchlist' | 'settings'): void {
     this.activeTab = tab;
-    if (tab === 'favorites' || tab === 'watched' || tab === 'watchlist' || tab === 'overview') {
-      this.loadStats();
-    }
   }
 
   startEditingProfile(): void {
