@@ -1,72 +1,35 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {Observable, BehaviorSubject} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 import {tap} from 'rxjs/operators';
 import {AuthService} from '../auth/auth-service';
-import {environment} from '../../../../environments/environment';
+import {PasswordChangeRequest} from '../../models/auth/auth.model';
+import {ProfileUpdateRequest, UserProfile} from '../../models/user/user.model';
+import {Service} from './service';
 
-export interface UserProfile {
-  username: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  isDirty: boolean;
-  avatar?: string;
-  bio?: string;
-  location?: string;
-  website?: string;
-  phone?: string;
-  dateOfBirth?: string;
-  preferredLanguage?: string;
-  timezone?: string;
-  notificationsEnabled?: boolean;
-  profileVisibility?: string;
-  createdAt?: string;
-}
-
-export interface PasswordChangeRequest {
-  currentPassword: string;
-  newPassword: string;
-  confirmPassword: string;
-}
-
-export interface ProfileUpdateRequest {
-  firstName?: string;
-  lastName?: string;
-  avatar?: string;
-  bio?: string;
-  location?: string;
-  website?: string;
-  phone?: string;
-  dateOfBirth?: string;
-  preferredLanguage?: string;
-  timezone?: string;
-  notificationsEnabled?: boolean;
-  profileVisibility?: string;
-}
 
 @Injectable({
   providedIn: 'root'
 })
-export class UserService {
-  private baseUrl = environment.apiUrl + '/user';
+export class UserService extends Service {
+
   private currentUserSubject = new BehaviorSubject<UserProfile | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
 
-  constructor(
-    private http: HttpClient,
-    private authService: AuthService
-  ) {
-    // Load current user on service initialization
-    this.loadCurrentUser();
+  protected apiUrl: string;
+
+  constructor(http: HttpClient, private authService: AuthService) {
+    super(http);
+    this.apiUrl = `${this.baseServiceApiUrl}`;
   }
+
 
   /**
    * Get current user profile
    */
   getCurrentUser(): Observable<UserProfile> {
     const headers = this.getAuthHeaders();
-    return this.http.get<UserProfile>(`${this.baseUrl}/me`, {headers})
+    return this.http.get<UserProfile>(`${this.apiUrl}/me`, {headers})
       .pipe(
         tap(user => {
           this.currentUserSubject.next(user);
@@ -79,7 +42,7 @@ export class UserService {
    */
   updateProfile(profileData: ProfileUpdateRequest): Observable<UserProfile> {
     const headers = this.getAuthHeaders();
-    return this.http.put<UserProfile>(`${this.baseUrl}/me`, profileData, {headers})
+    return this.http.put<UserProfile>(`${this.apiUrl}/me`, profileData, {headers})
       .pipe(
         tap(user => {
           this.currentUserSubject.next(user);
@@ -92,14 +55,14 @@ export class UserService {
    */
   changePassword(passwordData: PasswordChangeRequest): Observable<any> {
     const headers = this.getAuthHeaders();
-    return this.http.put(`${this.baseUrl}/change-password`, passwordData, {headers});
+    return this.http.put(`${this.apiUrl}/change-password`, passwordData, {headers});
   }
 
   /**
    * Get user by ID (for public profiles)
    */
   getUserById(userId: number): Observable<UserProfile> {
-    return this.http.get<UserProfile>(`${this.baseUrl}/${userId}`);
+    return this.http.get<UserProfile>(`${this.apiUrl}/${userId}`);
   }
 
   /**
@@ -107,7 +70,7 @@ export class UserService {
    */
   deleteAccount(): Observable<any> {
     const headers = this.getAuthHeaders();
-    return this.http.delete(`${this.baseUrl}/account`, {headers})
+    return this.http.delete(`${this.apiUrl}/account`, {headers})
       .pipe(
         tap(() => {
           // Clear current user and logout
