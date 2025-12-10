@@ -213,7 +213,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.clearMessages();
 
-    this.userService.changePassword(this.passwordData).subscribe({
+    this.authService.changePassword(this.passwordData).subscribe({
       next: () => {
         this.isChangingPassword = false;
         this.passwordData = {
@@ -226,7 +226,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
       },
       error: (error) => {
         console.error('Failed to change password:', error);
-        this.errorMessage = error.error?.error || 'Failed to change password. Please try again.';
+        this.errorMessage = error.error?.message || 'Failed to change password. Please try again.';
         this.loading = false;
       }
     });
