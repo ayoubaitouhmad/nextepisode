@@ -1,7 +1,8 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import {PasswordChangeRequest} from '../../../../../../core/services/user/user.service';
+import {PasswordChangeRequest} from '../../../../../../core/models/auth/auth.model';
+
 
 @Component({
   selector: 'app-settings',

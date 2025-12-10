@@ -8,13 +8,15 @@ import {Subscription} from 'rxjs';
 import {UserOverviewComponent} from './components/user-overview/user-overview.component';
 import {FavoritesComponent} from './components/favorites/favorites.component';
 import {SettingsComponent} from './components/settings/settings.component';
-import {PasswordChangeRequest, UserProfile, UserService} from '../../../../core/services/user/user.service';
+import { UserService} from '../../../../core/services/user/user.service';
 import {UserMovieService} from '../../../../core/services/user/movie/user-movie.service';
 import {AuthService} from '../../../../core/services/auth/auth-service';
 import {UserTvService} from '../../../../core/services/user/tv/user-tv.service';
 import {WatchedComponent} from './components/watched/watched.component';
 import {WatchlistComponent} from './components/watchlist/watchlist.component';
 import {UserMoviesAndTvShowStats} from '../../../../core/models/user/shared/shared-dtos';
+import {PasswordChangeRequest} from '../../../../core/models/auth/auth.model';
+import {UserProfile} from '../../../../core/models/user/user.model';
 
 
 @Component({
@@ -34,7 +36,7 @@ import {UserMoviesAndTvShowStats} from '../../../../core/models/user/shared/shar
 })
 export class ProfileComponent implements OnInit, OnDestroy {
 
-  activeTab: 'overview' | 'favorites' | 'watched' | 'watchlist' | 'settings' = 'overview';
+  activeTab: 'overview' | 'favorites' | 'watched' | 'watchlist' | 'settings' = 'settings';
   currentUser: UserProfile | null = null;
   editedProfile: Partial<UserProfile> = {};
   private userSubscription: Subscription | null = null;
