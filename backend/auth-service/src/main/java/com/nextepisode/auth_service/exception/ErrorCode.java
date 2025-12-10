@@ -74,7 +74,27 @@ public enum ErrorCode {
             "SYS_001",
             "An unexpected error occurred",
             HttpStatus.INTERNAL_SERVER_ERROR
-    );
+    ),
+    // ==================== Validation Errors ====================
+    PASSWORD_MISMATCH("VAL_005", "Passwords do not match", HttpStatus.BAD_REQUEST),
+
+
+    // Resource errors (4xx)
+    RESOURCE_NOT_FOUND(
+            "RES_001",
+            "{0} not found with {1}: {2}", HttpStatus.NOT_FOUND),
+    RESOURCE_ALREADY_EXISTS(
+            "RES_002",
+            "{0} already exists: {1}", HttpStatus.CONFLICT),
+    USERNAME_TAKEN(
+            "RES_003",
+            "Username already taken: {0}", HttpStatus.CONFLICT),
+    EMAIL_TAKEN(
+            "RES_004",
+            "Email already registered: {0}",
+            HttpStatus.CONFLICT);
+
+
 
     private final String code;
     private final String messageTemplate;

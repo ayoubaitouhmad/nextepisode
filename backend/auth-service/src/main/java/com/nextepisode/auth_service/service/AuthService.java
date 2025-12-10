@@ -1,18 +1,21 @@
 package com.nextepisode.auth_service.service;
 
-import com.nextepisode.auth_service.dto.LoginRequest;
-import com.nextepisode.auth_service.dto.LoginResponse;
-import com.nextepisode.auth_service.dto.RegisterRequest;
-import com.nextepisode.auth_service.dto.UserResponse;
+import com.nextepisode.auth_service.dto.*;
 import com.nextepisode.auth_service.entity.User;
 import com.nextepisode.auth_service.exception.AuthenticationException;
 import com.nextepisode.auth_service.exception.ErrorCode;
+import com.nextepisode.auth_service.exception.ResourceNotFoundException;
 import com.nextepisode.auth_service.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class AuthService {
 
@@ -66,5 +69,47 @@ public class AuthService {
                                 .email(u.getEmail())
                                 .username(u.getUsername()).build()
                 ).build();
+    }
+
+
+    /**
+     * Find user by username
+     */
+    @Transactional(readOnly = true)
+    public Optional<User> findByUsername(String username) {
+        log.debug("Finding user by username: {}", username);
+        return userRepository.findByUsername(username);
+    }
+
+    /**
+     * Get user by username (throws exception if not found)
+     */
+    @Transactional(readOnly = true)
+    public User getUserByUsername(String username) {
+        log.debug("Getting user by username: {}", username);
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
+    }
+
+
+    @Transactional
+    public void changePassword(UserUpdatePasswordRequest req, String username) {
+        log.debug("Updating password for current user: {}", username);
+
+        validateNewPassword(req.newPassword(),req.confirmPassword());
+
+        User u = getUserByUsername(username);
+        if (!passwordEncoder.matches(req.currentPassword(), u.getPassword())) {
+            throw new AuthenticationException(ErrorCode.INVALID_CREDENTIALS);
+        }
+        u.setPassword(passwordEncoder.encode(req.newPassword()));
+        log.debug("Password updated successfully for current user: {}", username);
+    }
+
+
+    private void validateNewPassword(String newPassword , String confirmPassword){
+        if(!confirmPassword.equals(newPassword)){
+            throw new AuthenticationException(ErrorCode.PASSWORD_MISMATCH);
+        }
     }
 }

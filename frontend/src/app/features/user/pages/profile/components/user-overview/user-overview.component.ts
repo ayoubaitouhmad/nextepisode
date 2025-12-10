@@ -1,8 +1,9 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {NgIf} from '@angular/common';
 import {FormsModule} from '@angular/forms';
-import {UserProfile} from '../../../../../../core/services/user/user.service';
+
 import {UserMoviesAndTvShowStats} from '../../../../../../core/models/user/shared/shared-dtos';
+import {UserProfile} from '../../../../../../core/models/user/user.model';
 
 @Component({
   selector: 'app-user-overview',

@@ -3,9 +3,8 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {tap} from 'rxjs/operators';
-import {environment} from '../../../../environments/environment';
 import {User} from '../../models/user/user.model';
-import {LoginRequest, LoginResponse, SignupRequest} from '../../models/auth/auth.model';
+import {LoginRequest, LoginResponse, PasswordChangeRequest, SignupRequest} from '../../models/auth/auth.model';
 import {Service} from './service';
 
 
@@ -67,5 +66,19 @@ export class AuthService extends Service {
 
   getUser() {
     return JSON.parse(localStorage.getItem("user")!);
+  }
+
+  /**
+   * Change user password
+   */
+  changePassword(passwordData: PasswordChangeRequest): Observable<any> {
+    const token = this.getToken();
+    const headers =
+      new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      });
+
+    return this.http.patch(`${this.apiUrl}/change-password`, passwordData, {headers});
   }
 }

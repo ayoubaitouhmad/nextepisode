@@ -20,3 +20,9 @@ export interface LoginResponse {
     username: string
   };
 }
+
+export interface PasswordChangeRequest {
+  currentPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+}
