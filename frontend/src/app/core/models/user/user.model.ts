@@ -45,5 +45,4 @@ export interface ProfileUpdateRequest {
   preferredLanguage?: string;
   timezone?: string;
   notificationsEnabled?: boolean;
-  profileVisibility?: string;
 }
