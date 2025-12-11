@@ -55,7 +55,7 @@
         <p class="setting-description">Control who can see your profile and activity</p>
       </div>
       <div class="toggle-switch">
-        <input type="checkbox" id="profile-visibility" class="toggle-input">
+        <input type="checkbox" id="profile-visibility" (change)="onSavePrivacySettings()"  [(ngModel)]="privacySettingsData.profileVisibility" class="toggle-input">
         <label for="profile-visibility" class="toggle-label"></label>
       </div>
     </div>
@@ -65,7 +65,7 @@
         <p class="setting-description">Share your movie ratings and reviews</p>
       </div>
       <div class="toggle-switch">
-        <input type="checkbox" id="activity-sharing" class="toggle-input" checked>
+        <input type="checkbox" id="activity-sharing" (change)="onSavePrivacySettings()" [(ngModel)]="privacySettingsData.activitySharing" class="toggle-input" checked>
         <label for="activity-sharing" class="toggle-label"></label>
       </div>
     </div>

@@ -4,7 +4,7 @@ import {BehaviorSubject, Observable} from 'rxjs';
 import {tap} from 'rxjs/operators';
 import {AuthService} from '../auth/auth-service';
 import {PasswordChangeRequest} from '../../models/auth/auth.model';
-import {ProfileUpdateRequest, UserProfile} from '../../models/user/user.model';
+import {ProfilePrivacySettingsUpdateRequest, ProfileUpdateRequest, UserProfile} from '../../models/user/user.model';
 import {Service} from './service';
 
 
@@ -56,6 +56,14 @@ export class UserService extends Service {
   changePassword(passwordData: PasswordChangeRequest): Observable<any> {
     const headers = this.getAuthHeaders();
     return this.http.put(`${this.apiUrl}/change-password`, passwordData, {headers});
+  }
+
+  /**
+   * Change user privacy settings
+   */
+  changePrivacySettings(privacySettings: ProfilePrivacySettingsUpdateRequest): Observable<any> {
+    const headers = this.getAuthHeaders();
+    return this.http.patch(`${this.apiUrl}/me/change-privacy-settings`, privacySettings, {headers});
   }
 
   /**
@@ -140,22 +148,6 @@ export class UserService extends Service {
     });
   }
 
-  /**
-   * Update preferences
-   */
-  updatePreferences(
-    preferredLanguage?: string,
-    timezone?: string,
-    notificationsEnabled?: boolean,
-    profileVisibility?: string
-  ): Observable<UserProfile> {
-    return this.updateProfile({
-      preferredLanguage,
-      timezone,
-      notificationsEnabled,
-      profileVisibility
-    });
-  }
 
   /**
    * Get auth headers with JWT token

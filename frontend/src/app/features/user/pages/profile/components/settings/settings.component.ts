@@ -1,7 +1,8 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { NgIf } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import {Component, Input, Output, EventEmitter} from '@angular/core';
+import {NgIf} from '@angular/common';
+import {FormsModule} from '@angular/forms';
 import {PasswordChangeRequest} from '../../../../../../core/models/auth/auth.model';
+import {ProfilePrivacySettingsUpdateRequest} from '../../../../../../core/models/user/user.model';
 
 
 @Component({
@@ -25,6 +26,13 @@ export class SettingsComponent {
   @Output() cancelPasswordChange = new EventEmitter<void>();
   @Output() deleteAccount = new EventEmitter<void>();
   @Output() passwordDataChange = new EventEmitter<PasswordChangeRequest>();
+  @Output() savePrivacySettings = new EventEmitter<void>();
+
+
+  @Input() privacySettingsData: ProfilePrivacySettingsUpdateRequest = {
+    profileVisibility: false,
+    activitySharing: false
+  };
 
   onStartChangingPassword(): void {
     this.startChangingPassword.emit();
@@ -45,5 +53,9 @@ export class SettingsComponent {
 
   onPasswordDataChange(): void {
     this.passwordDataChange.emit(this.passwordData);
+  }
+
+  onSavePrivacySettings(){
+    this.savePrivacySettings.emit();
   }
 }
