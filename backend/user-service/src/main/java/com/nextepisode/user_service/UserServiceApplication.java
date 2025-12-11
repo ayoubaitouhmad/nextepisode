@@ -118,7 +118,6 @@ public class UserServiceApplication {
         user.setIsActive(true);
         user.setIsDirty(false);
         user.setNotificationsEnabled(true);
-        user.setProfileVisibility("public");
         user.setPreferredLanguage("en");
         user.setTimezone("UTC");
         user.setDateOfBirth(randomDateOfBirth());

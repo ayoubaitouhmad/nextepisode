@@ -49,7 +49,8 @@ public class User {
     private String preferredLanguage;
     private String timezone;
     private Boolean notificationsEnabled = true;
-    private String profileVisibility = "public"; // public, private, friends
+    private Boolean profileVisibility = false;
+    private Boolean activitySharing = false;
 
     @PrePersist
     protected void onCreate() {
