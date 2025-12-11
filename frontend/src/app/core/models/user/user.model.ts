@@ -10,8 +10,6 @@ export interface User {
   lastLogin: string | null;
 }
 
-
-
 export interface UserProfile {
   username: string;
   firstName: string;
@@ -31,8 +29,6 @@ export interface UserProfile {
   createdAt?: string;
 }
 
-
-
 export interface ProfileUpdateRequest {
   firstName?: string;
   lastName?: string;
@@ -45,4 +41,9 @@ export interface ProfileUpdateRequest {
   preferredLanguage?: string;
   timezone?: string;
   notificationsEnabled?: boolean;
+}
+
+export interface ProfilePrivacySettingsUpdateRequest {
+  profileVisibility: boolean
+  activitySharing: boolean;
 }
