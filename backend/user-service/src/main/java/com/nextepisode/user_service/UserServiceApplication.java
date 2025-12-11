@@ -122,7 +122,6 @@ public class UserServiceApplication {
         user.setPreferredLanguage("en");
         user.setTimezone("UTC");
         user.setDateOfBirth(randomDateOfBirth());
-        user.setCreatedAt(LocalDateTime.now().minusDays(random.nextInt(365)));
         user.setLastLogin(LocalDateTime.now().minusHours(random.nextInt(72)));
         return user;
     }

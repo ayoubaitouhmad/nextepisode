@@ -9,7 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.Optional;
 
 /**
@@ -54,7 +54,7 @@ public class EventListener {
 
         String username = event.getUsername();
         String email = event.getEmail();
-        LocalDateTime createdAt = event.getCreatedAt();
+        Instant createdAt = event.getCreatedAt();
 
         Optional<User> existingUser = userService.findByUsername(username);
         if (existingUser.isEmpty()) {
