@@ -95,10 +95,13 @@ public class AuthService {
     @Transactional
     public void changePassword(UserUpdatePasswordRequest req, String username) {
         log.debug("Updating password for current user: {}", username);
-
-        validateNewPassword(req.newPassword(),req.confirmPassword());
+        validateNewPassword(req.newPassword(), req.confirmPassword());
 
         User u = getUserByUsername(username);
+        if (passwordEncoder.matches(req.newPassword(), u.getPassword())) {
+            throw new AuthenticationException(ErrorCode.PASSWORD_SAME_AS_CURRENT);
+        }
+
         if (!passwordEncoder.matches(req.currentPassword(), u.getPassword())) {
             throw new AuthenticationException(ErrorCode.INVALID_CREDENTIALS);
         }
@@ -107,8 +110,8 @@ public class AuthService {
     }
 
 
-    private void validateNewPassword(String newPassword , String confirmPassword){
-        if(!confirmPassword.equals(newPassword)){
+    private void validateNewPassword(String newPassword, String confirmPassword) {
+        if (!confirmPassword.equals(newPassword)) {
             throw new AuthenticationException(ErrorCode.PASSWORD_MISMATCH);
         }
     }

@@ -9,8 +9,8 @@ spring:
       enabled: true
     restart:
       enabled: true
-      poll-interval: 2s
-      quiet-period: 1s
+      poll-interval: 500ms
+      quiet-period: 100ms
 
   datasource:
     url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/authdb}

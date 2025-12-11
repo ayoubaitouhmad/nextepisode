@@ -68,7 +68,11 @@ public enum ErrorCode {
             "Invalid input: {0}",
             HttpStatus.BAD_REQUEST
     ),
-
+    PASSWORD_SAME_AS_CURRENT(
+            "VAL_005",
+            "New password must be different from current password",
+            HttpStatus.BAD_REQUEST)
+    ,
     // General errors (5xx)
     INTERNAL_ERROR(
             "SYS_001",
