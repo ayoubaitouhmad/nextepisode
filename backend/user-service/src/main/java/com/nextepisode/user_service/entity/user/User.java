@@ -50,6 +50,7 @@ public class User {
     private String timezone;
     private Boolean notificationsEnabled = true;
     private Boolean profileVisibility = false;
+    private Boolean activitySharing = false;
 
     @PrePersist
     protected void onCreate() {
