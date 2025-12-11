@@ -79,7 +79,8 @@
         <p class="setting-description">Receive updates about new releases and recommendations</p>
       </div>
       <div class="toggle-switch">
-        <input type="checkbox" id="email-notifications" class="toggle-input" checked>
+        <input (change)="onSaveNotificationSettings()"  [(ngModel)]="profileNotificationSettingsUpdateRequest.notificationsEnabled"
+          type="checkbox" id="email-notifications" class="toggle-input" checked>
         <label for="email-notifications" class="toggle-label"></label>
       </div>
     </div>
@@ -89,7 +90,8 @@
         <p class="setting-description">Get instant notifications on your device</p>
       </div>
       <div class="toggle-switch">
-        <input type="checkbox" id="push-notifications" class="toggle-input">
+        <input (change)="onSaveNotificationSettings()"  [(ngModel)]="profileNotificationSettingsUpdateRequest.pushNotifications"
+          type="checkbox" id="push-notifications" class="toggle-input">
         <label for="push-notifications" class="toggle-label"></label>
       </div>
     </div>
