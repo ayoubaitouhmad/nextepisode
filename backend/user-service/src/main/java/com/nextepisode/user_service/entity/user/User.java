@@ -55,13 +55,6 @@ public class User {
     private String profileVisibility = "public"; // public, private, friends
 
 
-//    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-//    @JoinTable(
-//            name = "user_tvs",
-//            joinColumns = @JoinColumn(name = "tv_id"),
-//            inverseJoinColumns = @JoinColumn(name = "genre_id")
-//    )
-//    private List<Tv> tvs = new ArrayList<>();
 
 
 
