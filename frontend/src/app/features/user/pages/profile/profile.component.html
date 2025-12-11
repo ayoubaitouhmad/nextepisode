@@ -157,7 +157,10 @@
         (savePassword)="savePassword()"
         (cancelPasswordChange)="cancelPasswordChange()"
         (deleteAccount)="deleteAccount()"
-        (passwordDataChange)="onPasswordDataChange($event)">
+        (passwordDataChange)="onPasswordDataChange($event)"
+        [privacySettingsData]="privacySettingsData"
+        (savePrivacySettings)="savePrivacySettings()"
+      >
       </app-settings>
     </div>
   </div>

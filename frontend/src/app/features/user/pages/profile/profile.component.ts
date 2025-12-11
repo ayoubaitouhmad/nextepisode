@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {NgIf} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {Router} from '@angular/router';
@@ -16,7 +16,8 @@ import {WatchedComponent} from './components/watched/watched.component';
 import {WatchlistComponent} from './components/watchlist/watchlist.component';
 import {UserMoviesAndTvShowStats} from '../../../../core/models/user/shared/shared-dtos';
 import {PasswordChangeRequest} from '../../../../core/models/auth/auth.model';
-import {UserProfile} from '../../../../core/models/user/user.model';
+import {ProfilePrivacySettingsUpdateRequest, UserProfile} from '../../../../core/models/user/user.model';
+import {log} from '@angular-devkit/build-angular/src/builders/ssr-dev-server';
 
 
 @Component({
@@ -60,6 +61,13 @@ export class ProfileComponent implements OnInit, OnDestroy {
   errorMessage = '';
   successMessage = '';
 
+  privacySettingsData: ProfilePrivacySettingsUpdateRequest = {
+    profileVisibility: false,
+    activitySharing: false
+  };
+
+
+
   constructor(
     private userService: UserService,
     private authService: AuthService,
@@ -74,9 +82,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.userSubscription = this.userService.currentUser$.subscribe(user => {
       this.currentUser = user;
+
       if (user) {
         this.editedProfile = {...user};
-
+          this.privacySettingsData.profileVisibility = user.profileVisibility;
+          this.privacySettingsData.activitySharing = user.activitySharing;
       }
     });
 
@@ -84,6 +94,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
       this.loadCurrentUser();
       this.loadStats();
     }
+
 
   }
 
@@ -291,5 +302,22 @@ export class ProfileComponent implements OnInit, OnDestroy {
   getProfileCompletionPercentage(): number {
     if (!this.currentUser) return 0;
     return this.userService.getProfileCompletionPercentage(this.currentUser);
+  }
+
+  savePrivacySettings(): void {
+    this.loading = true;
+    this.clearMessages();
+
+    this.userService.changePrivacySettings(this.privacySettingsData).subscribe({
+      next: () => {
+        this.successMessage = 'Password changed successfully!';
+        this.loading = false;
+      },
+      error: (error) => {
+        console.error('Failed to change privacy settings:', error);
+        this.errorMessage = error.error?.message || 'Failed to change password. Please try again.';
+        this.loading = false;
+      }
+    });
   }
 }
