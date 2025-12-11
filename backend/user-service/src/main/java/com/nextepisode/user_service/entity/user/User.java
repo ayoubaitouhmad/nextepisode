@@ -51,6 +51,7 @@ public class User {
     private Boolean notificationsEnabled = true;
     private Boolean profileVisibility = false;
     private Boolean activitySharing = false;
+    private Boolean pushNotifications = false;
 
     @PrePersist
     protected void onCreate() {
