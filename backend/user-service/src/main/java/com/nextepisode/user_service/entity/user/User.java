@@ -1,17 +1,18 @@
 package com.nextepisode.user_service.entity.user;
 
 
-import com.nextepisode.user_service.entity.tv.Tv;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 
 @Entity
@@ -36,8 +37,8 @@ public class User {
     private String avatar;
     private String role = "USER";
     private Boolean emailVerified = false;
-    private LocalDateTime createdAt = LocalDateTime.now();
-    private LocalDateTime updatedAt;
+    private Instant createdAt;
+    private Instant updatedAt;
     private LocalDateTime lastLogin;
     private Boolean isActive = true;
     private Boolean isDirty = false;
@@ -61,6 +62,7 @@ public class User {
 //            inverseJoinColumns = @JoinColumn(name = "genre_id")
 //    )
 //    private List<Tv> tvs = new ArrayList<>();
+
 
 
 }
