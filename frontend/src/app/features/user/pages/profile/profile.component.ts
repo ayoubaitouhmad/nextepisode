@@ -8,7 +8,7 @@ import {Subscription} from 'rxjs';
 import {UserOverviewComponent} from './components/user-overview/user-overview.component';
 import {FavoritesComponent} from './components/favorites/favorites.component';
 import {SettingsComponent} from './components/settings/settings.component';
-import { UserService} from '../../../../core/services/user/user.service';
+import {UserService} from '../../../../core/services/user/user.service';
 import {UserMovieService} from '../../../../core/services/user/movie/user-movie.service';
 import {AuthService} from '../../../../core/services/auth/auth-service';
 import {UserTvService} from '../../../../core/services/user/tv/user-tv.service';
@@ -16,8 +16,11 @@ import {WatchedComponent} from './components/watched/watched.component';
 import {WatchlistComponent} from './components/watchlist/watchlist.component';
 import {UserMoviesAndTvShowStats} from '../../../../core/models/user/shared/shared-dtos';
 import {PasswordChangeRequest} from '../../../../core/models/auth/auth.model';
-import {ProfilePrivacySettingsUpdateRequest, UserProfile} from '../../../../core/models/user/user.model';
-import {log} from '@angular-devkit/build-angular/src/builders/ssr-dev-server';
+import {
+  ProfileNotificationSettingsUpdateRequest,
+  ProfilePrivacySettingsUpdateRequest,
+  UserProfile
+} from '../../../../core/models/user/user.model';
 
 
 @Component({
@@ -67,6 +70,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
   };
 
 
+  profileNotificationSettingsUpdateRequest: ProfileNotificationSettingsUpdateRequest = {
+    pushNotifications: false,
+    notificationsEnabled: false,
+  };
 
   constructor(
     private userService: UserService,
@@ -85,8 +92,14 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
       if (user) {
         this.editedProfile = {...user};
-          this.privacySettingsData.profileVisibility = user.profileVisibility;
-          this.privacySettingsData.activitySharing = user.activitySharing;
+
+        this.privacySettingsData.profileVisibility = user.profileVisibility;
+        this.privacySettingsData.activitySharing = user.activitySharing;
+
+        this.profileNotificationSettingsUpdateRequest.notificationsEnabled = user.notificationsEnabled;
+        this.profileNotificationSettingsUpdateRequest.pushNotifications = user.pushNotifications;
+
+
       }
     });
 
@@ -315,6 +328,23 @@ export class ProfileComponent implements OnInit, OnDestroy {
       },
       error: (error) => {
         console.error('Failed to change privacy settings:', error);
+        this.errorMessage = error.error?.message || 'Failed to change password. Please try again.';
+        this.loading = false;
+      }
+    });
+  }
+
+  saveNotificationSettings(): void {
+    this.loading = true;
+    this.clearMessages();
+
+    this.userService.changeNotificationSettings(this.profileNotificationSettingsUpdateRequest).subscribe({
+      next: () => {
+        this.successMessage = 'Change notification settings changed successfully!';
+        this.loading = false;
+      },
+      error: (error) => {
+        console.error('Failed to change notification settings:', error);
         this.errorMessage = error.error?.message || 'Failed to change password. Please try again.';
         this.loading = false;
       }

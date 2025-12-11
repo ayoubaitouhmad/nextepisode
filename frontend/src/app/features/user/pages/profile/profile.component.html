@@ -160,6 +160,11 @@
         (passwordDataChange)="onPasswordDataChange($event)"
         [privacySettingsData]="privacySettingsData"
         (savePrivacySettings)="savePrivacySettings()"
+
+
+        [profileNotificationSettingsUpdateRequest]="profileNotificationSettingsUpdateRequest"
+        (saveNotificationSettings)="saveNotificationSettings()"
+
       >
       </app-settings>
     </div>

@@ -1,8 +1,11 @@
-import {Component, Input, Output, EventEmitter} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {NgIf} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {PasswordChangeRequest} from '../../../../../../core/models/auth/auth.model';
-import {ProfilePrivacySettingsUpdateRequest} from '../../../../../../core/models/user/user.model';
+import {
+  ProfileNotificationSettingsUpdateRequest,
+  ProfilePrivacySettingsUpdateRequest
+} from '../../../../../../core/models/user/user.model';
 
 
 @Component({
@@ -27,11 +30,18 @@ export class SettingsComponent {
   @Output() deleteAccount = new EventEmitter<void>();
   @Output() passwordDataChange = new EventEmitter<PasswordChangeRequest>();
   @Output() savePrivacySettings = new EventEmitter<void>();
+  @Output() saveNotificationSettings = new EventEmitter<void>();
 
 
   @Input() privacySettingsData: ProfilePrivacySettingsUpdateRequest = {
     profileVisibility: false,
     activitySharing: false
+  };
+
+
+  @Input() profileNotificationSettingsUpdateRequest: ProfileNotificationSettingsUpdateRequest = {
+    pushNotifications: false,
+    notificationsEnabled: false
   };
 
   onStartChangingPassword(): void {
@@ -55,7 +65,11 @@ export class SettingsComponent {
     this.passwordDataChange.emit(this.passwordData);
   }
 
-  onSavePrivacySettings(){
+  onSavePrivacySettings() {
     this.savePrivacySettings.emit();
+  }
+
+  onSaveNotificationSettings() {
+    this.saveNotificationSettings.emit();
   }
 }
