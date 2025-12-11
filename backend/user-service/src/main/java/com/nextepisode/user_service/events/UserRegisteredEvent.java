@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 
 @Data
@@ -45,7 +45,7 @@ public class UserRegisteredEvent {
      * ✅ CORRECTED: "createdAt" (was "created_at")
      */
     @JsonProperty("createdAt")
-    private LocalDateTime createdAt;
+    private Instant createdAt;
 
     /**
      * Event source service
