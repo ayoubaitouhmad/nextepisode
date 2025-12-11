@@ -59,7 +59,6 @@ public class UserService {
             user.setDateOfBirth(request.dateOfBirth());
             user.setPreferredLanguage(request.preferredLanguage());
 //        user.setTimezone(request.timezone());
-            user.setNotificationsEnabled(request.notificationsEnabled());
             log.info("Successfully created user with username: {}", username);
             return repo.save(user);
 
@@ -89,7 +88,7 @@ public class UserService {
             existingUser.setDateOfBirth(request.dateOfBirth());
             existingUser.setPreferredLanguage(request.preferredLanguage());
 //          existingUser.setTimezone(request.timezone());
-            existingUser.setNotificationsEnabled(request.notificationsEnabled());
+//            existingUser.setNotificationsEnabled(request.notificationsEnabled());
             existingUser.setIsDirty(true);
             return repo.save(existingUser);
         } catch (Exception e) {
