@@ -49,3 +49,8 @@ export interface ProfilePrivacySettingsUpdateRequest {
   profileVisibility: boolean
   activitySharing: boolean;
 }
+
+export interface ProfileNotificationSettingsUpdateRequest {
+  pushNotifications: boolean
+  notificationsEnabled: boolean;
+}
