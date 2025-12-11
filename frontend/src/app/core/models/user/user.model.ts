@@ -27,6 +27,7 @@ export interface UserProfile {
   notificationsEnabled?: boolean;
   profileVisibility: boolean;
   createdAt?: string;
+  activitySharing: boolean;
 }
 
 export interface ProfileUpdateRequest {
