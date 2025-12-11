@@ -1,6 +1,7 @@
 package com.nextepisode.user_service.service;
 
 import com.nextepisode.user_service.dto.UserUpdateProfileRequest;
+import com.nextepisode.user_service.dto.profile.UserUpdateNotificationSettingsRequest;
 import com.nextepisode.user_service.dto.profile.UserUpdatePrivacySettingsRequest;
 import com.nextepisode.user_service.entity.user.User;
 import com.nextepisode.user_service.exception.BusinessValidationException;
@@ -126,6 +127,22 @@ public class UserService {
         } catch (Exception e) {
             log.error("Failed to change user privacy settings for user: {}", username, e);
             throw new BusinessValidationException("Failed to change user privacy settings for user", "");
+        }
+
+    }
+
+    @Transactional
+    public void changeNotificationSettings(UserUpdateNotificationSettingsRequest userUpdateNotificationSettingsRequest, String username) {
+        log.info("Changing notification settings for user: {}", username);
+        User existingUser = this.getUserByUsername(username);
+        try {
+            existingUser.setNotificationsEnabled(userUpdateNotificationSettingsRequest.notificationsEnabled());
+            existingUser.setPushNotifications(userUpdateNotificationSettingsRequest.pushNotifications());
+            repo.save(existingUser);
+            log.info("Successfully changed notification settings for user: {}", username);
+        } catch (Exception e) {
+            log.error("Failed to change notification settings for user: {}", username, e);
+            throw new BusinessValidationException("Failed to change user notification settings for user", "");
         }
 
     }
