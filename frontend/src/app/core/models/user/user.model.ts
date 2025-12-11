@@ -27,7 +27,7 @@ export interface UserProfile {
   preferredLanguage?: string;
   timezone?: string;
   notificationsEnabled?: boolean;
-  profileVisibility?: string;
+  profileVisibility: boolean;
   createdAt?: string;
 }
 
