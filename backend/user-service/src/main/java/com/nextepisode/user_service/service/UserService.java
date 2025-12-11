@@ -92,7 +92,6 @@ public class UserService {
 //          existingUser.setTimezone(request.timezone());
             existingUser.setNotificationsEnabled(request.notificationsEnabled());
             existingUser.setProfileVisibility(request.profileVisibility());
-            existingUser.setUpdatedAt(LocalDateTime.now());
             existingUser.setIsDirty(true);
             return repo.save(existingUser);
         } catch (Exception e) {
