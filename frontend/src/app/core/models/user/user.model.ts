@@ -24,10 +24,11 @@ export interface UserProfile {
   dateOfBirth?: string;
   preferredLanguage?: string;
   timezone?: string;
-  notificationsEnabled?: boolean;
+  notificationsEnabled: boolean;
   profileVisibility: boolean;
   createdAt?: string;
   activitySharing: boolean;
+  pushNotifications: boolean;
 }
 
 export interface ProfileUpdateRequest {
