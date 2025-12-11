@@ -1,6 +1,7 @@
 package com.nextepisode.user_service.service;
 
 import com.nextepisode.user_service.dto.UserUpdateProfileRequest;
+import com.nextepisode.user_service.dto.profile.UserUpdatePrivacySettingsRequest;
 import com.nextepisode.user_service.entity.user.User;
 import com.nextepisode.user_service.exception.BusinessValidationException;
 import com.nextepisode.user_service.exception.ResourceNotFoundException;
@@ -10,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Slf4j
@@ -114,4 +114,20 @@ public class UserService {
     }
 
 
+    @Transactional
+    public void changeUserPrivacySettings(UserUpdatePrivacySettingsRequest userUpdatePrivacySettingsRequest, String username) {
+        log.info("Changing user privacy settings for user: {}", username);
+        User existingUser = this.getUserByUsername(username);
+        try {
+            existingUser.setActivitySharing(userUpdatePrivacySettingsRequest.activitySharing());
+            existingUser.setProfileVisibility(userUpdatePrivacySettingsRequest.profileVisibility());
+            repo.save(existingUser);
+            log.info("Successfully changed user privacy settings for user: {}", username);
+
+        } catch (Exception e) {
+            log.error("Failed to change user privacy settings for user: {}", username, e);
+            throw new BusinessValidationException("Failed to change user privacy settings for user", "");
+        }
+
+    }
 }
