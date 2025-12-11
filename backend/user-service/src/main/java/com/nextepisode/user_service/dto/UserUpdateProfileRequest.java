@@ -27,7 +27,6 @@ public record UserUpdateProfileRequest(
         @Nullable LocalDate dateOfBirth,
         @Nullable String preferredLanguage,
         @Nullable LocalDate timezone,
-        @Nullable boolean notificationsEnabled,
         @Nullable String profileVisibility
 ) {
 }
