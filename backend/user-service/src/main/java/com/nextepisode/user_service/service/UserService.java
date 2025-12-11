@@ -60,7 +60,6 @@ public class UserService {
             user.setPreferredLanguage(request.preferredLanguage());
 //        user.setTimezone(request.timezone());
             user.setNotificationsEnabled(request.notificationsEnabled());
-            user.setProfileVisibility(request.profileVisibility());
             log.info("Successfully created user with username: {}", username);
             return repo.save(user);
 
@@ -91,7 +90,6 @@ public class UserService {
             existingUser.setPreferredLanguage(request.preferredLanguage());
 //          existingUser.setTimezone(request.timezone());
             existingUser.setNotificationsEnabled(request.notificationsEnabled());
-            existingUser.setProfileVisibility(request.profileVisibility());
             existingUser.setIsDirty(true);
             return repo.save(existingUser);
         } catch (Exception e) {
