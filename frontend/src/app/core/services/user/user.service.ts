@@ -4,7 +4,12 @@ import {BehaviorSubject, Observable} from 'rxjs';
 import {tap} from 'rxjs/operators';
 import {AuthService} from '../auth/auth-service';
 import {PasswordChangeRequest} from '../../models/auth/auth.model';
-import {ProfilePrivacySettingsUpdateRequest, ProfileUpdateRequest, UserProfile} from '../../models/user/user.model';
+import {
+  ProfileNotificationSettingsUpdateRequest,
+  ProfilePrivacySettingsUpdateRequest,
+  ProfileUpdateRequest,
+  UserProfile
+} from '../../models/user/user.model';
 import {Service} from './service';
 
 
@@ -64,6 +69,14 @@ export class UserService extends Service {
   changePrivacySettings(privacySettings: ProfilePrivacySettingsUpdateRequest): Observable<any> {
     const headers = this.getAuthHeaders();
     return this.http.patch(`${this.apiUrl}/me/change-privacy-settings`, privacySettings, {headers});
+  }
+
+  /**
+   * Change user privacy settings
+   */
+  changeNotificationSettings(notificationSettings: ProfileNotificationSettingsUpdateRequest): Observable<any> {
+    const headers = this.getAuthHeaders();
+    return this.http.patch(`${this.apiUrl}/me/change-notifications-settings`, notificationSettings, {headers});
   }
 
   /**
