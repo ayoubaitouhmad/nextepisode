@@ -1,10 +1,11 @@
 package com.nextepisode.tmdb_service.controller.v1;
 
-import com.nextepisode.tmdb_service.dto.movie.TmdbMovieListResponse;
+import com.nextepisode.tmdb_service.config.ApiPaths;
+import com.nextepisode.tmdb_service.dto.movie.response.TmdbMovieListResponse;
 import com.nextepisode.tmdb_service.dto.movie.filters.MovieDiscoverFilters;
 import com.nextepisode.tmdb_service.dto.movie.response.TMDBMovieGenres;
 import com.nextepisode.tmdb_service.enums.movie.MovieSortBy;
-import com.nextepisode.tmdb_service.service.movie.TMDBMovieService;
+import com.nextepisode.tmdb_service.service.TMDBMovieService;
 
 import jakarta.validation.constraints.Min;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @Slf4j
-@RequestMapping("/movies")
+@RequestMapping(ApiPaths.API_V1 + "/movies")
 @RestController
 public class MovieController {
 
