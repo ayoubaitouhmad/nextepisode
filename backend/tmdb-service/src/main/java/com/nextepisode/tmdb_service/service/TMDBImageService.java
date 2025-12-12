@@ -36,6 +36,9 @@ public class TMDBImageService {
     }
 
     public TMDBImageService setPath(String path) {
+        if (path == null || path.isEmpty()) {
+            path = "";
+        }
         if (path.startsWith("/")) {
             path = path.substring(1);
         }
