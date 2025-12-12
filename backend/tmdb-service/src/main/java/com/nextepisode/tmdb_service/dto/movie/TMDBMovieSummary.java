@@ -1,6 +1,7 @@
 package com.nextepisode.tmdb_service.dto.movie;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.nextepisode.tmdb_service.service.TMDBImageService;
 import lombok.Data;
 
 import java.util.List;
@@ -49,5 +50,14 @@ public class TMDBMovieSummary {
 
     @JsonProperty("vote_count")
     private Integer vote_count;
+
+    public void setPoster_path(String poster_path) {
+        this.poster_path = TMDBImageService.getTMDBImageService().setPath(poster_path).get();
+    }
+
+    public void setBackdropPath(String backdropPath) {
+        this.backdropPath = TMDBImageService.getTMDBImageService().setPath(backdropPath).get();
+    }
+
 
 }
