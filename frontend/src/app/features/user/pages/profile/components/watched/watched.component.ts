@@ -15,8 +15,8 @@ import {UserTvService} from '../../../../../../core/services/user/tv/user-tv.ser
   styleUrls: ['./watched.component.scss']
 })
 export class WatchedComponent implements OnInit {
-  watchedMovies: UserMovieList = {page: 0, totalPages: 0, results: [], totalResults: 0};
-  watchedTvShows: UserTvShowList = {page: 0, totalPages: 0, results: [], totalResults: 0};
+  watchedMovies: UserMovieList = {page: 0, total_pages: 0, results: [], total_results: 0};
+  watchedTvShows: UserTvShowList = {page: 0, total_pages: 0, results: [], total_results: 0};
   loading: boolean = false;
   errorMessage: string = '';
 
