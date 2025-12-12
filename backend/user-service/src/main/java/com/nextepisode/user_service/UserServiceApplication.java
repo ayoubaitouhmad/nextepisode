@@ -16,9 +16,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
@@ -105,7 +105,9 @@ public class UserServiceApplication {
     }
 
     private User createUser(String username, String firstName, String lastName, String email, String bio, String location) {
-        Random random = new Random();
+        Instant now = Instant.now();
+        Instant oneYearAgo = now.minus(Duration.ofDays(365));
+
         User user = new User();
         user.setUsername(username);
         user.setFirstName(firstName);
@@ -121,7 +123,7 @@ public class UserServiceApplication {
         user.setPreferredLanguage("en");
         user.setTimezone("UTC");
         user.setDateOfBirth(randomDateOfBirth());
-        user.setLastLogin(LocalDateTime.now().minusHours(random.nextInt(72)));
+        user.setLastLogin(Instant.now());
         return user;
     }
 

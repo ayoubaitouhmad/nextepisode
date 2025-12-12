@@ -36,7 +36,7 @@ public class User {
     private Boolean emailVerified = false;
     private Instant createdAt;
     private Instant updatedAt;
-    private LocalDateTime lastLogin;
+    private Instant lastLogin;
     private Boolean isActive = true;
     private Boolean isDirty = false;
 

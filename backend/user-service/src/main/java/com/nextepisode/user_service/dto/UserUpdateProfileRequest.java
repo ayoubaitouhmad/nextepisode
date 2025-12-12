@@ -4,6 +4,7 @@ import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
+import java.time.Instant;
 import java.time.LocalDate;
 
 public record UserUpdateProfileRequest(
@@ -26,7 +27,7 @@ public record UserUpdateProfileRequest(
         @Nullable String phone,
         @Nullable LocalDate dateOfBirth,
         @Nullable String preferredLanguage,
-        @Nullable LocalDate timezone,
+        @Nullable String timezone,
         @Nullable String profileVisibility
 ) {
 }
