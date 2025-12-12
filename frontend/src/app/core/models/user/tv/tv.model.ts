@@ -12,7 +12,7 @@ export interface UserTvShow {
 }
 export interface UserTvShowList {
   page: number;
-  totalPages: number;
+  total_pages: number;
   results: UserTvShow[];
-  totalResults: number;      // when added to list
+  total_results: number;      // when added to list
 }

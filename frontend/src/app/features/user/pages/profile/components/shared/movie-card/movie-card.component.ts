@@ -1,7 +1,7 @@
-import { Component, Input } from '@angular/core';
-import { NgIf } from '@angular/common';
-import { MovieDto, getMoviePosterUrl, getMovieYear, getMovieGenres } from '../../movie.model';
+import {Component, Input} from '@angular/core';
+import {NgIf} from '@angular/common';
 import {getUserMovieGenreAsString, UserMovie} from '../../../../../../../core/models/user/movie/movie.model';
+import {getYearFromDate} from '../../../../../../../shared/utils';
 
 @Component({
   selector: 'app-movie-card',
@@ -14,12 +14,9 @@ export class MovieCardComponent {
   @Input() movie!: UserMovie;
   @Input() type: 'favorite' | 'watched' | 'watchlist' = 'favorite';
 
-  getPosterUrl(): string {
-    return getMoviePosterUrl(this.movie.poster_path);
-  }
 
   getYear(): string {
-    return getMovieYear(this.movie.release_date);
+    return getYearFromDate(this.movie.release_date);
   }
 
   getGenres(): string {

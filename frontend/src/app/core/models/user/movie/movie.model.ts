@@ -35,9 +35,9 @@ export interface UserMovie {
 
 export interface UserMovieList {
   page: number;
-  totalPages: number;
+  total_pages: number;
   results: UserMovie[];
-  totalResults: number;      // when added to list
+  total_results: number;      // when added to list
 }
 
 export function getUserMovieGenreAsString(genres: Genre[]) {

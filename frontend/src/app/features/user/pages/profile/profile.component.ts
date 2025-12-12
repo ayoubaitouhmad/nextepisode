@@ -273,16 +273,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
   deleteAccount(): void {
     if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
       this.loading = true;
-      this.userService.deleteAccount().subscribe({
-        next: () => {
-          this.router.navigate(['/auth/login']);
-        },
-        error: (error) => {
-          console.error('Failed to delete account:', error);
-          this.errorMessage = 'Failed to delete account. Please try again.';
-          this.loading = false;
-        }
-      });
+      this.userService.deleteAccount();
     }
   }
 
