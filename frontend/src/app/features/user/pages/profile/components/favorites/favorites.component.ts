@@ -6,30 +6,40 @@ import {TvCardComponent} from '../shared/tv-card/tv-card.component';
 import {MovieCardComponent} from '../shared/movie-card/movie-card.component';
 import {UserTvShowList} from '../../../../../../core/models/user/tv/tv.model';
 import {UserTvService} from '../../../../../../core/services/user/tv/user-tv.service';
+import {ListPaginationComponent} from '../shared/list-pagination/list-pagination.component';
 
 @Component({
   selector: 'app-favorites',
   standalone: true,
-  imports: [NgFor, NgIf, TvCardComponent, MovieCardComponent],
+  imports: [NgFor, NgIf, TvCardComponent, MovieCardComponent, ListPaginationComponent],
   templateUrl: './favorites.component.html',
   styleUrls: ['./favorites.component.scss']
 })
 export class FavoritesComponent implements OnInit {
-  favoriteMovies: UserMovieList = {page: 0, totalPages: 0, results: [], totalResults: 0};
-  favoriteTvShows: UserTvShowList = {page: 0, totalPages: 0, results: [], totalResults: 0};
+  favoriteMovies: UserMovieList = {page: 0, total_pages: 0, results: [], total_results: 0};
+  favoriteTvShows: UserTvShowList = {page: 0, total_pages: 0, results: [], total_results: 0};
+
+  favoriteTvShowsToShow: UserTvShowList = {page: 0, total_pages: 0, results: [], total_results: 0};
+  favoriteMoviesToShow: UserMovieList = {page: 0, total_pages: 0, results: [], total_results: 0};
 
   loading = false;
+
+
   errorMessage = '';
+
+  moviesDisplayCount: number = 5;
+  tvShowsDisplayCount: number = 5;
 
 
   public constructor(
     private userMovieService: UserMovieService,
     private userTvService: UserTvService
   ) {
+    this.loadFavorites();
   }
 
   ngOnInit(): void {
-    this.loadFavorites();
+
   }
 
   loadFavorites(): void {
@@ -45,6 +55,12 @@ export class FavoritesComponent implements OnInit {
     this.userMovieService.getUserFavoriteMovies().subscribe({
       next: (movies) => {
         this.favoriteMovies = movies;
+        this.favoriteMoviesToShow = {
+          page: this.favoriteMovies.page,
+          total_pages: this.favoriteMovies.total_pages,
+          results: this.favoriteMovies.results.slice(0, this.moviesDisplayCount),
+          total_results: this.favoriteMovies.total_results
+        };
       },
       error: err => console.log(err)
     });
@@ -54,6 +70,12 @@ export class FavoritesComponent implements OnInit {
     this.userTvService.getUserFavoriteTvShows().subscribe({
       next: (tvShows) => {
         this.favoriteTvShows = tvShows;
+        this.favoriteTvShowsToShow = {
+          page: this.favoriteTvShows.page,
+          total_pages: this.favoriteTvShows.total_pages,
+          results: this.favoriteTvShows.results.slice(0, this.tvShowsDisplayCount),
+          total_results: this.favoriteTvShows.total_results
+        };
       },
       error: err => console.log(err)
     });
@@ -62,5 +84,25 @@ export class FavoritesComponent implements OnInit {
   hasContent(): boolean {
     return this.favoriteMovies.results.length > 0 ||
       this.favoriteTvShows.results.length > 0;
+  }
+
+  showMoreTvShows(): void {
+    if (this.favoriteTvShowsToShow.results.length >= this.favoriteTvShows.results.length) return;
+    this.favoriteTvShowsToShow.results = this.favoriteTvShows.results.slice(0, this.favoriteTvShowsToShow.results.length + this.tvShowsDisplayCount);
+  }
+
+  showLessTvShows(): void {
+    if (this.favoriteTvShowsToShow.results.length <= this.tvShowsDisplayCount) return;
+    this.favoriteTvShowsToShow.results = this.favoriteTvShows.results.slice(0, this.favoriteTvShowsToShow.results.length - this.tvShowsDisplayCount);
+  }
+
+  showMoreMovies(): void {
+    if (this.favoriteMoviesToShow.results.length >= this.favoriteMovies.results.length) return;
+    this.favoriteMoviesToShow.results = this.favoriteMovies.results.slice(0, this.favoriteMoviesToShow.results.length + this.moviesDisplayCount);
+  }
+
+  showLessMovies(): void {
+    if (this.favoriteMoviesToShow.results.length <= this.moviesDisplayCount) return;
+    this.favoriteMoviesToShow.results = this.favoriteMovies.results.slice(0, this.favoriteMoviesToShow.results.length - this.moviesDisplayCount);
   }
 }
