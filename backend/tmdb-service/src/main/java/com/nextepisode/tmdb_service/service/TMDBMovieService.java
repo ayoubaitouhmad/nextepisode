@@ -1,12 +1,10 @@
-package com.nextepisode.tmdb_service.service.movie;
+package com.nextepisode.tmdb_service.service;
 
-import com.nextepisode.tmdb_service.dto.movie.TmdbMovieListResponse;
+import com.nextepisode.tmdb_service.dto.movie.response.TmdbMovieListResponse;
 import com.nextepisode.tmdb_service.dto.movie.filters.MovieDiscoverFilters;
 import com.nextepisode.tmdb_service.dto.movie.response.TMDBMovieGenres;
 
-import com.nextepisode.tmdb_service.service.BaseService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
