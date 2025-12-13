@@ -12,6 +12,12 @@ import org.springframework.context.annotation.Configuration;
 @EnableCaching
 public class CacheConfig {
 
+    public final static String TMDB_API_LANGUAGES = "tmdb_api_languages";
+    public final static String TMDB_API_COUNTRIES = "countries";
+    public final static String TMDB_API_MOVIE_GENRES = "movieGenres";
+    public final static String TMDB_API_TVSHOW_GENRES = "tvShowGenres";
+
+
     @Bean
     public Caffeine<Object, Object> caffeineSpec() {
         return Caffeine.newBuilder()
@@ -22,29 +28,18 @@ public class CacheConfig {
     @Bean
     public CacheManager caffeineCacheManager(Caffeine<Object, Object> caffeine) {
         CaffeineCacheManager cm = new CaffeineCacheManager(
-                "movieGenres",
-                "countries",
-                "tvShowGenres"
-
+                cacheNames()
         );
         cm.setCaffeine(caffeine);
         return cm; // Start with Caffeine only
     }
 
-    // Later, if you want Redis too:
-    // @Bean
-    // public RedisCacheManager redisCacheManager(RedisConnectionFactory factory) {
-    //   RedisCacheConfiguration cfg = RedisCacheConfiguration.defaultCacheConfig()
-    //     .entryTtl(Duration.ofHours(12))
-    //     .disableCachingNullValues();
-    //   return RedisCacheManager.builder(factory).cacheDefaults(cfg).build();
-    // }
-
-    // @Primary
-    // @Bean
-    // public CompositeCacheManager composite(CacheManager caffeine, RedisCacheManager redis) {
-    //   CompositeCacheManager cm = new CompositeCacheManager(caffeine, redis);
-    //   cm.setFallbackToNoOpCache(false);
-    //   return cm;
-    // }
+    private String[] cacheNames() {
+        return new String[]{
+                TMDB_API_LANGUAGES,
+                TMDB_API_COUNTRIES,
+                TMDB_API_MOVIE_GENRES,
+                TMDB_API_TVSHOW_GENRES
+        };
+    }
 }
