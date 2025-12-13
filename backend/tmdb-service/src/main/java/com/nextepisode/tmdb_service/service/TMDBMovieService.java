@@ -2,10 +2,8 @@ package com.nextepisode.tmdb_service.service;
 
 import com.nextepisode.tmdb_service.dto.movie.response.TmdbMovieListResponse;
 import com.nextepisode.tmdb_service.dto.movie.filters.MovieDiscoverFilters;
-import com.nextepisode.tmdb_service.dto.movie.response.TMDBMovieGenres;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.util.UriBuilder;
@@ -134,22 +132,6 @@ public class TMDBMovieService  extends BaseService {
         return uriBuilder.build();
     }
 
-    @Cacheable("movieGenres")
-    public TMDBMovieGenres getMovieGenres() {
-        try {
-            return TMDBClient.get()
-                    .uri(uriBuilder -> uriBuilder
-                            .path("/genre/movie/list")
-                            .queryParam("language", "en-US")
-                            .build()
-                    )
-                    .retrieve()
-                    .body(TMDBMovieGenres.class);
-        } catch (Exception e) {
-            log.error("Failed to discover movies", e);
-            throw new RuntimeException("Failed to discover movies", e);
-        }
-    }
 
 
 

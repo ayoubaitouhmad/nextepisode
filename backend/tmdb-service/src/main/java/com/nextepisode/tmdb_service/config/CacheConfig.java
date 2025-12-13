@@ -23,7 +23,8 @@ public class CacheConfig {
     public CacheManager caffeineCacheManager(Caffeine<Object, Object> caffeine) {
         CaffeineCacheManager cm = new CaffeineCacheManager(
                 "movieGenres",
-                "countries"
+                "countries",
+                "tvShowGenres"
 
         );
         cm.setCaffeine(caffeine);
