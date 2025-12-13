@@ -1,12 +1,10 @@
 package com.nextepisode.tmdb_service.controller.v1;
 
 import com.nextepisode.tmdb_service.config.ApiPaths;
-import com.nextepisode.tmdb_service.dto.movie.response.TmdbMovieListResponse;
 import com.nextepisode.tmdb_service.dto.movie.filters.MovieDiscoverFilters;
-import com.nextepisode.tmdb_service.dto.movie.response.TMDBMovieGenres;
+import com.nextepisode.tmdb_service.dto.movie.response.TmdbMovieListResponse;
 import com.nextepisode.tmdb_service.enums.movie.MovieSortBy;
 import com.nextepisode.tmdb_service.service.TMDBMovieService;
-
 import jakarta.validation.constraints.Min;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,11 +88,4 @@ public class MovieController {
 
         return movieService.discoverMovies(filters);
     }
-
-    @GetMapping("/genres")
-    public TMDBMovieGenres upcomingMovies() {
-        return movieService.getMovieGenres();
-    }
-
-
 }
