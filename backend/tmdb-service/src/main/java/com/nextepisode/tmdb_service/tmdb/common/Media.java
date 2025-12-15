@@ -1,6 +1,7 @@
 package com.nextepisode.tmdb_service.tmdb.common;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.nextepisode.tmdb_service.service.utll.ImageUrlBuilder;
 import com.nextepisode.tmdb_service.tmdb.core.IdElement;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -54,4 +55,11 @@ public class Media extends IdElement {
     @JsonProperty("genres")
     private List<Genre> genres;
 
+    public void setPosterPath(String posterPath) {
+        this.posterPath = ImageUrlBuilder.buildUrl(posterPath);
+    }
+
+    public void setBackdropPath(String backdropPath) {
+        this.backdropPath = ImageUrlBuilder.buildUrl(backdropPath);
+    }
 }
