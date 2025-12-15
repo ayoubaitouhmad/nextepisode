@@ -1,17 +1,15 @@
 package com.nextepisode.tmdb_service.controller.v1;
 
 import com.nextepisode.tmdb_service.config.ApiPaths;
-import com.nextepisode.tmdb_service.tmdb.request.MovieDiscoverFilters;
-import com.nextepisode.tmdb_service.tmdb.response.MovieList;
 import com.nextepisode.tmdb_service.enums.movie.MovieSortBy;
 import com.nextepisode.tmdb_service.service.MovieService;
+import com.nextepisode.tmdb_service.tmdb.request.MovieDiscoverFilters;
+import com.nextepisode.tmdb_service.tmdb.response.MovieDetails;
+import com.nextepisode.tmdb_service.tmdb.response.MovieList;
 import jakarta.validation.constraints.Min;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,13 +20,17 @@ public class MovieController {
 
     private final MovieService movieService;
 
-
     @Autowired
-    public MovieController(MovieService restTMDBMovieClient) {
-        this.movieService = restTMDBMovieClient;
-
+    public MovieController(MovieService movieService) {
+        this.movieService = movieService;
     }
 
+    @GetMapping("/{id}")
+    public MovieDetails popularMovies(
+            @PathVariable(required = true) Long id
+    ) {
+        return movieService.getMovieById(id);
+    }
 
     @GetMapping("/popular")
     public MovieList popularMovies(@RequestParam(required = false) @Min(1) Integer page, @RequestParam(defaultValue = "en-US") String language) {
