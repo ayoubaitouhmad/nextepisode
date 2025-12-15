@@ -14,11 +14,11 @@ import java.util.List;
 
 @Slf4j
 @Service
-public class TMDBConfigurationService extends BaseService {
+public class ConfigurationService extends BaseService {
 
 
-    public TMDBConfigurationService(RestClient TMDBClient) {
-        super(TMDBClient);
+    public ConfigurationService(RestClient tmdbClient) {
+        super(tmdbClient);
     }
 
 
@@ -26,7 +26,7 @@ public class TMDBConfigurationService extends BaseService {
     public LanguageList getLanguages() {
         log.info("Start getting tmdb api languages");
         try {
-            List<Language> languages = TMDBClient.get().uri(uriBuilder -> uriBuilder
+            List<Language> languages = tmdbClient.get().uri(uriBuilder -> uriBuilder
                     .path("/configuration/languages")
                     .queryParam("language", "en-US")
                     .build()).retrieve().body(new ParameterizedTypeReference<List<Language>>() {

@@ -12,18 +12,18 @@ import java.util.Optional;
 
 @Slf4j
 @Service
-public class TMDBWatchProvidersService extends BaseService {
+public class WatchProvidersService extends BaseService {
 
 
-    public TMDBWatchProvidersService(RestClient TMDBClient) {
-        super(TMDBClient);
+    public WatchProvidersService(RestClient tmdbClient) {
+        super(tmdbClient);
     }
 
 
     @Cacheable("countries")
     public CountryList getCountries() {
         try {
-            return TMDBClient.get()
+            return tmdbClient.get()
                     .uri(uriBuilder -> uriBuilder
                             .path("/watch/providers/regions")
                             .queryParam("language", "en-US")
@@ -41,7 +41,7 @@ public class TMDBWatchProvidersService extends BaseService {
     public WatchProviderList getWatchProvidersForMovies(String region) {
         log.info("Start getting watch providers for movies with region={}", region);
         try {
-            WatchProviderList tmdbWatchProviderListResponse = TMDBClient.get()
+            WatchProviderList tmdbWatchProviderListResponse = tmdbClient.get()
                     .uri(uriBuilder -> uriBuilder
                             .path("/watch/providers/movie")
                             .queryParam("language", "en-US")
@@ -71,7 +71,7 @@ public class TMDBWatchProvidersService extends BaseService {
     public WatchProviderList getWatchProvidersForTvShows(String region) {
         log.info("Start getting watch providers for movies with region={}", region);
         try {
-            WatchProviderList tmdbWatchProviderListResponse = TMDBClient.get()
+            WatchProviderList tmdbWatchProviderListResponse = tmdbClient.get()
                     .uri(uriBuilder -> uriBuilder
                             .path("/watch/providers/tv")
                             .queryParam("language", "en-US")

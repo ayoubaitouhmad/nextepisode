@@ -13,11 +13,11 @@ import java.net.URI;
 
 @Slf4j
 @Service
-public class TMDBMovieService  extends BaseService {
+public class MovieService extends BaseService {
 
 
-    public TMDBMovieService(RestClient TMDBClient) {
-        super(TMDBClient);
+    public MovieService(RestClient tmdbClient) {
+        super(tmdbClient);
     }
 
     public MovieList getPopularMovies(Integer page, String language) {
@@ -38,7 +38,7 @@ public class TMDBMovieService  extends BaseService {
 
     public MovieList fetchMovies(String path, Integer page, String language) {
         try {
-            return TMDBClient.get().uri(
+            return tmdbClient.get().uri(
                             uriBuilder -> uriBuilder
                                     .path(path)
                                     .queryParam("page", validatePage(page))
@@ -65,7 +65,7 @@ public class TMDBMovieService  extends BaseService {
 
     public MovieList getTrending(String timeWindow, String language) {
         try {
-            return TMDBClient.get().uri(uriBuilder ->
+            return tmdbClient.get().uri(uriBuilder ->
                             uriBuilder
                                     .path("/trending/movie/week")
                                     .queryParam("time_window", timeWindow)
@@ -84,7 +84,7 @@ public class TMDBMovieService  extends BaseService {
         log.info("Discovering movies filters - {}", filters.toString());
 
         try {
-            return TMDBClient.get()
+            return tmdbClient.get()
                     .uri(uriBuilder -> buildDiscoverUri(uriBuilder, filters))
                     .retrieve()
                     .body(MovieList.class);

@@ -6,9 +6,9 @@ import org.springframework.web.client.RestClient;
 
 @Service
 public abstract class BaseService {
-    protected  RestClient TMDBClient;
+    protected  RestClient tmdbClient;
     @Autowired
     public BaseService(RestClient TMDBClient) {
-        this.TMDBClient = TMDBClient;
+        this.tmdbClient = TMDBClient;
     }
 }

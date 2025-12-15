@@ -3,7 +3,7 @@ package com.nextepisode.tmdb_service.controller.v1;
 import com.nextepisode.tmdb_service.config.ApiPaths;
 import com.nextepisode.tmdb_service.tmdb.response.CountryList;
 import com.nextepisode.tmdb_service.tmdb.response.WatchProviderList;
-import com.nextepisode.tmdb_service.service.TMDBWatchProvidersService;
+import com.nextepisode.tmdb_service.service.WatchProvidersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class WatchProvidersController {
 
-    private final TMDBWatchProvidersService watchProvidersClient;
+    private final WatchProvidersService watchProvidersClient;
 
 
     @Autowired
-    public WatchProvidersController(TMDBWatchProvidersService restTMDBMovieClient) {
+    public WatchProvidersController(WatchProvidersService restTMDBMovieClient) {
         this.watchProvidersClient = restTMDBMovieClient;
 
     }

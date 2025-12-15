@@ -10,14 +10,14 @@ import java.time.Instant;
 
 @Slf4j
 @Service
-public class TMDBGenreService extends BaseService {
+public class GenreService extends BaseService {
 
 
     private final static String MOVIE_GENRE_LIST_API_PATH = "/genre/movie/list";
     private final static String TV_SHOW_GENRE_LIST_API_PATH = "/genre/tv/list";
 
-    public TMDBGenreService(RestClient TMDBClient) {
-        super(TMDBClient);
+    public GenreService(RestClient tmdbClient) {
+        super(tmdbClient);
     }
 
     @Cacheable("movieGenres")
@@ -45,7 +45,7 @@ public class TMDBGenreService extends BaseService {
 
     public GenreList fetchGenres(String path) {
         log.info("Start getting genres from TMDB API");
-        GenreList tmdbGenreListResponse = TMDBClient.get()
+        GenreList tmdbGenreListResponse = tmdbClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path(path)
                         .queryParam("language", "en-US")

@@ -4,7 +4,7 @@ import com.nextepisode.tmdb_service.config.ApiPaths;
 import com.nextepisode.tmdb_service.tmdb.request.MovieDiscoverFilters;
 import com.nextepisode.tmdb_service.tmdb.response.MovieList;
 import com.nextepisode.tmdb_service.enums.movie.MovieSortBy;
-import com.nextepisode.tmdb_service.service.TMDBMovieService;
+import com.nextepisode.tmdb_service.service.MovieService;
 import jakarta.validation.constraints.Min;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +20,11 @@ import java.util.List;
 @RestController
 public class MovieController {
 
-    private final TMDBMovieService movieService;
+    private final MovieService movieService;
 
 
     @Autowired
-    public MovieController(TMDBMovieService restTMDBMovieClient) {
+    public MovieController(MovieService restTMDBMovieClient) {
         this.movieService = restTMDBMovieClient;
 
     }
