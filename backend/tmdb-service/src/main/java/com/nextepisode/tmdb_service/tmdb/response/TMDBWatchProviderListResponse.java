@@ -1,10 +1,10 @@
-package com.nextepisode.tmdb_service.dto;
+package com.nextepisode.tmdb_service.tmdb.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.nextepisode.tmdb_service.tmdb.common.TMDBWatchProvider;
 import lombok.Builder;
 import lombok.Data;
 
-import java.time.Instant;
 import java.util.List;
 
 @Data

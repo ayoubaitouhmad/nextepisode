@@ -1,8 +1,8 @@
 package com.nextepisode.tmdb_service.controller.v1;
 
 import com.nextepisode.tmdb_service.config.ApiPaths;
-import com.nextepisode.tmdb_service.dto.movie.filters.MovieDiscoverFilters;
-import com.nextepisode.tmdb_service.dto.movie.response.TmdbMovieListResponse;
+import com.nextepisode.tmdb_service.tmdb.request.MovieDiscoverFilters;
+import com.nextepisode.tmdb_service.tmdb.response.TmdbMovieListResponse;
 import com.nextepisode.tmdb_service.enums.movie.MovieSortBy;
 import com.nextepisode.tmdb_service.service.TMDBMovieService;
 import jakarta.validation.constraints.Min;

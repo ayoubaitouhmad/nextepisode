@@ -1,6 +1,7 @@
-package com.nextepisode.tmdb_service.dto.configuration;
+package com.nextepisode.tmdb_service.tmdb.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.nextepisode.tmdb_service.tmdb.common.TMDBLanguage;
 import lombok.Builder;
 import lombok.Data;
 

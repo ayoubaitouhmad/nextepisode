@@ -1,4 +1,4 @@
-package com.nextepisode.tmdb_service.dto.movie.response;
+package com.nextepisode.tmdb_service.tmdb.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.nextepisode.tmdb_service.service.TMDBImageService;

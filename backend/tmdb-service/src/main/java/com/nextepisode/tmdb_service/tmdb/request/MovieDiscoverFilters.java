@@ -1,4 +1,4 @@
-package com.nextepisode.tmdb_service.dto.movie.filters;
+package com.nextepisode.tmdb_service.tmdb.request;
 
 
 import com.nextepisode.tmdb_service.enums.movie.MovieSortBy;

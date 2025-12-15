@@ -1,7 +1,7 @@
 package com.nextepisode.tmdb_service.service;
 
-import com.nextepisode.tmdb_service.dto.movie.response.TmdbMovieListResponse;
-import com.nextepisode.tmdb_service.dto.movie.filters.MovieDiscoverFilters;
+import com.nextepisode.tmdb_service.tmdb.response.TmdbMovieListResponse;
+import com.nextepisode.tmdb_service.tmdb.request.MovieDiscoverFilters;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

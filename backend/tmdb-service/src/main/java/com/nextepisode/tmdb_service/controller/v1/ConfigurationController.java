@@ -1,7 +1,7 @@
 package com.nextepisode.tmdb_service.controller.v1;
 
 import com.nextepisode.tmdb_service.config.ApiPaths;
-import com.nextepisode.tmdb_service.dto.configuration.TMDBLanguageListResponse;
+import com.nextepisode.tmdb_service.tmdb.response.TMDBLanguageListResponse;
 import com.nextepisode.tmdb_service.service.TMDBConfigurationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -2,8 +2,8 @@ package com.nextepisode.tmdb_service.service;
 
 
 import com.nextepisode.tmdb_service.config.CacheConfig;
-import com.nextepisode.tmdb_service.dto.configuration.TMDBLanguage;
-import com.nextepisode.tmdb_service.dto.configuration.TMDBLanguageListResponse;
+import com.nextepisode.tmdb_service.tmdb.common.TMDBLanguage;
+import com.nextepisode.tmdb_service.tmdb.response.TMDBLanguageListResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.ParameterizedTypeReference;

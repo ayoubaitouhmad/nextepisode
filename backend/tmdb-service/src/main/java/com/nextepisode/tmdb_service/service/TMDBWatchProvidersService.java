@@ -1,8 +1,8 @@
 package com.nextepisode.tmdb_service.service;
 
 
-import com.nextepisode.tmdb_service.dto.TMDBCountryListResponse;
-import com.nextepisode.tmdb_service.dto.TMDBWatchProviderListResponse;
+import com.nextepisode.tmdb_service.tmdb.response.TMDBCountryListResponse;
+import com.nextepisode.tmdb_service.tmdb.response.TMDBWatchProviderListResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
