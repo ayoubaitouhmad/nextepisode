@@ -7,7 +7,7 @@ import lombok.Data;
 public class Genre {
 
     @JsonProperty("id")
-    private Number id;
+    private Integer id;
     @JsonProperty("name")
     private String name;
 }
