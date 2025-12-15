@@ -1,63 +1,35 @@
 package com.nextepisode.tmdb_service.tmdb.response;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.nextepisode.tmdb_service.service.utll.ImageUrlBuilder;
+import com.nextepisode.tmdb_service.service.GenreService;
+import com.nextepisode.tmdb_service.service.MovieService;
+import com.nextepisode.tmdb_service.service.SearchService;
+import com.nextepisode.tmdb_service.tmdb.common.BaseMovie;
+import com.nextepisode.tmdb_service.tmdb.common.Genre;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
+import lombok.extern.slf4j.Slf4j;
 
+import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Data
-public class MovieSummary {
+@SuperBuilder
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 
-    @JsonProperty("adult")
-    private boolean adult;
-
-    @JsonProperty("backdrop_path")
-    private String backdropPath;
+public class MovieSummary extends BaseMovie {
 
     @JsonProperty("genre_ids")
-    private List<Integer> genreIds;
+    private Integer[] genreIds;
 
-    @JsonProperty("id")
-    private Integer id;
-
-    @JsonProperty("original_language")
-    private String original_language;
-
-    @JsonProperty("original_title")
-    private String original_title;
-
-    @JsonProperty("overview")
-    private String overview;
-
-    @JsonProperty("popularity")
-    private Double popularity;
-
-    @JsonProperty("poster_path")
-    private String poster_path;
-
-    @JsonProperty("release_date")
-    private String release_date;
-
-    @JsonProperty("title")
-    private String title;
-
-    @JsonProperty("video")
-    private boolean video;
-
-    @JsonProperty("vote_average")
-    private Double vote_average;
-
-    @JsonProperty("vote_count")
-    private Integer vote_count;
-
-    public void setPoster_path(String poster_path) {
-        this.poster_path = ImageUrlBuilder.getTMDBImageService().setPath(poster_path).get();
-    }
-
-    public void setBackdropPath(String backdropPath) {
-        this.backdropPath = ImageUrlBuilder.getTMDBImageService().setPath(backdropPath).get();
-    }
-
+    @JsonProperty(value = "genres", access = JsonProperty.Access.READ_ONLY)
+    private List<Genre> genres = new ArrayList<>();
 
 }

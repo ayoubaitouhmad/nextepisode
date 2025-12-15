@@ -1,25 +1,27 @@
 package com.nextepisode.tmdb_service.tmdb.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.nextepisode.tmdb_service.tmdb.common.BaseMovie;
 import com.nextepisode.tmdb_service.tmdb.common.Genre;
+import com.nextepisode.tmdb_service.tmdb.common.Language;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 
 @Data
-public class MovieDetails {
-
-    @JsonProperty("adult")
-    private boolean adult;
-
-    @JsonProperty("backdrop_path")
-    private String backdropPath;
+@SuperBuilder
+@NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
+public class MovieDetails extends BaseMovie {
 
     @JsonProperty("belongs_to_collection")
-    private Object belongsToCollection;
+    private Object belongsToCollection;  // Can create a Collection class later
 
     @JsonProperty("budget")
-    private Integer budget;
+    private Long budget;
 
     @JsonProperty("genres")
     private List<Genre> genres;
@@ -27,38 +29,17 @@ public class MovieDetails {
     @JsonProperty("homepage")
     private String homepage;
 
-    @JsonProperty("id")
-    private Long id;
-
     @JsonProperty("imdb_id")
     private String imdbId;
 
     @JsonProperty("origin_country")
     private List<String> originCountry;
 
-    @JsonProperty("original_language")
-    private String originalLanguage;
-
-    @JsonProperty("original_title")
-    private String originalTitle;
-
-    @JsonProperty("overview")
-    private String overview;
-
-    @JsonProperty("popularity")
-    private Double popularity;
-
-    @JsonProperty("poster_path")
-    private String posterPath;
-
     @JsonProperty("production_companies")
-    private List<Object> productionCompanies; // replace with ProductionCompanyDto
+    private List<Object> productionCompanies;
 
     @JsonProperty("production_countries")
-    private List<Object> productionCountries; // replace with ProductionCountryDto
-
-    @JsonProperty("release_date")
-    private String releaseDate; // you can change this to LocalDate
+    private List<Object> productionCountries;
 
     @JsonProperty("revenue")
     private Long revenue;
@@ -67,24 +48,11 @@ public class MovieDetails {
     private Integer runtime;
 
     @JsonProperty("spoken_languages")
-    private List<Object> spokenLanguages; // replace with SpokenLanguageDto
+    private List<Language> spokenLanguages;
 
     @JsonProperty("status")
     private String status;
 
     @JsonProperty("tagline")
     private String tagline;
-
-    @JsonProperty("title")
-    private String title;
-
-    @JsonProperty("video")
-    private boolean video;
-
-    @JsonProperty("vote_average")
-    private Double voteAverage;
-
-    @JsonProperty("vote_count")
-    private Integer voteCount;
-
 }

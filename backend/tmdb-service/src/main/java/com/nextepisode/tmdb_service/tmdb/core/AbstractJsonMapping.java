@@ -2,6 +2,7 @@ package com.nextepisode.tmdb_service.tmdb.core;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -18,6 +19,7 @@ import java.util.Map;
 @NoArgsConstructor
 @Data
 @SuperBuilder
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public abstract class AbstractJsonMapping implements Serializable {
 
 

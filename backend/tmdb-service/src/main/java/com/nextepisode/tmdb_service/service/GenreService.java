@@ -43,7 +43,7 @@ public class GenreService extends BaseService {
     }
 
 
-    public GenreList fetchGenres(String path) {
+    private GenreList fetchGenres(String path) {
         log.info("Start getting genres from TMDB API");
         GenreList tmdbGenreListResponse = tmdbClient.get()
                 .uri(uriBuilder -> uriBuilder
