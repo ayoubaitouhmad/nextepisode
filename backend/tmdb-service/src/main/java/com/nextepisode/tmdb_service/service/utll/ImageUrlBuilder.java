@@ -1,9 +1,9 @@
-package com.nextepisode.tmdb_service.service;
+package com.nextepisode.tmdb_service.service.utll;
 
 import org.springframework.stereotype.Service;
 
 @Service
-public class TMDBImageService {
+public class ImageUrlBuilder {
     public static String W_92 = "w92";
     public static String W_154 = "w154";
     public static String W_185 = "w185";
@@ -16,33 +16,33 @@ public class TMDBImageService {
     private static String path;
     private static String size;
 
-    private static TMDBImageService instance;
+    private static ImageUrlBuilder instance;
 
 
-    public TMDBImageService() {
+    public ImageUrlBuilder() {
         size = ORIGINAL;
     }
 
-    public static TMDBImageService getTMDBImageService() {
-        return instance = new TMDBImageService();
+    public static ImageUrlBuilder getTMDBImageService() {
+        return instance = new ImageUrlBuilder();
     }
 
-    public TMDBImageService setSize(String size) {
+    public ImageUrlBuilder setSize(String size) {
         if (size == null || size.isEmpty())
-            TMDBImageService.size = ORIGINAL;
+            ImageUrlBuilder.size = ORIGINAL;
         else
-            TMDBImageService.size = size;
+            ImageUrlBuilder.size = size;
         return instance;
     }
 
-    public TMDBImageService setPath(String path) {
+    public ImageUrlBuilder setPath(String path) {
         if (path == null || path.isEmpty()) {
             path = "";
         }
         if (path.startsWith("/")) {
             path = path.substring(1);
         }
-        TMDBImageService.path = path;
+        ImageUrlBuilder.path = path;
         return instance;
     }
 

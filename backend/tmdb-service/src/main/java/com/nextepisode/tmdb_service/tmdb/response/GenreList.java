@@ -1,6 +1,7 @@
-package com.nextepisode.tmdb_service.dto;
+package com.nextepisode.tmdb_service.tmdb.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.nextepisode.tmdb_service.tmdb.common.Genre;
 import lombok.Builder;
 import lombok.Data;
 
@@ -9,7 +10,7 @@ import java.util.List;
 
 @Data
 @Builder
-public class TMDBGenreListResponse {
+public class GenreList {
     @Builder.Default
     public Integer total = 0;
 
@@ -18,5 +19,5 @@ public class TMDBGenreListResponse {
 
 
     @JsonProperty("genres")
-    public List<TMDBGenre> genres;
+    public List<Genre> genres;
 }

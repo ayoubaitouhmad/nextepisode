@@ -1,10 +1,10 @@
 package com.nextepisode.tmdb_service.controller.v1;
 
 import com.nextepisode.tmdb_service.config.ApiPaths;
-import com.nextepisode.tmdb_service.dto.movie.filters.MovieDiscoverFilters;
-import com.nextepisode.tmdb_service.dto.movie.response.TmdbMovieListResponse;
+import com.nextepisode.tmdb_service.tmdb.request.MovieDiscoverFilters;
+import com.nextepisode.tmdb_service.tmdb.response.MovieList;
 import com.nextepisode.tmdb_service.enums.movie.MovieSortBy;
-import com.nextepisode.tmdb_service.service.TMDBMovieService;
+import com.nextepisode.tmdb_service.service.MovieService;
 import jakarta.validation.constraints.Min;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,23 +20,23 @@ import java.util.List;
 @RestController
 public class MovieController {
 
-    private final TMDBMovieService movieService;
+    private final MovieService movieService;
 
 
     @Autowired
-    public MovieController(TMDBMovieService restTMDBMovieClient) {
+    public MovieController(MovieService restTMDBMovieClient) {
         this.movieService = restTMDBMovieClient;
 
     }
 
 
     @GetMapping("/popular")
-    public TmdbMovieListResponse popularMovies(@RequestParam(required = false) @Min(1) Integer page, @RequestParam(defaultValue = "en-US") String language) {
+    public MovieList popularMovies(@RequestParam(required = false) @Min(1) Integer page, @RequestParam(defaultValue = "en-US") String language) {
         return movieService.getPopularMovies(page, language);
     }
 
     @GetMapping("/top-rated")
-    public TmdbMovieListResponse topRatedMovies(@RequestParam(defaultValue = "1") @Min(1) Integer page, @RequestParam(defaultValue = "en-US") String language) {
+    public MovieList topRatedMovies(@RequestParam(defaultValue = "1") @Min(1) Integer page, @RequestParam(defaultValue = "en-US") String language) {
         MovieDiscoverFilters filters = MovieDiscoverFilters.builder()
                 .page(page)
                 .language(language)
@@ -45,12 +45,12 @@ public class MovieController {
     }
 
     @GetMapping("/upcoming")
-    public TmdbMovieListResponse upcomingMovies(@RequestParam(defaultValue = "1") @Min(1) Integer page, @RequestParam(defaultValue = "en-US") String language) {
+    public MovieList upcomingMovies(@RequestParam(defaultValue = "1") @Min(1) Integer page, @RequestParam(defaultValue = "en-US") String language) {
         return movieService.getUpcomingMovies(page, language);
     }
 
     @GetMapping("/trending")
-    public TmdbMovieListResponse trendingMovies(
+    public MovieList trendingMovies(
             @RequestParam(defaultValue = "day") String timeWindow,
             @RequestParam(defaultValue = "en-US") String language
     ) {
@@ -59,7 +59,7 @@ public class MovieController {
 
 
     @GetMapping("/discover")
-    public TmdbMovieListResponse discoverMovies(
+    public MovieList discoverMovies(
             @RequestParam(required = false) String sortBy,
             @RequestParam(required = false) Integer page,
             @RequestParam(required = false) String language,

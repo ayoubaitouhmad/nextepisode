@@ -1,6 +1,6 @@
 package com.nextepisode.tmdb_service.service;
 
-import com.nextepisode.tmdb_service.dto.TMDBGenreListResponse;
+import com.nextepisode.tmdb_service.tmdb.response.GenreList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -10,18 +10,18 @@ import java.time.Instant;
 
 @Slf4j
 @Service
-public class TMDBGenreService extends BaseService {
+public class GenreService extends BaseService {
 
 
     private final static String MOVIE_GENRE_LIST_API_PATH = "/genre/movie/list";
     private final static String TV_SHOW_GENRE_LIST_API_PATH = "/genre/tv/list";
 
-    public TMDBGenreService(RestClient TMDBClient) {
-        super(TMDBClient);
+    public GenreService(RestClient tmdbClient) {
+        super(tmdbClient);
     }
 
     @Cacheable("movieGenres")
-    public TMDBGenreListResponse getMovieGenres() {
+    public GenreList getMovieGenres() {
         log.info("Start getting movies genres");
         try {
             return fetchGenres(MOVIE_GENRE_LIST_API_PATH);
@@ -32,7 +32,7 @@ public class TMDBGenreService extends BaseService {
     }
 
     @Cacheable("tvShowGenres")
-    public TMDBGenreListResponse getTvShowGenres() {
+    public GenreList getTvShowGenres() {
         log.info("Start getting tv shows genres");
         try {
             return fetchGenres(TV_SHOW_GENRE_LIST_API_PATH);
@@ -43,17 +43,17 @@ public class TMDBGenreService extends BaseService {
     }
 
 
-    public TMDBGenreListResponse fetchGenres(String path) {
+    public GenreList fetchGenres(String path) {
         log.info("Start getting genres from TMDB API");
-        TMDBGenreListResponse tmdbGenreListResponse = TMDBClient.get()
+        GenreList tmdbGenreListResponse = tmdbClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path(path)
                         .queryParam("language", "en-US")
                         .build()
                 )
                 .retrieve()
-                .body(TMDBGenreListResponse.class);
-        return TMDBGenreListResponse.builder()
+                .body(GenreList.class);
+        return GenreList.builder()
                 .genres(tmdbGenreListResponse.getGenres())
                 .storedAt(Instant.now())
                 .total(tmdbGenreListResponse.getGenres().size())

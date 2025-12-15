@@ -1,4 +1,4 @@
-package com.nextepisode.tmdb_service.dto;
+package com.nextepisode.tmdb_service.tmdb.common;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import java.util.Map;
 
 @Data
 @Builder
-public class TMDBWatchProvider {
+public class WatchProvider {
 
     @JsonProperty("provider_id")
     private Integer providerId;

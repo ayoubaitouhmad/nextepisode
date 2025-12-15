@@ -1,13 +1,13 @@
-package com.nextepisode.tmdb_service.dto.movie.response;
+package com.nextepisode.tmdb_service.tmdb.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.nextepisode.tmdb_service.service.TMDBImageService;
+import com.nextepisode.tmdb_service.service.utll.ImageUrlBuilder;
 import lombok.Data;
 
 import java.util.List;
 
 @Data
-public class TMDBMovieSummaryResponse {
+public class MovieSummary {
 
     @JsonProperty("adult")
     private boolean adult;
@@ -52,11 +52,11 @@ public class TMDBMovieSummaryResponse {
     private Integer vote_count;
 
     public void setPoster_path(String poster_path) {
-        this.poster_path = TMDBImageService.getTMDBImageService().setPath(poster_path).get();
+        this.poster_path = ImageUrlBuilder.getTMDBImageService().setPath(poster_path).get();
     }
 
     public void setBackdropPath(String backdropPath) {
-        this.backdropPath = TMDBImageService.getTMDBImageService().setPath(backdropPath).get();
+        this.backdropPath = ImageUrlBuilder.getTMDBImageService().setPath(backdropPath).get();
     }
 
 

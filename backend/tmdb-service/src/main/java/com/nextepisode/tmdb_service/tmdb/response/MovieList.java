@@ -1,4 +1,4 @@
-package com.nextepisode.tmdb_service.dto.movie.response;
+package com.nextepisode.tmdb_service.tmdb.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
@@ -6,13 +6,13 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class TmdbMovieListResponse {
+public class MovieList {
 
     @JsonProperty("page")
     private Integer page;
 
     @JsonProperty("results")
-    private List<TMDBMovieSummaryResponse> results;
+    private List<MovieSummary> results;
 
     @JsonProperty("total_pages")
     private Integer totalPages;
