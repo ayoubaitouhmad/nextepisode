@@ -1,7 +1,7 @@
 package com.nextepisode.tmdb_service.tmdb.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.nextepisode.tmdb_service.tmdb.common.TMDBLanguage;
+import com.nextepisode.tmdb_service.tmdb.common.Genre;
 import lombok.Builder;
 import lombok.Data;
 
@@ -10,15 +10,14 @@ import java.util.List;
 
 @Data
 @Builder
-public class TMDBLanguageListResponse {
-
+public class GenreList {
     @Builder.Default
     public Integer total = 0;
 
     @Builder.Default
-    public Instant storedAt = Instant.now();
+    public Instant storedAt =  Instant.now();
 
-    @JsonProperty("languages")
-    public List<TMDBLanguage> languages;
 
+    @JsonProperty("genres")
+    public List<Genre> genres;
 }

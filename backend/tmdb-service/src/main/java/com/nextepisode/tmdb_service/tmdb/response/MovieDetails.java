@@ -1,13 +1,13 @@
 package com.nextepisode.tmdb_service.tmdb.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.nextepisode.tmdb_service.tmdb.common.TMDBGenre;
+import com.nextepisode.tmdb_service.tmdb.common.Genre;
 import lombok.Data;
 
 import java.util.List;
 
 @Data
-public class TMDBMovieDetails {
+public class MovieDetails {
 
     @JsonProperty("adult")
     private boolean adult;
@@ -22,7 +22,7 @@ public class TMDBMovieDetails {
     private Integer budget;
 
     @JsonProperty("genres")
-    private List<TMDBGenre> genres;
+    private List<Genre> genres;
 
     @JsonProperty("homepage")
     private String homepage;

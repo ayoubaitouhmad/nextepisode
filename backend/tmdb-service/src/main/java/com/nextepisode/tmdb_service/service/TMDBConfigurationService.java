@@ -2,8 +2,8 @@ package com.nextepisode.tmdb_service.service;
 
 
 import com.nextepisode.tmdb_service.config.CacheConfig;
-import com.nextepisode.tmdb_service.tmdb.common.TMDBLanguage;
-import com.nextepisode.tmdb_service.tmdb.response.TMDBLanguageListResponse;
+import com.nextepisode.tmdb_service.tmdb.common.Language;
+import com.nextepisode.tmdb_service.tmdb.response.LanguageList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.ParameterizedTypeReference;
@@ -23,17 +23,17 @@ public class TMDBConfigurationService extends BaseService {
 
 
     @Cacheable(CacheConfig.TMDB_API_LANGUAGES)
-    public TMDBLanguageListResponse getLanguages() {
+    public LanguageList getLanguages() {
         log.info("Start getting tmdb api languages");
         try {
-            List<TMDBLanguage> languages = TMDBClient.get().uri(uriBuilder -> uriBuilder
+            List<Language> languages = TMDBClient.get().uri(uriBuilder -> uriBuilder
                     .path("/configuration/languages")
                     .queryParam("language", "en-US")
-                    .build()).retrieve().body(new ParameterizedTypeReference<List<TMDBLanguage>>() {
+                    .build()).retrieve().body(new ParameterizedTypeReference<List<Language>>() {
                                               }
             );
 
-            return TMDBLanguageListResponse.builder().languages(languages).total(languages.size()).build();
+            return LanguageList.builder().languages(languages).total(languages.size()).build();
 
         } catch (Exception e) {
             log.error("Failed to get languages: ", e);

@@ -6,13 +6,13 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class TmdbMovieListResponse {
+public class MovieList {
 
     @JsonProperty("page")
     private Integer page;
 
     @JsonProperty("results")
-    private List<TMDBMovieSummaryResponse> results;
+    private List<MovieSummary> results;
 
     @JsonProperty("total_pages")
     private Integer totalPages;

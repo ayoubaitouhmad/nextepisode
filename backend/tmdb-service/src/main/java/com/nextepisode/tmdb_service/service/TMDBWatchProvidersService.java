@@ -1,8 +1,8 @@
 package com.nextepisode.tmdb_service.service;
 
 
-import com.nextepisode.tmdb_service.tmdb.response.TMDBCountryListResponse;
-import com.nextepisode.tmdb_service.tmdb.response.TMDBWatchProviderListResponse;
+import com.nextepisode.tmdb_service.tmdb.response.CountryList;
+import com.nextepisode.tmdb_service.tmdb.response.WatchProviderList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -21,7 +21,7 @@ public class TMDBWatchProvidersService extends BaseService {
 
 
     @Cacheable("countries")
-    public TMDBCountryListResponse getCountries() {
+    public CountryList getCountries() {
         try {
             return TMDBClient.get()
                     .uri(uriBuilder -> uriBuilder
@@ -30,7 +30,7 @@ public class TMDBWatchProvidersService extends BaseService {
                             .build()
                     )
                     .retrieve()
-                    .body(TMDBCountryListResponse.class);
+                    .body(CountryList.class);
 
         } catch (Exception e) {
             log.error("Failed to get countries: ", e);
@@ -38,10 +38,10 @@ public class TMDBWatchProvidersService extends BaseService {
         }
     }
 
-    public TMDBWatchProviderListResponse getWatchProvidersForMovies(String region) {
+    public WatchProviderList getWatchProvidersForMovies(String region) {
         log.info("Start getting watch providers for movies with region={}", region);
         try {
-            TMDBWatchProviderListResponse tmdbWatchProviderListResponse = TMDBClient.get()
+            WatchProviderList tmdbWatchProviderListResponse = TMDBClient.get()
                     .uri(uriBuilder -> uriBuilder
                             .path("/watch/providers/movie")
                             .queryParam("language", "en-US")
@@ -49,13 +49,13 @@ public class TMDBWatchProvidersService extends BaseService {
                             .build()
                     )
                     .retrieve()
-                    .body(TMDBWatchProviderListResponse.class);
+                    .body(WatchProviderList.class);
 
             tmdbWatchProviderListResponse.getProviders().sort(
                     (o1, o2) -> o1.getDisplayPriority().compareTo(o2.getDisplayPriority())
             );
 
-            return TMDBWatchProviderListResponse.builder()
+            return WatchProviderList.builder()
                     .providers(
                             tmdbWatchProviderListResponse.getProviders()
                     )
@@ -68,10 +68,10 @@ public class TMDBWatchProvidersService extends BaseService {
         }
     }
 
-    public TMDBWatchProviderListResponse getWatchProvidersForTvShows(String region) {
+    public WatchProviderList getWatchProvidersForTvShows(String region) {
         log.info("Start getting watch providers for movies with region={}", region);
         try {
-            TMDBWatchProviderListResponse tmdbWatchProviderListResponse = TMDBClient.get()
+            WatchProviderList tmdbWatchProviderListResponse = TMDBClient.get()
                     .uri(uriBuilder -> uriBuilder
                             .path("/watch/providers/tv")
                             .queryParam("language", "en-US")
@@ -79,13 +79,13 @@ public class TMDBWatchProvidersService extends BaseService {
                             .build()
                     )
                     .retrieve()
-                    .body(TMDBWatchProviderListResponse.class);
+                    .body(WatchProviderList.class);
 
             tmdbWatchProviderListResponse.getProviders().sort(
                     (o1, o2) -> o1.getDisplayPriority().compareTo(o2.getDisplayPriority())
             );
 
-            return TMDBWatchProviderListResponse.builder()
+            return WatchProviderList.builder()
                     .providers(
                             tmdbWatchProviderListResponse.getProviders()
                     )

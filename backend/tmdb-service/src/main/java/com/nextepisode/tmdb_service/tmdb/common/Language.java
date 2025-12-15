@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class TMDBLanguage {
+public class Language {
 
     @JsonProperty("iso_639_1")
     public String isoNationalCode;

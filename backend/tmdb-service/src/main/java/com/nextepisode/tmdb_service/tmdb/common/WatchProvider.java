@@ -9,7 +9,7 @@ import java.util.Map;
 
 @Data
 @Builder
-public class TMDBWatchProvider {
+public class WatchProvider {
 
     @JsonProperty("provider_id")
     private Integer providerId;

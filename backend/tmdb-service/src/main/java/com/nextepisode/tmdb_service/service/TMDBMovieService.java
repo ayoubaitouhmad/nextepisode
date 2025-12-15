@@ -1,6 +1,6 @@
 package com.nextepisode.tmdb_service.service;
 
-import com.nextepisode.tmdb_service.tmdb.response.TmdbMovieListResponse;
+import com.nextepisode.tmdb_service.tmdb.response.MovieList;
 import com.nextepisode.tmdb_service.tmdb.request.MovieDiscoverFilters;
 
 import lombok.extern.slf4j.Slf4j;
@@ -20,23 +20,23 @@ public class TMDBMovieService  extends BaseService {
         super(TMDBClient);
     }
 
-    public TmdbMovieListResponse getPopularMovies(Integer page, String language) {
+    public MovieList getPopularMovies(Integer page, String language) {
         log.info("Fetching popular movies - language: {}, page: {}", language, page);
         return fetchMovies("/movie/popular", page, language);
     }
 
-    public TmdbMovieListResponse getTopRatedMovies(Integer page, String language) {
+    public MovieList getTopRatedMovies(Integer page, String language) {
         log.info("Fetching top rated movies - language: {}, page: {}", language, page);
         return fetchMovies("/movie/top_rated", page, language);
     }
 
-    public TmdbMovieListResponse getUpcomingMovies(Integer page, String language) {
+    public MovieList getUpcomingMovies(Integer page, String language) {
         log.info("Fetching popular movies - language: {}, page: {}", language, page);
         return fetchMovies("/movie/upcoming", page, language);
     }
 
 
-    public TmdbMovieListResponse fetchMovies(String path, Integer page, String language) {
+    public MovieList fetchMovies(String path, Integer page, String language) {
         try {
             return TMDBClient.get().uri(
                             uriBuilder -> uriBuilder
@@ -44,7 +44,7 @@ public class TMDBMovieService  extends BaseService {
                                     .queryParam("page", validatePage(page))
                                     .queryParam("language", validateLanguage(language)).build())
                     .retrieve()
-                    .body(TmdbMovieListResponse.class);
+                    .body(MovieList.class);
 
         } catch (Exception e) {
             // Log error and handle appropriately
@@ -63,7 +63,7 @@ public class TMDBMovieService  extends BaseService {
 
 
 
-    public TmdbMovieListResponse getTrending(String timeWindow, String language) {
+    public MovieList getTrending(String timeWindow, String language) {
         try {
             return TMDBClient.get().uri(uriBuilder ->
                             uriBuilder
@@ -71,7 +71,7 @@ public class TMDBMovieService  extends BaseService {
                                     .queryParam("time_window", timeWindow)
                                     .queryParam("language", validateLanguage(language))
                                     .build())
-                    .retrieve().body(TmdbMovieListResponse.class);
+                    .retrieve().body(MovieList.class);
 
         } catch (Exception e) {
             // Log error and handle appropriately
@@ -80,14 +80,14 @@ public class TMDBMovieService  extends BaseService {
     }
 
 
-    public TmdbMovieListResponse discoverMovies(MovieDiscoverFilters filters) {
+    public MovieList discoverMovies(MovieDiscoverFilters filters) {
         log.info("Discovering movies filters - {}", filters.toString());
 
         try {
             return TMDBClient.get()
                     .uri(uriBuilder -> buildDiscoverUri(uriBuilder, filters))
                     .retrieve()
-                    .body(TmdbMovieListResponse.class);
+                    .body(MovieList.class);
         } catch (Exception e) {
             log.error("Failed to discover movies", e);
             throw new RuntimeException("Failed to discover movies", e);

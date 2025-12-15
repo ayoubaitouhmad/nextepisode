@@ -1,7 +1,7 @@
 package com.nextepisode.tmdb_service.controller.v1;
 
 import com.nextepisode.tmdb_service.config.ApiPaths;
-import com.nextepisode.tmdb_service.tmdb.response.TMDBLanguageListResponse;
+import com.nextepisode.tmdb_service.tmdb.response.LanguageList;
 import com.nextepisode.tmdb_service.service.TMDBConfigurationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,7 +20,7 @@ public class ConfigurationController {
     }
 
     @GetMapping("/languages")
-    public TMDBLanguageListResponse moviesGenres() {
+    public LanguageList moviesGenres() {
         return tmdbConfigurationService.getLanguages();
     }
 }

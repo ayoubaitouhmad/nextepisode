@@ -7,7 +7,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class TMDBMovieSummaryResponse {
+public class MovieSummary {
 
     @JsonProperty("adult")
     private boolean adult;

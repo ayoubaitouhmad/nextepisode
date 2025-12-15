@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 @Data
-public class TMDBCountry {
+public class Country {
     @JsonProperty("iso_3166_1")
     public String ISO;
     @JsonProperty("english_name")
