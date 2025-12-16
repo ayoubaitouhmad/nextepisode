@@ -2,8 +2,8 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Service} from '../service';
 import {Observable} from 'rxjs';
-import {UserMoviesAndTvShowStats} from '../../../models/user/shared/shared-dtos';
-import {UserTvShowList} from '../../../models/user/tv/tv.model';
+import {UserMoviesAndTvShowStats} from '../../../models/common/shared-dtos';
+import {UserTvShowList} from '../../../models/common/tv.model';
 
 @Injectable({
   providedIn: 'root'

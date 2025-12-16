@@ -2,7 +2,7 @@ import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {NgIf} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 
-import {UserMoviesAndTvShowStats} from '../../../../../../core/models/user/shared/shared-dtos';
+import {UserMoviesAndTvShowStats} from '../../../../../../core/models/common/shared-dtos';
 import {UserProfile} from '../../../../../../core/models/user/user.model';
 
 @Component({

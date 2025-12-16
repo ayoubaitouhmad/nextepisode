@@ -1,9 +1,9 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {UserMovieList} from '../../../models/user/movie/movie.model';
+import {UserMovieList} from '../../../models/common/movie.model';
 import {Service} from '../service';
-import {UserMoviesAndTvShowStats} from '../../../models/user/shared/shared-dtos';
+import {UserMoviesAndTvShowStats} from '../../../models/common/shared-dtos';
 
 
 @Injectable({

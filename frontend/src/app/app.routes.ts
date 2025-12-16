@@ -10,7 +10,7 @@ export const routes: Routes = [
       {
         path: '',
 
-        loadChildren: () => import('./features/movies/movies.routes').then(m => m.MOVIE_ROUTES)
+        loadChildren: () => import('./features/home/home.routes').then(m => m.MOVIE_ROUTES)
       },
       {
         path: 'about',

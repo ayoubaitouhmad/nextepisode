@@ -1,4 +1,4 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {NgIf} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {Router} from '@angular/router';
@@ -14,7 +14,7 @@ import {AuthService} from '../../../../core/services/auth/auth-service';
 import {UserTvService} from '../../../../core/services/user/tv/user-tv.service';
 import {WatchedComponent} from './components/watched/watched.component';
 import {WatchlistComponent} from './components/watchlist/watchlist.component';
-import {UserMoviesAndTvShowStats} from '../../../../core/models/user/shared/shared-dtos';
+import {UserMoviesAndTvShowStats} from '../../../../core/models/common/shared-dtos';
 import {PasswordChangeRequest} from '../../../../core/models/auth/auth.model';
 import {
   ProfileNotificationSettingsUpdateRequest,
