@@ -1,12 +1,9 @@
 import {Injectable} from '@angular/core';
 import {TMDBService} from './tmdb.service';
-import {TMDBMovie} from '../models/TMDBMovie';
-import {Movie} from '../models/movie.model';
-import {TMDBGenre} from '../models/TMDBGenre';
 import {map, Observable} from 'rxjs';
-import {StreamingService} from '../models/streaming-service';
 import {HttpParams} from '@angular/common/http';
-import {TMDBMovieResponse} from '../models/TMDBMovieResponse';
+import {StreamingService} from '../models/common/shared-dtos';
+import {TMDBMovie, TMDBMovieResponse, XMovie} from '../models/common/movie.model';
 
 @Injectable({
   providedIn: 'root'
@@ -20,10 +17,10 @@ export class MovieService extends TMDBService {
   /**
    * Transform TMDB movie to our Movie interface
    */
-  private transformMovie(tmdbMovie: TMDBMovie): Movie {
+  private transformMovie(tmdbMovie: TMDBMovie): XMovie {
 
 
-    const movie: Movie = {
+    const movie: XMovie = {
       id: tmdbMovie.id.toString(),
       title: tmdbMovie.title,
       rating: Math.round(tmdbMovie.vote_average * 10) / 10,
@@ -104,7 +101,7 @@ export class MovieService extends TMDBService {
     language?: string;
     includeAdult?: boolean;
     watch_region?: string;
-  } = {}): Observable<{ movies: Movie[], totalPages: number, totalResults: number }> {
+  } = {}): Observable<{ movies: XMovie[], totalPages: number, totalResults: number }> {
 
     let params = new HttpParams()
       .set('api_key', this.apiKey)
@@ -182,7 +179,7 @@ export class MovieService extends TMDBService {
   /**
    * Get popular movies ordered by year
    */
-  getPopularMoviesByYear(page = 1): Observable<Movie[]> {
+  getPopularMoviesByYear(page = 1): Observable<XMovie[]> {
     const params = new HttpParams()
       .set('api_key', this.apiKey)
       .set('page', page.toString())
@@ -203,7 +200,7 @@ export class MovieService extends TMDBService {
   /**
    * Search movies by keyword
    */
-  searchMovies(query: string, page = 1): Observable<Movie[]> {
+  searchMovies(query: string, page = 1): Observable<XMovie[]> {
     const params = new HttpParams()
       .set('api_key', this.apiKey)
       .set('query', query)

@@ -1,9 +1,9 @@
 import {Injectable} from '@angular/core';
 import {TMDBService} from './tmdb.service';
 import {map, Observable} from 'rxjs';
-import {TMDBTvSeries, TMDBTvSeriesResponse, TvSeries} from '../models/TMDTvSeries';
 import {HttpParams} from '@angular/common/http';
-import {StreamingService} from '../models/streaming-service';
+import {StreamingService} from '../models/common/shared-dtos';
+import {TMDBTvSeries, TMDBTvSeriesResponse, TvSeries} from '../models/common/tv.model';
 
 @Injectable({
   providedIn: 'root'

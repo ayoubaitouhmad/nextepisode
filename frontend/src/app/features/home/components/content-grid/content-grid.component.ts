@@ -1,8 +1,8 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {Movie} from '../../../../core/models/movie.model';
 import {ContentCardComponent} from '../content-card/content-card.component';
-import {TvSeries} from '../../../../core/models/TMDTvSeries';
+import {XMovie} from '../../../../core/models/common/movie.model';
+import {TvSeries} from '../../../../core/models/common/tv.model';
 
 @Component({
   selector: 'app-content-grid',
@@ -12,36 +12,36 @@ import {TvSeries} from '../../../../core/models/TMDTvSeries';
   styleUrl: './content-grid.component.scss'
 })
 export class ContentGridComponent {
-  @Input() items: (Movie | TvSeries)[] = [];
+  @Input() items: (XMovie | TvSeries)[] = [];
   @Input() loading = false;
   @Input() viewMode: 'grid' | 'list' = 'grid';
 
-  @Output() addToFavorites = new EventEmitter<Movie | TvSeries>();
-  @Output() addToWatched = new EventEmitter<Movie | TvSeries>();
-  @Output() addToWatchlist = new EventEmitter<Movie | TvSeries>();
-  @Output() movieClick = new EventEmitter<Movie | TvSeries>();
-  @Output() shareItem = new EventEmitter<Movie | TvSeries>();
+  @Output() addToFavorites = new EventEmitter<XMovie | TvSeries>();
+  @Output() addToWatched = new EventEmitter<XMovie | TvSeries>();
+  @Output() addToWatchlist = new EventEmitter<XMovie | TvSeries>();
+  @Output() movieClick = new EventEmitter<XMovie | TvSeries>();
+  @Output() shareItem = new EventEmitter<XMovie | TvSeries>();
 
   ngOnLoad() {
   }
 
-  onShare(item: Movie | TvSeries): void {
+  onShare(item: XMovie | TvSeries): void {
     this.shareItem.emit(item);
   }
 
-  onAddToFavorites(item: Movie | TvSeries): void {
+  onAddToFavorites(item: XMovie | TvSeries): void {
     this.addToFavorites.emit(item);
   }
 
-  onAddToWatched(item: Movie | TvSeries): void {
+  onAddToWatched(item: XMovie | TvSeries): void {
     this.addToWatched.emit(item);
   }
 
-  onAddToWatchlist(item: Movie | TvSeries): void {
+  onAddToWatchlist(item: XMovie | TvSeries): void {
     this.addToWatchlist.emit(item);
   }
 
-  onContentClick(item: Movie | TvSeries): void {
+  onContentClick(item: XMovie | TvSeries): void {
     this.movieClick.emit(item);
   }
 }

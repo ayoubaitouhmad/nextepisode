@@ -1,6 +1,6 @@
 import {Component, Input} from '@angular/core';
 import {NgIf} from '@angular/common';
-import {getUserMovieGenreAsString, UserMovie} from '../../../../../../../core/models/user/movie/movie.model';
+import {getUserMovieGenreAsString, UserMovie} from '../../../../../../../core/models/common/movie.model';
 import {getYearFromDate} from '../../../../../../../shared/utils';
 
 @Component({

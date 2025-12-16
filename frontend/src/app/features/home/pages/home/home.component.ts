@@ -3,13 +3,13 @@ import {Router} from '@angular/router';
 import {CommonModule} from '@angular/common';
 import {ContentFiltersComponent} from '../../components/content-filters/content-filters.component';
 import {ContentGridComponent} from '../../components/content-grid/content-grid.component';
-import {Movie} from '../../../../core/models/movie.model';
-import {ContentFilters} from '../../../../core/models/content-filters';
+import {ContentFilters} from '../../../../core/models/tmdb/request/content-filters';
 import {TvSeriesService} from '../../../../core/services/tv-series.service';
-import {TvSeries} from '../../../../core/models/TMDTvSeries';
 import {MovieService} from '../../../../core/services/movie.service';
 import {UserMovieService} from '../../../../core/services/user/movie/user-movie.service';
 import {AuthService} from '../../../../core/services/auth/auth-service';
+import {XMovie} from '../../../../core/models/common/movie.model';
+import {TvSeries} from '../../../../core/models/common/tv.model';
 
 @Component({
   selector: 'app-movie-list',
@@ -26,7 +26,7 @@ export class HomeComponent implements OnInit {
   private authService = inject(AuthService);
   private router = inject(Router);
 
-  items: (Movie | TvSeries)[] = [];
+  items: (XMovie | TvSeries)[] = [];
   loading = false;
   error: string | null = null;
   currentPage = 1;
@@ -39,7 +39,7 @@ export class HomeComponent implements OnInit {
     this.testAuthentication();
   }
 
-  onOpenDetails(item: Movie | TvSeries): void {
+  onOpenDetails(item: XMovie | TvSeries): void {
     const id = 'id' in item ? item.id : '';
     // Heuristic: TvSeries has originCountry property in our model; Movie does not
     const isTv = (item as any).originCountry !== undefined;
@@ -172,7 +172,7 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  onShareContent(movie: Movie): void {
+  onShareContent(movie: XMovie): void {
     // Implement share functionality
     const shareUrl = `https://www.themoviedb.org/movie/${movie.id}`;
     if (navigator.share) {
@@ -187,7 +187,7 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  onAddToFavorites(content: Movie | TvSeries): void {
+  onAddToFavorites(content: XMovie | TvSeries): void {
     if (!this.authService.isAuthenticated()) {
       console.log('User not authenticated');
       return;
@@ -206,7 +206,7 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  onAddToWatched(content: Movie | TvSeries): void {
+  onAddToWatched(content: XMovie | TvSeries): void {
     if (!this.authService.isAuthenticated()) {
       console.log('User not authenticated');
       return;
@@ -225,7 +225,7 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  onAddToWatchlist(content: Movie | TvSeries): void {
+  onAddToWatchlist(content: XMovie | TvSeries): void {
     if (!this.authService.isAuthenticated()) {
       console.log('User not authenticated');
       return;

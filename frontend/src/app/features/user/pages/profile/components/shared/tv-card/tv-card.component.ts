@@ -1,7 +1,7 @@
 import {Component, Input} from '@angular/core';
 import {NgIf} from '@angular/common';
-import {UserTvShow} from '../../../../../../../core/models/user/tv/tv.model';
-import {getUserMovieGenreAsString} from '../../../../../../../core/models/user/shared/shared-dtos';
+import {UserTvShow} from '../../../../../../../core/models/common/tv.model';
+import {getUserMovieGenreAsString} from '../../../../../../../core/models/common/shared-dtos';
 import {getYearFromDate} from '../../../../../../../shared/utils';
 
 @Component({

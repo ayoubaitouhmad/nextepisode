@@ -1,9 +1,9 @@
 import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {Movie} from '../../../../core/models/movie.model';
-import {TvSeries} from '../../../../core/models/TMDTvSeries';
 import {UserMovieService} from '../../../../core/services/user/movie/user-movie.service';
 import {AuthService} from '../../../../core/services/auth/auth-service';
+import {XMovie} from '../../../../core/models/common/movie.model';
+import {TvSeries} from '../../../../core/models/common/tv.model';
 
 @Component({
   selector: 'app-content-card',
@@ -14,11 +14,11 @@ import {AuthService} from '../../../../core/services/auth/auth-service';
 })
 export class ContentCardComponent implements OnInit {
 
-  @Input({required: true}) content!: (Movie | TvSeries);
-  @Output() share = new EventEmitter<Movie>();
-  @Output() addToFavorites = new EventEmitter<Movie>();
-  @Output() addToWatched = new EventEmitter<Movie>();
-  @Output() addToWatchlist = new EventEmitter<Movie>();
+  @Input({required: true}) content!: (XMovie | TvSeries);
+  @Output() share = new EventEmitter<XMovie>();
+  @Output() addToFavorites = new EventEmitter<XMovie>();
+  @Output() addToWatched = new EventEmitter<XMovie>();
+  @Output() addToWatchlist = new EventEmitter<XMovie>();
 
   // State properties for visual feedback
   isInFavorites = false;
@@ -37,7 +37,7 @@ export class ContentCardComponent implements OnInit {
 
 
   onShare(): void {
-    this.share.emit(this.content as Movie);
+    this.share.emit(this.content as XMovie);
   }
 
   onAddToFavorites(): void {
@@ -73,7 +73,7 @@ export class ContentCardComponent implements OnInit {
         }
       });
     }
-    this.addToFavorites.emit(this.content as Movie);
+    this.addToFavorites.emit(this.content as XMovie);
   }
 
   onAddToWatched(): void {
@@ -109,7 +109,7 @@ export class ContentCardComponent implements OnInit {
         }
       });
     }
-    this.addToWatched.emit(this.content as Movie);
+    this.addToWatched.emit(this.content as XMovie);
   }
 
   onAddToWatchlist(): void {
@@ -145,7 +145,7 @@ export class ContentCardComponent implements OnInit {
         }
       });
     }
-    this.addToWatchlist.emit(this.content as Movie);
+    this.addToWatchlist.emit(this.content as XMovie);
   }
 
   ngOnInit() {

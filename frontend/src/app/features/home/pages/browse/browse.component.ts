@@ -3,9 +3,9 @@ import {MovieService} from '../../../../core/services/movie.service';
 import {TvSeriesService} from '../../../../core/services/tv-series.service';
 import {forkJoin} from 'rxjs';
 import {DecimalPipe, NgForOf, NgIf} from '@angular/common';
-import {Movie} from '../../../../core/models/movie.model';
-import {TvSeries} from '../../../../core/models/TMDTvSeries';
 import {Router} from '@angular/router';
+import {XMovie} from '../../../../core/models/common/movie.model';
+import {TvSeries} from '../../../../core/models/common/tv.model';
 
 type Section = { id: string; title: string; items: any[]; kind: 'movie' | 'tv' };
 
@@ -79,7 +79,7 @@ export class BrowseComponent implements OnInit {
     if (el) el.scrollBy({left: dir * 900, behavior: 'smooth'});
   }
 
-  onOpenDetails(item: Movie | TvSeries): void {
+  onOpenDetails(item: XMovie | TvSeries): void {
 
     const id = 'id' in item ? item.id : '';
     const isTv = (item as any).origin_country != undefined;

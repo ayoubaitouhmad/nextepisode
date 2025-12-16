@@ -2,10 +2,9 @@ import {Component, EventEmitter, inject, OnInit, Output} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {TMDBService} from '../../../../core/services/tmdb.service';
-import {ContentFilters} from '../../../../core/models/content-filters';
-import {TMDBGenre} from '../../../../core/models/TMDBGenre';
-import {Language} from '../../../../core/models/movie.model';
+import {ContentFilters} from '../../../../core/models/tmdb/request/content-filters';
 import {AutocompleteComponent} from '../../../../shared/components/auto-complete-component/AutocompleteComponent';
+import {Genre, Language} from '../../../../core/models/common/shared-dtos';
 
 
 @Component({
@@ -37,11 +36,11 @@ export class ContentFiltersComponent implements OnInit {
   };
 
   languages: Language[] = [];
-  genres: TMDBGenre[] = [];
+  genres: Genre[] = [];
   streamingServices: any[] = [];
   regions: any[] = [];
   persones: string[] = [];
-  tvGenres: TMDBGenre[] = [];
+  tvGenres: Genre[] = [];
 
   ngOnInit(): void {
     this.tmdbService.getMovieGenres().subscribe(g => this.genres = g);
@@ -71,7 +70,7 @@ export class ContentFiltersComponent implements OnInit {
   }
 
 
-  onGenreToggle(genre: TMDBGenre): void {
+  onGenreToggle(genre: Genre): void {
     const idx = this.filters.genres.indexOf(genre.id);
     if (idx > -1) this.filters.genres.splice(idx, 1);
     else this.filters.genres.push(genre.id);

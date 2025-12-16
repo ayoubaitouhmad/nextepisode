@@ -1,16 +1,8 @@
-import {Injectable, inject} from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
-import {Observable, map, forkJoin, of, shareReplay} from 'rxjs';
+import {map, Observable} from 'rxjs';
 import {environment} from '../../../environments/environment';
-import {
-  Language,
-  Movie,
-
-} from '../models/movie.model';
-import {StreamingService} from '../models/streaming-service';
-import {TMDBMovie} from '../models/TMDBMovie';
-import {TMDBMovieResponse} from '../models/TMDBMovieResponse';
-import {TMDBGenre} from '../models/TMDBGenre';
+import {Genre, Language, StreamingService} from '../models/common/shared-dtos';
 
 
 @Injectable({
@@ -27,7 +19,7 @@ export class TMDBService {
   }
 
 
-  public static readonly movieGenreList: TMDBGenre[] = [
+  public static readonly movieGenreList: Genre[] = [
     {id: 28, name: 'Action'},
     {id: 12, name: 'Adventure'},
     {id: 16, name: 'Animation'},
@@ -49,7 +41,7 @@ export class TMDBService {
     {id: 37, name: 'Western'}
   ];
 
-  public static readonly tvGenreList: TMDBGenre[] = [
+  public static readonly tvGenreList: Genre[] = [
     {id: 10759, name: 'Action & Adventure'},
     {id: 16, name: 'Animation'},
     {id: 35, name: 'Comedy'},
@@ -69,7 +61,7 @@ export class TMDBService {
   ];
 
 
-  findGenreById(id: number): TMDBGenre | undefined {
+  findGenreById(id: number): Genre | undefined {
 
 
     const genre = TMDBService.movieGenreList.find(genre => genre.id == id);
@@ -86,18 +78,18 @@ export class TMDBService {
   /**
    * Get all genres
    */
-  getMovieGenres(): Observable<TMDBGenre[]> {
+  getMovieGenres(): Observable<Genre[]> {
     const params = new HttpParams().set('api_key', this.apiKey);
-    return this.http.get<{ genres: TMDBGenre[] }>(`${this.baseUrl}/genre/movie/list`, {params})
+    return this.http.get<{ genres: Genre[] }>(`${this.baseUrl}/genre/movie/list`, {params})
       .pipe(map(response => response.genres));
   }
 
   /**
    * Get all genres
    */
-  geTvGenres(): Observable<TMDBGenre[]> {
+  geTvGenres(): Observable<Genre[]> {
     const params = new HttpParams().set('api_key', this.apiKey);
-    return this.http.get<{ genres: TMDBGenre[] }>(`${this.baseUrl}/genre/tv/list`, {params})
+    return this.http.get<{ genres: Genre[] }>(`${this.baseUrl}/genre/tv/list`, {params})
       .pipe(map(response => response.genres));
   }
 
@@ -143,8 +135,8 @@ export class TMDBService {
   }
 
 
-  transformGenres(ids: number[]): TMDBGenre[] {
-    let genres: TMDBGenre[] = [];
+  transformGenres(ids: number[]): Genre[] {
+    let genres: Genre[] = [];
 
     ids.forEach(id => {
       TMDBService.movieGenreList.forEach(genre => {
