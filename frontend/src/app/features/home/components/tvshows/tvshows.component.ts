@@ -4,10 +4,11 @@ import {ContentFiltersComponent} from '../../components/content-filters/content-
 import {ContentGridComponent} from '../../components/content-grid/content-grid.component';
 import {ContentFilters} from '../../../../core/models/tmdb/request/content-filters';
 import {TvSeriesService} from '../../../../core/services/tmdb/tv-series.service';
-import {UserTvService} from '../../../../core/services/user/tv/user-tv.service';
 import {AuthService} from '../../../../core/services/auth/auth-service';
 import {TvSeries} from '../../../../core/models/common/tv.model';
 import {XMovie} from '../../../../core/models/common/movie.model';
+import {GenreList} from '../../../../core/models/common/shared-dtos';
+import {_TmdbService} from '../../../../core/services/tmdb/_-tmdb.service';
 
 @Component({
   selector: 'app-tvshows',
@@ -18,8 +19,8 @@ import {XMovie} from '../../../../core/models/common/movie.model';
 })
 export class TvShowsComponent implements OnInit {
   private tvSeriesService = inject(TvSeriesService);
-  private userTvService = inject(UserTvService);
   private authService = inject(AuthService);
+  private tmdbService = inject(_TmdbService);
 
   @Output() itemClick = new EventEmitter<TvSeries>();
 
@@ -33,9 +34,27 @@ export class TvShowsComponent implements OnInit {
 
   readonly contentType = 'tv' as const;
 
+
+  genres: GenreList = {
+    total: 0,
+    stored_at: new Date(),
+    genres: []
+  };
+
   ngOnInit(): void {
+    this.loadGenres();
     this.loadTvShows();
   }
+
+  private loadGenres() {
+    this.tmdbService.getTvShowsGenres().subscribe({
+      next: (genres) => {
+        this.genres = genres;
+      },
+      error: (error) => console.log(error)
+    });
+  }
+
 
   loadTvShows(): void {
     this.loading = true;

@@ -101,31 +101,31 @@
 
   <div class="flex flex-wrap gap-2">
     <div *ngFor="let service of streamingServices"
-         (click)="onStreamingServiceToggle(service.id)"
+         (click)="onStreamingServiceToggle(service.provider_id)"
          class="group relative cursor-pointer transition-all duration-300 ease-in-out hover:scale-[1.02]">
 
       <div
         class="relative bg-gray-800/50 backdrop-blur-sm rounded-lg px-4 py-3 border border-gray-700/50 hover:border-gray-600/70 transition-all duration-300"
         [ngClass]="{
-             'bg-blue-900/30 border-blue-500/50 ring-1 ring-blue-400/30': filters.streamingServices.includes(service.id),
-             'hover:bg-gray-700/30': !filters.streamingServices.includes(service.id)
+             'bg-blue-900/30 border-blue-500/50 ring-1 ring-blue-400/30': filters.streamingServices.includes(service.provider_id),
+             'hover:bg-gray-700/30': !filters.streamingServices.includes(service.provider_id)
            }">
 
         <div class="flex items-center gap-3 relative min-w-0">
           <div class="flex-shrink-0 w-8 h-8 flex items-center justify-center">
-            <img [src]="service.logoUrl"
-                 [alt]="service.name"
+            <img [src]="service.logo_path"
+                 [alt]="service.provider_name"
                  class="max-w-full max-h-full object-contain transition-all duration-300 group-hover:scale-110"
                  loading="lazy"/>
           </div>
 
           <span
             class="text-sm font-medium text-gray-300 group-hover:text-white transition-colors duration-300 whitespace-nowrap"
-            [ngClass]="{'text-blue-300': filters.streamingServices.includes(service.id)}">
-            {{ service.name }}
+            [ngClass]="{'text-blue-300': filters.streamingServices.includes(service.provider_id)}">
+            {{ service.provider_name }}
           </span>
 
-          <div *ngIf="filters.streamingServices.includes(service.id)"
+          <div *ngIf="filters.streamingServices.includes(service.provider_id)"
                class="flex-shrink-0 w-4 h-4 bg-blue-500 rounded-full flex items-center justify-center ml-2">
             <svg class="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 20 20">
               <path fill-rule="evenodd"

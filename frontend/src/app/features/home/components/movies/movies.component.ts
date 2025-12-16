@@ -1,13 +1,15 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {CommonModule} from '@angular/common';
-import {MovieService} from '../../../../core/services/tmdb/movie.service';
 import {UserMovieService} from '../../../../core/services/user/movie/user-movie.service';
 import {AuthService} from '../../../../core/services/auth/auth-service';
 import {ContentGridComponent} from '../content-grid/content-grid.component';
 import {ContentFilters} from '../../../../core/models/tmdb/request/content-filters';
 import {XMovie} from '../../../../core/models/common/movie.model';
 import {ContentFiltersComponent} from '../content-filters/content-filters.component';
+import {GenreList} from '../../../../core/models/common/shared-dtos';
+import {_TmdbService} from '../../../../core/services/tmdb/_-tmdb.service';
+import {MovieService} from '../../../../core/services/tmdb/movie.service';
 
 
 @Component({
@@ -18,8 +20,10 @@ import {ContentFiltersComponent} from '../content-filters/content-filters.compon
   styleUrl: './movies.component.scss'
 })
 export class MoviesComponent implements OnInit {
+  private tmdbService = inject(_TmdbService);
   private movieService = inject(MovieService);
   private userMovieService = inject(UserMovieService);
+  private _tmdbService: _TmdbService = inject(_TmdbService);
   private authService = inject(AuthService);
   private router = inject(Router);
 
@@ -31,30 +35,30 @@ export class MoviesComponent implements OnInit {
   totalResults = 0;
   currentFilters: ContentFilters | null = null;
 
+  genres: GenreList = {
+    total: 0,
+    stored_at: new Date(),
+    genres: []
+  };
+
   readonly contentType = 'movie' as const;
 
+
   ngOnInit(): void {
+    this.loadGenres();
     this.loadMovies();
-    this.testAuthentication();
   }
 
-  private testAuthentication(): void {
-    if (this.authService.isAuthenticated()) {
-      console.log('User is authenticated, testing API call...');
-      this.userMovieService.testAuthentication().subscribe({
-        next: (response) => console.log('Authentication test successful:', response),
-        error: (error) => {
-          console.error('Authentication test failed:', error);
-          if (error.status === 401) {
-            console.log('User needs to log in again - JWT token may be invalid');
-            this.authService.logout();
-          }
-        }
-      });
-    } else {
-      console.log('User is not authenticated');
-    }
+
+  private loadGenres() {
+    this._tmdbService.getMoviesGenres().subscribe({
+      next: (genres) => {
+        this.genres = genres;
+      },
+      error: (error) => console.log(error)
+    });
   }
+
 
   onOpenDetails(item: XMovie): void {
     this.router.navigate(['/movie', item.id]);
