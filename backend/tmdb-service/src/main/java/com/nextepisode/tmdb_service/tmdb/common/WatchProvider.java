@@ -1,6 +1,7 @@
 package com.nextepisode.tmdb_service.tmdb.common;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.nextepisode.tmdb_service.tmdb.core.HasImagePaths;
 import lombok.Builder;
 import lombok.Data;
 
@@ -9,7 +10,7 @@ import java.util.Map;
 
 @Data
 @Builder
-public class WatchProvider {
+public class WatchProvider  implements HasImagePaths {
 
     @JsonProperty("provider_id")
     private Integer providerId;
@@ -26,8 +27,7 @@ public class WatchProvider {
     @JsonProperty("display_priorities")
     private Map<String, Integer> displayPriorities;
 
-
-    public Map<String, Integer> getDisplayPriorities() {
-        return  new HashMap<>();
+    public String getLogoPath() {
+        return fullImageUrl(logoPath);
     }
 }

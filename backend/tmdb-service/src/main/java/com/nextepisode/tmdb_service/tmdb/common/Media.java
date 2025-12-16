@@ -2,6 +2,7 @@ package com.nextepisode.tmdb_service.tmdb.common;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.nextepisode.tmdb_service.service.utll.ImageUrlBuilder;
+import com.nextepisode.tmdb_service.tmdb.core.HasImagePaths;
 import com.nextepisode.tmdb_service.tmdb.core.IdElement;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -14,7 +15,7 @@ import java.util.List;
 @Data
 @SuperBuilder
 @NoArgsConstructor
-public class Media extends IdElement {
+public class Media extends IdElement implements HasImagePaths {
 
     @JsonProperty("adult")
     private boolean adult;
@@ -56,10 +57,10 @@ public class Media extends IdElement {
     private List<Genre> genres;
 
     public void setPosterPath(String posterPath) {
-        this.posterPath = ImageUrlBuilder.buildUrl(posterPath);
+        this.posterPath = fullImageUrl(posterPath);
     }
 
     public void setBackdropPath(String backdropPath) {
-        this.backdropPath = ImageUrlBuilder.buildUrl(backdropPath);
+        this.backdropPath =  fullImageUrl(backdropPath);
     }
 }
