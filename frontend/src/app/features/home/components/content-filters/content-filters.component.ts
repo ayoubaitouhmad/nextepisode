@@ -2,9 +2,9 @@ import {Component, EventEmitter, inject, Input, OnChanges, OnInit, Output, Simpl
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {AutocompleteComponent} from '../../../../shared/components/auto-complete-component/AutocompleteComponent';
-import {TMDBService} from '../../../../core/services/tmdb/tmdb.service';
 import {ContentFilters} from '../../../../core/models/tmdb/request/content-filters';
-import {Genre, Language} from '../../../../core/models/common/shared-dtos';
+import {Genre, GenreList, Language, Region, WatchProvider} from '../../../../core/models/common/shared-dtos';
+import {_TmdbService} from '../../../../core/services/tmdb/_-tmdb.service';
 
 @Component({
   selector: 'app-movie-filters',
@@ -14,18 +14,25 @@ import {Genre, Language} from '../../../../core/models/common/shared-dtos';
   styleUrls: ['./content-filters.component.scss']
 })
 export class ContentFiltersComponent implements OnInit, OnChanges {
-  private tmdbService = inject(TMDBService);
   private maxShowedStreamingServices = 15;
+  private tmdbService: _TmdbService = inject(_TmdbService);
 
+
+  @Input({required: true}) genreList: GenreList = {
+    total: 0,
+    stored_at: new Date(),
+    genres: []
+  };
   @Input() contentType: 'movie' | 'tv' = 'movie';
   @Output() filtersChange = new EventEmitter<ContentFilters>();
+
 
   filters: ContentFilters = {
     type: 'movie',
     genres: [],
     yearFrom: 1975,
     yearTo: 2025,
-    language: 'Any',
+    language: 'en',
     runtime: 'Any',
     castAndCrew: '',
     keyword: '',
@@ -36,48 +43,41 @@ export class ContentFiltersComponent implements OnInit, OnChanges {
   };
 
   languages: Language[] = [];
+
   genres: Genre[] = [];
-  streamingServices: any[] = [];
-  regions: any[] = [];
+  streamingServices: WatchProvider[] = [];
+  regions: Region[] = [];
   persones: string[] = [];
-  tvGenres: Genre[] = [];
-  movieGenres: Genre[] = [];
+
 
   ngOnInit(): void {
-    this.tmdbService.getMovieGenres().subscribe(g => {
-      this.movieGenres = g;
-      if (this.contentType === 'movie') {
-        this.genres = g;
-      }
-    });
-    this.tmdbService.geTvGenres().subscribe(tvGenres => {
-      this.tvGenres = tvGenres;
-      if (this.contentType === 'tv') {
-        this.genres = tvGenres;
-      }
-    });
-    this.tmdbService.getRegions().subscribe(r => this.regions = r);
-    this.tmdbService.getStreamingServices(this.filters.country).subscribe(s =>
-        this.streamingServices = s.slice(0, this.maxShowedStreamingServices)
-    );
-    this.tmdbService.getLanguages().subscribe(l => this.languages = l);
-
+    this.tmdbService.getLanguages().subscribe(languages => this.languages = languages.languages)
+    this.tmdbService.getRegions().subscribe(regionList => this.regions = regionList.results);
+    this.tmdbService.getMovieWatchProviders().subscribe(list => this.streamingServices = list.results.slice(0, this.maxShowedStreamingServices));
     this.filters.type = this.contentType;
     this.emitFilters();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+    if (changes['genreList']) {
+      const newGenreList = changes['genreList'].currentValue as GenreList;
+
+      if (newGenreList && newGenreList.genres && newGenreList.genres.length > 0) {
+        this.genres = newGenreList.genres;
+        console.log('Genres updated in child component:', this.genres.length);
+      }
+    }
+
     if (changes['contentType'] && !changes['contentType'].firstChange) {
       this.filters.type = this.contentType;
-      this.genres = this.contentType === 'movie' ? this.movieGenres : this.tvGenres;
       this.filters.genres = [];
       this.emitFilters();
     }
   }
 
   getServiceName(serviceId: number): string {
-    const service = this.streamingServices.find(s => s.id === serviceId);
-    return service ? service.name : '';
+    const service = this.streamingServices.find(s => s.provider_id === serviceId);
+    return service ? service.provider_name : '';
   }
 
   clearStreamingServices(): void {
@@ -141,9 +141,9 @@ export class ContentFiltersComponent implements OnInit, OnChanges {
 
   onCountryChange(countryCode: string): void {
     this.filters.country = countryCode;
-    this.tmdbService.getStreamingServices(countryCode).subscribe(s =>
-        this.streamingServices = s.slice(0, this.maxShowedStreamingServices)
-    );
+    // this.tmdbService.getStreamingServices(countryCode).subscribe(s =>
+    //   this.streamingServices = s.slice(0, this.maxShowedStreamingServices)
+    // );
     this.emitFilters();
   }
 
@@ -159,9 +159,9 @@ export class ContentFiltersComponent implements OnInit, OnChanges {
 
   onSearch(text: string): void {
     console.log('Current input:', text);
-    this.tmdbService.searchPerson(text).subscribe(p =>
-        this.persones = p.map(person => person.name)
-    );
+    // this.tmdbService.searchPerson(text).subscribe(p =>
+    //   this.persones = p.map(person => person.name)
+    // );
   }
 
   onSelected(item: string): void {

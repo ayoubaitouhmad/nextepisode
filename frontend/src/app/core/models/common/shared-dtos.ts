@@ -3,6 +3,12 @@ export interface Genre {
   name: string;
 }
 
+export interface GenreList {
+  total: number;
+  stored_at: Date;
+  genres: Genre[];
+}
+
 export interface UserMoviesAndTvShowStats {
   favoriteCount: number;
   watchedCount: number;
@@ -38,9 +44,40 @@ export interface Language {
   name: string;
 }
 
+export interface LanguageList {
+  total: number;
+  stored_at: Date;
+  languages: Language[];
+}
+
+
 export interface StreamingService {
   id: number;
   name: string;
   logoUrl: string;
 }
 
+export interface Region {
+  iso: string,
+  iso_3166_1: string,
+  english_name: string,
+  native_name: string
+}
+
+export interface RegionList {
+  results: Region[]
+}
+
+export interface WatchProvider {
+  provider_id: number;
+  provider_name: string;
+  logo_path: string;
+  display_priority: number;
+  display_priorities: []
+}
+
+export interface WatchProviderList {
+  total: number;
+  results: WatchProvider[]
+
+}

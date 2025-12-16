@@ -5,7 +5,6 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 import {environment} from '../../../environments/environment';
 import {SafeUrlPipe} from '../../shared/pipes/safe-url.pipe';
 import {MovieService} from '../../core/services/tmdb/movie.service';
-import {TMDBService} from '../../core/services/tmdb/tmdb.service';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 
@@ -25,10 +24,9 @@ interface rESponse {
   styleUrl: './content-details.component.scss'
 })
 export class ContentDetailsComponent {
-  private tmdbService = inject(TMDBService);
   private route = inject(ActivatedRoute);
   private http = inject(HttpClient);
-  private tmdb = inject(MovieService);
+  private movieService = inject(MovieService);
 
   region: string = "US";
   regions: any[] = [];
@@ -64,13 +62,13 @@ export class ContentDetailsComponent {
 
     this.loadWatchProviders()
 
-    this.tmdbService.getRegions().subscribe(r => this.regions = r);
+    // this.tmdbService.getRegions().subscribe(r => this.regions = r);
 
   }
 
 
   loadWatchProviders() {
-    this.tmdb.getWatchProviders(parseInt(this.id)).subscribe(resp => {
+    this.movieService.getWatchProviders(parseInt(this.id)).subscribe(resp => {
       const r = resp.results?.[this.region] || {};
       this.tmdbWatchLink = r?.link || null;
       this.providers = r?.flatrate ?? r?.free ?? r?.ads ?? r?.rent ?? r?.buy ?? [];
