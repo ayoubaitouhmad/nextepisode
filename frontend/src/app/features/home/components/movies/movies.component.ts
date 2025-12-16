@@ -1,32 +1,29 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {CommonModule} from '@angular/common';
-import {ContentFiltersComponent} from '../../components/content-filters/content-filters.component';
-import {ContentGridComponent} from '../../components/content-grid/content-grid.component';
-import {ContentFilters} from '../../../../core/models/tmdb/request/content-filters';
-import {TvSeriesService} from '../../../../core/services/tmdb/tv-series.service';
 import {MovieService} from '../../../../core/services/tmdb/movie.service';
 import {UserMovieService} from '../../../../core/services/user/movie/user-movie.service';
 import {AuthService} from '../../../../core/services/auth/auth-service';
+import {ContentGridComponent} from '../content-grid/content-grid.component';
+import {ContentFilters} from '../../../../core/models/tmdb/request/content-filters';
 import {XMovie} from '../../../../core/models/common/movie.model';
-import {TvSeries} from '../../../../core/models/common/tv.model';
+import {ContentFiltersComponent} from '../content-filters/content-filters.component';
+
 
 @Component({
-  selector: 'app-movie-list',
+  selector: 'app-movies',
   standalone: true,
   imports: [CommonModule, ContentFiltersComponent, ContentGridComponent],
-  templateUrl: './home.component.html',
-  styleUrl: './home.component.scss'
+  templateUrl: './movies.component.html',
+  styleUrl: './movies.component.scss'
 })
-export class HomeComponent implements OnInit {
-
+export class MoviesComponent implements OnInit {
   private movieService = inject(MovieService);
-  private tvSeriesService = inject(TvSeriesService);
   private userMovieService = inject(UserMovieService);
   private authService = inject(AuthService);
   private router = inject(Router);
 
-  items: (XMovie | TvSeries)[] = [];
+  items: XMovie[] = [];
   loading = false;
   error: string | null = null;
   currentPage = 1;
@@ -34,30 +31,22 @@ export class HomeComponent implements OnInit {
   totalResults = 0;
   currentFilters: ContentFilters | null = null;
 
+  readonly contentType = 'movie' as const;
+
   ngOnInit(): void {
     this.loadMovies();
     this.testAuthentication();
   }
 
-  onOpenDetails(item: XMovie | TvSeries): void {
-    const id = 'id' in item ? item.id : '';
-    // Heuristic: TvSeries has originCountry property in our model; Movie does not
-    const isTv = (item as any).originCountry !== undefined;
-    this.router.navigate([isTv ? '/tv' : '/movie', id]);
-  }
-
-  testAuthentication(): void {
+  private testAuthentication(): void {
     if (this.authService.isAuthenticated()) {
       console.log('User is authenticated, testing API call...');
       this.userMovieService.testAuthentication().subscribe({
-        next: (response) => {
-          console.log('Authentication test successful:', response);
-        },
+        next: (response) => console.log('Authentication test successful:', response),
         error: (error) => {
           console.error('Authentication test failed:', error);
           if (error.status === 401) {
             console.log('User needs to log in again - JWT token may be invalid');
-            // Clear the invalid token
             this.authService.logout();
           }
         }
@@ -65,6 +54,10 @@ export class HomeComponent implements OnInit {
     } else {
       console.log('User is not authenticated');
     }
+  }
+
+  onOpenDetails(item: XMovie): void {
+    this.router.navigate(['/movie', item.id]);
   }
 
   loadMovies(): void {
@@ -91,7 +84,7 @@ export class HomeComponent implements OnInit {
 
   onFiltersChange(filters: ContentFilters): void {
     this.currentFilters = filters;
-    console.log(filters)
+    this.currentPage = 1;
     this.loading = true;
     this.error = null;
 
@@ -106,35 +99,19 @@ export class HomeComponent implements OnInit {
       watch_region: filters.country
     };
 
-    if (filters.type === 'tv') {
-      this.tvSeriesService.discoverSeries(filterParams).subscribe({
-        next: (response) => {
-          this.items = response.series;
-          this.totalPages = response.totalPages;
-          this.totalResults = response.totalResults;
-          this.loading = false;
-        },
-        error: (error) => {
-          console.error('Error loading TV series:', error);
-          this.error = 'Failed to load TV series. Please try again.';
-          this.loading = false;
-        }
-      });
-    } else {
-      this.movieService.discoverMovies(filterParams).subscribe({
-        next: (response) => {
-          this.items = response.movies;
-          this.totalPages = response.totalPages;
-          this.totalResults = response.totalResults;
-          this.loading = false;
-        },
-        error: (error) => {
-          console.error('Error loading movies:', error);
-          this.error = 'Failed to load movies. Please try again.';
-          this.loading = false;
-        }
-      });
-    }
+    this.movieService.discoverMovies(filterParams).subscribe({
+      next: (response) => {
+        this.items = response.movies;
+        this.totalPages = response.totalPages;
+        this.totalResults = response.totalResults;
+        this.loading = false;
+      },
+      error: (error) => {
+        console.error('Error loading movies:', error);
+        this.error = 'Failed to load movies. Please try again.';
+        this.loading = false;
+      }
+    });
   }
 
   loadNextPage(): void {
@@ -152,7 +129,6 @@ export class HomeComponent implements OnInit {
   }
 
   private loadMoviesWithCurrentFilters(): void {
-    console.log(this.currentFilters)
     if (this.currentFilters) {
       this.onFiltersChange(this.currentFilters);
     } else {
@@ -163,8 +139,10 @@ export class HomeComponent implements OnInit {
   private getSortBy(lookFor: string): 'release_date.desc' | 'popularity.desc' | 'vote_average.desc' {
     switch (lookFor) {
       case 'High Rated':
+      case 'Mieux noté':
         return 'vote_average.desc';
       case 'Most Popular':
+      case 'Populaire':
         return 'popularity.desc';
       case 'Newest':
       default:
@@ -173,7 +151,6 @@ export class HomeComponent implements OnInit {
   }
 
   onShareContent(movie: XMovie): void {
-    // Implement share functionality
     const shareUrl = `https://www.themoviedb.org/movie/${movie.id}`;
     if (navigator.share) {
       navigator.share({
@@ -182,65 +159,46 @@ export class HomeComponent implements OnInit {
         url: shareUrl
       });
     } else {
-      // Fallback: copy to clipboard
       navigator.clipboard.writeText(shareUrl);
     }
   }
 
-  onAddToFavorites(content: XMovie | TvSeries): void {
+  onAddToFavorites(content: XMovie): void {
     if (!this.authService.isAuthenticated()) {
       console.log('User not authenticated');
       return;
     }
 
-    if ('id' in content) {
-      const tmdbId = parseInt(content.id);
-      this.userMovieService.addToFavorites(tmdbId).subscribe({
-        next: () => {
-          console.log('Added to favorites successfully');
-        },
-        error: (error) => {
-          console.error('Failed to add to favorites:', error);
-        }
-      });
-    }
+    const tmdbId = parseInt(content.id);
+    this.userMovieService.addToFavorites(tmdbId).subscribe({
+      next: () => console.log('Added to favorites successfully'),
+      error: (error) => console.error('Failed to add to favorites:', error)
+    });
   }
 
-  onAddToWatched(content: XMovie | TvSeries): void {
+  onAddToWatched(content: XMovie): void {
     if (!this.authService.isAuthenticated()) {
       console.log('User not authenticated');
       return;
     }
 
-    if ('id' in content) {
-      const tmdbId = parseInt(content.id);
-      this.userMovieService.addToWatched(tmdbId).subscribe({
-        next: () => {
-          console.log('Added to watched successfully');
-        },
-        error: (error) => {
-          console.error('Failed to add to watched:', error);
-        }
-      });
-    }
+    const tmdbId = parseInt(content.id);
+    this.userMovieService.addToWatched(tmdbId).subscribe({
+      next: () => console.log('Added to watched successfully'),
+      error: (error) => console.error('Failed to add to watched:', error)
+    });
   }
 
-  onAddToWatchlist(content: XMovie | TvSeries): void {
+  onAddToWatchlist(content: XMovie): void {
     if (!this.authService.isAuthenticated()) {
       console.log('User not authenticated');
       return;
     }
 
-    if ('id' in content) {
-      const tmdbId = parseInt(content.id);
-      this.userMovieService.addToWatchlist(tmdbId).subscribe({
-        next: () => {
-          console.log('Added to watchlist successfully');
-        },
-        error: (error) => {
-          console.error('Failed to add to watchlist:', error);
-        }
-      });
-    }
+    const tmdbId = parseInt(content.id);
+    this.userMovieService.addToWatchlist(tmdbId).subscribe({
+      next: () => console.log('Added to watchlist successfully'),
+      error: (error) => console.error('Failed to add to watchlist:', error)
+    });
   }
 }

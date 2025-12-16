@@ -1,9 +1,10 @@
 import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {UserMovieService} from '../../../../core/services/user/movie/user-movie.service';
-import {AuthService} from '../../../../core/services/auth/auth-service';
 import {XMovie} from '../../../../core/models/common/movie.model';
 import {TvSeries} from '../../../../core/models/common/tv.model';
+import {UserMovieService} from '../../../../core/services/user/movie/user-movie.service';
+import {AuthService} from '../../../../core/services/auth/auth-service';
+
 
 @Component({
   selector: 'app-content-card',

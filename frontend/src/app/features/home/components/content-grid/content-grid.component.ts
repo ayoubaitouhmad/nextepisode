@@ -4,6 +4,7 @@ import {ContentCardComponent} from '../content-card/content-card.component';
 import {XMovie} from '../../../../core/models/common/movie.model';
 import {TvSeries} from '../../../../core/models/common/tv.model';
 
+
 @Component({
   selector: 'app-content-grid',
   standalone: true,

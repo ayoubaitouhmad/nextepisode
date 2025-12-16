@@ -1,23 +1,4 @@
-<div class="flex justify-between items-center mb-6">
-  <h2 class="text-white text-2xl font-semibold">NextEpisode</h2>
-
-  <label class="inline-flex items-center cursor-pointer">
-    <span [ngClass]="filters.type === 'movie' ? 'text-white' : 'text-gray-400'">Films</span>
-
-    <div
-      class="relative w-14 h-8 bg-gray-700 rounded-full cursor-pointer transition-all duration-300"
-      (click)="toggleSelection()"
-    >
-      <div
-        class="absolute top-1 left-1 w-6 h-6 bg-white rounded-full transition-transform duration-300"
-        [ngClass]="filters.type === 'tv' ? 'translate-x-6' : ''"
-      ></div>
-    </div>
-
-    <span [ngClass]="filters.type === 'tv' ? 'text-white' : 'text-gray-400'">Séries</span>
-  </label>
-</div>
-
+<!-- Genres Section -->
 <div class="mb-6">
   <h3 class="text-white font-semibold mb-2">Genres</h3>
   <div class="flex flex-wrap gap-2">
@@ -32,9 +13,10 @@
   </div>
 </div>
 
+<!-- Filter Options Grid -->
 <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6 text-white">
   <div>
-    <label>De l’année</label>
+    <label>De l'année</label>
     <select class="w-full bg-gray-600 rounded p-2"
             [(ngModel)]="filters.yearFrom"
             (ngModelChange)="onYearFromChange($event)">
@@ -42,7 +24,7 @@
     </select>
   </div>
   <div>
-    <label>À l’année</label>
+    <label>À l'année</label>
     <select class="w-full bg-gray-600 rounded p-2"
             [(ngModel)]="filters.yearTo"
             (ngModelChange)="onYearToChange($event)">
@@ -62,7 +44,7 @@
     <select class="w-full bg-gray-600 rounded p-2"
             [(ngModel)]="filters.runtime"
             (ngModelChange)="onRuntimeChange($event)">
-      <option>N’importe</option>
+      <option>N'importe</option>
       <option>Court</option>
       <option>Moyen</option>
       <option>Long</option>
@@ -72,8 +54,8 @@
   <app-autocomplete
     [items]="persones"
     (selected)="onSelected($event)"
-    (queryChange)="onSearch($event)"
-  ></app-autocomplete>
+    (queryChange)="onSearch($event)">
+  </app-autocomplete>
 
   <div>
     <label>Mot-clé</label>
@@ -91,7 +73,7 @@
     </select>
   </div>
   <div>
-    <label>Filtre d’âge</label>
+    <label>Filtre d'âge</label>
     <select class="w-full bg-gray-600 rounded p-2"
             [(ngModel)]="filters.ageFilter"
             (ngModelChange)="onAgeFilterChange($event)">
@@ -102,6 +84,7 @@
   </div>
 </div>
 
+<!-- Streaming Services Section -->
 <div class="mb-8">
   <div class="flex items-center justify-between mb-4">
     <h3 class="text-white text-lg font-semibold">Services de streaming</h3>
