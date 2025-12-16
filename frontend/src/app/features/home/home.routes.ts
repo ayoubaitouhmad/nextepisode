@@ -3,7 +3,7 @@ import {Routes} from '@angular/router';
 export const MOVIE_ROUTES: Routes = [
   {
     path: '',
-    loadComponent: () => import('./pages/movie-list/content-list.component').then(m => m.ContentListComponent)
+    loadComponent: () => import('./pages/home/home.component').then(m => m.HomeComponent)
   },
 
   {

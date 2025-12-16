@@ -1,4 +1,4 @@
-import {Component, Output, EventEmitter, inject, OnInit} from '@angular/core';
+import {Component, EventEmitter, inject, OnInit, Output} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {TMDBService} from '../../../../core/services/tmdb.service';

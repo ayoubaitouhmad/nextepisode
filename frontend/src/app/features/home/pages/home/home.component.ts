@@ -1,12 +1,9 @@
-import {Component, OnInit, inject} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {CommonModule} from '@angular/common';
-import {ContentFiltersComponent} from '../../components/movie-filters/content-filters.component';
-import {ContentGridComponent} from '../../components/movie-grid/content-grid.component';
-import {TMDBService} from '../../../../core/services/tmdb.service';
+import {ContentFiltersComponent} from '../../components/content-filters/content-filters.component';
+import {ContentGridComponent} from '../../components/content-grid/content-grid.component';
 import {Movie} from '../../../../core/models/movie.model';
-import {LoginComponent} from '../../../auth/pages/login/login.component';
-import {forkJoin, switchMap} from 'rxjs';
 import {ContentFilters} from '../../../../core/models/content-filters';
 import {TvSeriesService} from '../../../../core/services/tv-series.service';
 import {TvSeries} from '../../../../core/models/TMDTvSeries';
@@ -18,10 +15,10 @@ import {AuthService} from '../../../../core/services/auth/auth-service';
   selector: 'app-movie-list',
   standalone: true,
   imports: [CommonModule, ContentFiltersComponent, ContentGridComponent],
-  templateUrl: './content-list.component.html',
-  styleUrl: './content-list.component.scss'
+  templateUrl: './home.component.html',
+  styleUrl: './home.component.scss'
 })
-export class ContentListComponent implements OnInit {
+export class HomeComponent implements OnInit {
 
   private movieService = inject(MovieService);
   private tvSeriesService = inject(TvSeriesService);
