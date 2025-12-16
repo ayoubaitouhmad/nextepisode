@@ -1,11 +1,11 @@
 import {Component, inject, OnInit} from '@angular/core';
-import {MovieService} from '../../../../core/services/tmdb/movie.service';
-import {TvSeriesService} from '../../../../core/services/tmdb/tv-series.service';
+import {MovieService} from '../../core/services/tmdb/movie.service';
+import {TvSeriesService} from '../../core/services/tmdb/tv-series.service';
 import {forkJoin} from 'rxjs';
 import {DecimalPipe, NgForOf, NgIf} from '@angular/common';
 import {Router} from '@angular/router';
-import {XMovie} from '../../../../core/models/common/movie.model';
-import {TvSeries} from '../../../../core/models/common/tv.model';
+import {XMovie} from '../../core/models/common/movie.model';
+import {TvSeries} from '../../core/models/common/tv.model';
 
 type Section = { id: string; title: string; items: any[]; kind: 'movie' | 'tv' };
 

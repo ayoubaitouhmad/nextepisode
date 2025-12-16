@@ -2,10 +2,10 @@ import {Component, inject} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {ActivatedRoute} from '@angular/router';
 import {HttpClient, HttpParams} from '@angular/common/http';
-import {environment} from '../../../../../environments/environment';
-import {SafeUrlPipe} from '../../../../shared/pipes/safe-url.pipe';
-import {MovieService} from '../../../../core/services/tmdb/movie.service';
-import {TMDBService} from '../../../../core/services/tmdb/tmdb.service';
+import {environment} from '../../../environments/environment';
+import {SafeUrlPipe} from '../../shared/pipes/safe-url.pipe';
+import {MovieService} from '../../core/services/tmdb/movie.service';
+import {TMDBService} from '../../core/services/tmdb/tmdb.service';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 
