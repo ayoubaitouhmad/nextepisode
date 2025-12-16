@@ -11,12 +11,13 @@ import java.util.List;
 @Data
 @Builder
 public class GenreList {
+    @JsonProperty("total")
     @Builder.Default
     public Integer total = 0;
 
+    @JsonProperty("stored_at")
     @Builder.Default
-    public Instant storedAt =  Instant.now();
-
+    public Instant storedAt = Instant.now();
 
     @JsonProperty("genres")
     public List<Genre> genres;
