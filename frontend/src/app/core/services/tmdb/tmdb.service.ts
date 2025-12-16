@@ -1,8 +1,8 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {map, Observable} from 'rxjs';
-import {environment} from '../../../environments/environment';
-import {Genre, Language, StreamingService} from '../models/common/shared-dtos';
+import {environment} from '../../../../environments/environment';
+import {Genre, Language, StreamingService} from '../../models/common/shared-dtos';
 
 
 @Injectable({

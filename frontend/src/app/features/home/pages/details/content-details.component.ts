@@ -4,8 +4,8 @@ import {ActivatedRoute} from '@angular/router';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {environment} from '../../../../../environments/environment';
 import {SafeUrlPipe} from '../../../../shared/pipes/safe-url.pipe';
-import {MovieService} from '../../../../core/services/movie.service';
-import {TMDBService} from '../../../../core/services/tmdb.service';
+import {MovieService} from '../../../../core/services/tmdb/movie.service';
+import {TMDBService} from '../../../../core/services/tmdb/tmdb.service';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 

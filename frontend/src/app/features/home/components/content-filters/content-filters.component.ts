@@ -1,7 +1,7 @@
 import {Component, EventEmitter, inject, OnInit, Output} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
-import {TMDBService} from '../../../../core/services/tmdb.service';
+import {TMDBService} from '../../../../core/services/tmdb/tmdb.service';
 import {ContentFilters} from '../../../../core/models/tmdb/request/content-filters';
 import {AutocompleteComponent} from '../../../../shared/components/auto-complete-component/AutocompleteComponent';
 import {Genre, Language} from '../../../../core/models/common/shared-dtos';

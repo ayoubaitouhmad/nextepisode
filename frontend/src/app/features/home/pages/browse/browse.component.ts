@@ -1,6 +1,6 @@
 import {Component, inject, OnInit} from '@angular/core';
-import {MovieService} from '../../../../core/services/movie.service';
-import {TvSeriesService} from '../../../../core/services/tv-series.service';
+import {MovieService} from '../../../../core/services/tmdb/movie.service';
+import {TvSeriesService} from '../../../../core/services/tmdb/tv-series.service';
 import {forkJoin} from 'rxjs';
 import {DecimalPipe, NgForOf, NgIf} from '@angular/common';
 import {Router} from '@angular/router';
