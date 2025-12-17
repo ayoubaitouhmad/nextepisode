@@ -150,7 +150,6 @@ export class ContentCardComponent implements OnInit {
   }
 
   ngOnInit() {
-    // Initialize state based on user's lists
     this.checkUserLists();
   }
 

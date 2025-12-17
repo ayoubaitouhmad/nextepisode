@@ -3,7 +3,15 @@ import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {AutocompleteComponent} from '../../../../shared/components/auto-complete-component/AutocompleteComponent';
 import {ContentFilters} from '../../../../core/models/tmdb/request/content-filters';
-import {Genre, GenreList, Language, Region, WatchProvider} from '../../../../core/models/common/shared-dtos';
+import {
+  Genre,
+  GenreList,
+  Language,
+  Person,
+  PersonList,
+  Region,
+  WatchProvider
+} from '../../../../core/models/common/shared-dtos';
 import {_TmdbService} from '../../../../core/services/tmdb/_-tmdb.service';
 
 @Component({
@@ -47,7 +55,12 @@ export class ContentFiltersComponent implements OnInit, OnChanges {
   genres: Genre[] = [];
   streamingServices: WatchProvider[] = [];
   regions: Region[] = [];
-  persones: string[] = [];
+  people: PersonList = {
+    page: 0,
+    total_pages: 0,
+    total_results: 0,
+    results: []
+  };
 
 
   ngOnInit(): void {
@@ -159,12 +172,10 @@ export class ContentFiltersComponent implements OnInit, OnChanges {
 
   onSearch(text: string): void {
     console.log('Current input:', text);
-    // this.tmdbService.searchPerson(text).subscribe(p =>
-    //   this.persones = p.map(person => person.name)
-    // );
+    this.tmdbService.searchPerson(text).subscribe(list => this.people = list);
   }
 
-  onSelected(item: string): void {
+  onSelected(item: Person): void {
     console.log('User selected:', item);
   }
 }
