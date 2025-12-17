@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Service} from './service';
 import {Observable} from 'rxjs';
-import {GenreList, LanguageList, RegionList, WatchProviderList} from '../../models/common/shared-dtos';
+import {GenreList, LanguageList, PersonList, RegionList, WatchProviderList} from '../../models/common/shared-dtos';
 
 
 @Injectable({
@@ -57,5 +57,16 @@ export class _TmdbService extends Service {
     });
   }
 
+  /**
+   * Get current user profile
+   */
+  searchPerson(query: string, page: number = 1): Observable<PersonList> {
+    return this.http.get<PersonList>(`${this.apiUrl}/search/person`, {
+      params: {
+        "page": page,
+        "query": query,
+      }
+    });
+  }
 
 }
