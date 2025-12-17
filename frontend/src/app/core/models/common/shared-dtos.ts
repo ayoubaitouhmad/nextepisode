@@ -81,3 +81,21 @@ export interface WatchProviderList {
   results: WatchProvider[]
 
 }
+
+export interface Person {
+  adult: boolean;
+  gender: string;
+  name: string;
+  original_name: string;
+  known_for_department: string;
+  popularity: number;
+  profile_path: string;
+}
+
+export interface PersonList {
+  page: number;
+  total_pages: number;
+  total_results: number;
+  results: Person[]
+}
+
