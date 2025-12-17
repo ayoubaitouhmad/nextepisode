@@ -2,6 +2,7 @@ package com.nextepisode.tmdb_service.tmdb.common;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import com.nextepisode.tmdb_service.tmdb.core.HasImagePaths;
 import com.nextepisode.tmdb_service.tmdb.core.IdElement;
 import com.nextepisode.tmdb_service.tmdb.enums.Gender;
 import lombok.Data;
@@ -15,8 +16,8 @@ import java.util.List;
 @Data
 @SuperBuilder
 @NoArgsConstructor
-public class Person extends IdElement {
-    @JsonProperty("Adult")
+public class Person extends IdElement  implements HasImagePaths {
+    @JsonProperty("adult")
     private Boolean Adult;
 
     @JsonProperty("gender")
@@ -39,4 +40,8 @@ public class Person extends IdElement {
 
     @JsonProperty("known_for")
     private List<Object> knownFor;
+
+    public String getProfilePath() {
+        return fullImageUrl(profilePath);
+    }
 }
