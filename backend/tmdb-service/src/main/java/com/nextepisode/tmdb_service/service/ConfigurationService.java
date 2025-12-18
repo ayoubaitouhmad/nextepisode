@@ -2,6 +2,7 @@ package com.nextepisode.tmdb_service.service;
 
 
 import com.nextepisode.tmdb_service.config.CacheConfig;
+import com.nextepisode.tmdb_service.service.utll.DateHelper;
 import com.nextepisode.tmdb_service.tmdb.common.Language;
 import com.nextepisode.tmdb_service.tmdb.response.LanguageList;
 import lombok.extern.slf4j.Slf4j;
@@ -16,9 +17,11 @@ import java.util.List;
 @Service
 public class ConfigurationService extends BaseService {
 
+    private final DateHelper dateHelper;
 
     public ConfigurationService(RestClient tmdbClient) {
         super(tmdbClient);
+        this.dateHelper = new DateHelper();
     }
 
 
@@ -39,6 +42,11 @@ public class ConfigurationService extends BaseService {
             log.error("Failed to get languages: ", e);
             throw new RuntimeException("Failed to get languages: ", e);
         }
+    }
+
+    @Cacheable(CacheConfig.YEARS)
+    public List<Integer> getYearsSequence() {
+        return dateHelper.getYearsSequence();
     }
 
 
