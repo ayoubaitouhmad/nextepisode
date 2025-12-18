@@ -14,6 +14,8 @@ export class _TmdbService extends Service {
 
   public static readonly MOVIE_GENRE_CACHE_KEY = `movie-genres`;
   public static readonly TV_SHOW_CACHE_KEY = `tv-show-genres`;
+  public static readonly LANGUAGES_CACHE_KEY = `languages`;
+  public static readonly REGIONS_CACHE_KEY = `regions`;
   protected apiUrl: string;
 
   constructor(http: HttpClient, private localCache: LocalStorageCacheService) {
@@ -38,33 +40,39 @@ export class _TmdbService extends Service {
   }
 
 
-  fetchGenres(path: string, cacheKey: string) {
+  fetchGenres(path: string, cacheKey: string): Observable<GenreList> {
     const cached = this.localCache.get<GenreList>(cacheKey);
+    return this.fetchDataFromCache(path, cacheKey);
+  }
+
+
+  /**
+   * Get current user profile
+   */
+  getLanguages(): Observable<LanguageList> {
+    return this.fetchDataFromCache("/configuration/languages", _TmdbService.LANGUAGES_CACHE_KEY);
+  }
+
+  fetchDataFromCache<T>(path: string, cacheKey: string): Observable<T> {
+    const cached = this.localCache.get<T>(cacheKey);
     if (cached) {
       return of(cached);
     }
     {
-      return this.http.get<GenreList>(`${this.apiUrl}${path}`).pipe(
+      return this.http.get<T>(`${this.apiUrl}${path}`).pipe(
         tap(list => {
-          list.stored_at = new Date();
           this.localCache.set(cacheKey, list)
         })
       );
     }
   }
 
-  /**
-   * Get current user profile
-   */
-  getLanguages(): Observable<LanguageList> {
-    return this.http.get<LanguageList>(`${this.apiUrl}/configuration/languages`);
-  }
 
   /**
    * Get current user profile
    */
   getRegions(): Observable<RegionList> {
-    return this.http.get<RegionList>(`${this.apiUrl}/watch-providers/available-regions`);
+    return this.fetchDataFromCache("/watch-providers/available-regions", _TmdbService.REGIONS_CACHE_KEY);
   }
 
   /**
