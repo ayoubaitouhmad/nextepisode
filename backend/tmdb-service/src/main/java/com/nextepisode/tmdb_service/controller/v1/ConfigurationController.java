@@ -1,12 +1,15 @@
 package com.nextepisode.tmdb_service.controller.v1;
 
 import com.nextepisode.tmdb_service.config.ApiPaths;
+import com.nextepisode.tmdb_service.service.utll.DateHelper;
 import com.nextepisode.tmdb_service.tmdb.response.LanguageList;
 import com.nextepisode.tmdb_service.service.ConfigurationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @Slf4j
 @RequestMapping(ApiPaths.API_V1 + "/configuration")
@@ -22,5 +25,11 @@ public class ConfigurationController {
     @GetMapping("/languages")
     public LanguageList moviesGenres() {
         return tmdbConfigurationService.getLanguages();
+    }
+
+
+    @GetMapping("/years")
+    public List<Integer> getYears() {
+        return tmdbConfigurationService.getYearsSequence();
     }
 }
