@@ -1,8 +1,10 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Service} from './service';
-import {Observable} from 'rxjs';
+import {Observable, of} from 'rxjs';
 import {GenreList, LanguageList, PersonList, RegionList, WatchProviderList} from '../../models/common/shared-dtos';
+import {LocalStorageCacheService} from '../local-storage-cache.service';
+import {tap} from 'rxjs/operators';
 
 
 @Injectable({
@@ -10,40 +12,67 @@ import {GenreList, LanguageList, PersonList, RegionList, WatchProviderList} from
 })
 export class _TmdbService extends Service {
 
+  public static readonly MOVIE_GENRE_CACHE_KEY = `movie-genres`;
+  public static readonly TV_SHOW_CACHE_KEY = `tv-show-genres`;
+  public static readonly LANGUAGES_CACHE_KEY = `languages`;
+  public static readonly REGIONS_CACHE_KEY = `regions`;
   protected apiUrl: string;
 
-  constructor(http: HttpClient) {
+  constructor(http: HttpClient, private localCache: LocalStorageCacheService) {
     super(http);
     this.apiUrl = `${this.baseServiceApiUrl}`;
   }
-
 
   /**
    * Get current user profile
    */
   getMoviesGenres(): Observable<GenreList> {
-    return this.http.get<GenreList>(`${this.apiUrl}/genres/movie-genres`);
+    const path = `/genres/movie-genres`;
+    return this.fetchGenres(path, _TmdbService.MOVIE_GENRE_CACHE_KEY)
   }
 
   /**
    * Get current user profile
    */
   getTvShowsGenres(): Observable<GenreList> {
-    return this.http.get<GenreList>(`${this.apiUrl}/genres/tv-show-genres`);
+    const path = `/genres/tv-show-genres`;
+    return this.fetchGenres(path, _TmdbService.TV_SHOW_CACHE_KEY)
   }
+
+
+  fetchGenres(path: string, cacheKey: string): Observable<GenreList> {
+    const cached = this.localCache.get<GenreList>(cacheKey);
+    return this.fetchDataFromCache(path, cacheKey);
+  }
+
 
   /**
    * Get current user profile
    */
   getLanguages(): Observable<LanguageList> {
-    return this.http.get<LanguageList>(`${this.apiUrl}/configuration/languages`);
+    return this.fetchDataFromCache("/configuration/languages", _TmdbService.LANGUAGES_CACHE_KEY);
   }
+
+  fetchDataFromCache<T>(path: string, cacheKey: string): Observable<T> {
+    const cached = this.localCache.get<T>(cacheKey);
+    if (cached) {
+      return of(cached);
+    }
+    {
+      return this.http.get<T>(`${this.apiUrl}${path}`).pipe(
+        tap(list => {
+          this.localCache.set(cacheKey, list)
+        })
+      );
+    }
+  }
+
 
   /**
    * Get current user profile
    */
   getRegions(): Observable<RegionList> {
-    return this.http.get<RegionList>(`${this.apiUrl}/watch-providers/available-regions`);
+    return this.fetchDataFromCache("/watch-providers/available-regions", _TmdbService.REGIONS_CACHE_KEY);
   }
 
   /**
