@@ -44,10 +44,12 @@
     <select class="w-full bg-gray-600 rounded p-2"
             [(ngModel)]="filters.runtime"
             (ngModelChange)="onRuntimeChange($event)">
-      <option>N'importe</option>
-      <option>Court</option>
-      <option>Moyen</option>
-      <option>Long</option>
+
+      <option value="{{ item.value }}" *ngFor="let item of runtimes | keyvalue">
+        {{ capitalizeFirstLetter(item.key) }}
+      </option>
+
+
     </select>
   </div>
 

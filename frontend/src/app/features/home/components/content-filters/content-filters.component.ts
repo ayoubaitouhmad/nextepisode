@@ -13,6 +13,8 @@ import {
   WatchProvider
 } from '../../../../core/models/common/shared-dtos';
 import {_TmdbService} from '../../../../core/services/tmdb/_-tmdb.service';
+import {RuntimeResponse} from '../../../../core/models/tmdb/runtime';
+import {capitalizeFirstLetter} from '../../../../shared/utils';
 
 @Component({
   selector: 'app-movie-filters',
@@ -62,6 +64,10 @@ export class ContentFiltersComponent implements OnInit, OnChanges {
     results: []
   };
 
+  runtimes: RuntimeResponse = {
+    data: {} as any
+  };
+
 
   ngOnInit(): void {
     this.tmdbService.getLanguages().subscribe(languages => this.languages = languages.languages)
@@ -69,6 +75,17 @@ export class ContentFiltersComponent implements OnInit, OnChanges {
     this.tmdbService.getMovieWatchProviders().subscribe(list => this.streamingServices = list.results.slice(0, this.maxShowedStreamingServices));
     this.filters.type = this.contentType;
     this.emitFilters();
+
+
+    this.tmdbService.getRuntimes().subscribe((value: RuntimeResponse) => {
+      this.runtimes = value;
+
+      for (const [name, score] of Object.entries(value)) {
+        console.log(`Key: ${name}, Value: ${score}`);
+      }
+    });
+
+
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -129,6 +146,7 @@ export class ContentFiltersComponent implements OnInit, OnChanges {
 
   onRuntimeChange(rt: string): void {
     this.filters.runtime = rt;
+    console.log(rt)
     this.emitFilters();
   }
 
@@ -178,4 +196,6 @@ export class ContentFiltersComponent implements OnInit, OnChanges {
   onSelected(item: Person): void {
     console.log('User selected:', item);
   }
+
+  protected readonly capitalizeFirstLetter = capitalizeFirstLetter;
 }

@@ -5,6 +5,7 @@ import {Observable, of} from 'rxjs';
 import {GenreList, LanguageList, PersonList, RegionList, WatchProviderList} from '../../models/common/shared-dtos';
 import {LocalStorageCacheService} from '../local-storage-cache.service';
 import {tap} from 'rxjs/operators';
+import {RuntimeResponse} from '../../models/tmdb/runtime';
 
 
 @Injectable({
@@ -96,6 +97,11 @@ export class _TmdbService extends Service {
         "query": query,
       }
     });
+  }
+
+
+  getRuntimes() {
+    return this.http.get<RuntimeResponse>(`${this.apiUrl}/configuration/runtimes`);
   }
 
 }
