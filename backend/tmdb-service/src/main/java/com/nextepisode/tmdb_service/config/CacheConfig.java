@@ -17,6 +17,8 @@ public class CacheConfig {
     public final static String TMDB_API_MOVIE_GENRES = "movieGenres";
     public final static String TMDB_API_TVSHOW_GENRES = "tvShowGenres";
     public final static String YEARS = "years";
+    public final static String MOVIE_CERTIFICATIONS = "movies.certifications";
+    public final static String TVSHOWS_CERTIFICATIONS = "tvshows.certifications";
 
 
     @Bean
@@ -41,7 +43,9 @@ public class CacheConfig {
                 TMDB_API_COUNTRIES,
                 TMDB_API_MOVIE_GENRES,
                 TMDB_API_TVSHOW_GENRES,
-                YEARS
+                YEARS,
+                MOVIE_CERTIFICATIONS,
+                TVSHOWS_CERTIFICATIONS,
         };
     }
 }
