@@ -2,7 +2,15 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Service} from './service';
 import {Observable, of} from 'rxjs';
-import {GenreList, LanguageList, PersonList, RegionList, WatchProviderList} from '../../models/common/shared-dtos';
+import {
+  Certification,
+  CertificationList,
+  GenreList,
+  LanguageList,
+  PersonList,
+  RegionList,
+  WatchProviderList
+} from '../../models/common/shared-dtos';
 import {LocalStorageCacheService} from '../local-storage-cache.service';
 import {tap} from 'rxjs/operators';
 import {RuntimeResponse} from '../../models/tmdb/runtime';
@@ -102,6 +110,29 @@ export class _TmdbService extends Service {
 
   getRuntimes() {
     return this.http.get<RuntimeResponse>(`${this.apiUrl}/configuration/runtimes`);
+  }
+
+
+  getMoviesCertification() {
+    return this.http.get<CertificationList | Certification[]>(`${this.apiUrl}/certifications/movies`);
+  }
+
+  getTvCertification() {
+    return this.http.get<CertificationList | Certification[]>(`${this.apiUrl}/certifications/tv`);
+  }
+
+  getMoviesCertificationByCountry(countryCode = 'us'): Observable<Certification[]> {
+    if (countryCode != "") {
+      countryCode = countryCode.toLowerCase();
+    }
+    return this.http.get<Certification[]>(`${this.apiUrl}/certifications/movies/${countryCode}`);
+  }
+
+  getTvCertificationByCountry(countryCode = 'us'): Observable<Certification[]> {
+    if (!countryCode) {
+      countryCode = countryCode.toLowerCase();
+    }
+    return this.http.get<Certification[]>(`${this.apiUrl}/certifications/tv/${countryCode}`);
   }
 
 }
