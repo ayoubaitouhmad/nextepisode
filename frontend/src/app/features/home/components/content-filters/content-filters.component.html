@@ -79,9 +79,13 @@
     <select class="w-full bg-gray-600 rounded p-2"
             [(ngModel)]="filters.ageFilter"
             (ngModelChange)="onAgeFilterChange($event)">
-      <option>Aucun filtre</option>
-      <option>PG</option>
-      <option>R</option>
+      <option>No Filter</option>
+      <option *ngFor="let certificaton of certifications"
+              [value]="certificaton.certification"
+              [attr.data-descrption]="certificaton.meaning"
+      >
+        {{ certificaton.certification }}
+      </option>
     </select>
   </div>
 </div>

@@ -99,3 +99,12 @@ export interface PersonList {
   results: Person[]
 }
 
+export interface Certification {
+  certification: string,
+  meaning: string,
+  order: string,
+}
+
+export interface CertificationList {
+  certification: Certification[]
+}

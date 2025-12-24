@@ -7,8 +7,9 @@ import {TvSeriesService} from '../../../../core/services/tmdb/tv-series.service'
 import {AuthService} from '../../../../core/services/auth/auth-service';
 import {TvSeries} from '../../../../core/models/common/tv.model';
 import {XMovie} from '../../../../core/models/common/movie.model';
-import {GenreList} from '../../../../core/models/common/shared-dtos';
+import {Certification, GenreList} from '../../../../core/models/common/shared-dtos';
 import {_TmdbService} from '../../../../core/services/tmdb/_-tmdb.service';
+import {AlertService} from '../../../../shared/components/alert/alert.service';
 
 @Component({
   selector: 'app-tvshows',
@@ -22,6 +23,10 @@ export class TvShowsComponent implements OnInit {
   private authService = inject(AuthService);
   private tmdbService = inject(_TmdbService);
 
+  constructor(private alertService: AlertService) {
+  }
+
+
   @Output() itemClick = new EventEmitter<TvSeries>();
 
   items: TvSeries[] = [];
@@ -31,6 +36,7 @@ export class TvShowsComponent implements OnInit {
   totalPages = 1;
   totalResults = 0;
   currentFilters: ContentFilters | null = null;
+  certifications: Certification[] = [];
 
   readonly contentType = 'tv' as const;
 
@@ -44,7 +50,9 @@ export class TvShowsComponent implements OnInit {
   ngOnInit(): void {
     this.loadGenres();
     this.loadTvShows();
+    this.loadCertification();
   }
+
 
   private loadGenres() {
     this.tmdbService.getTvShowsGenres().subscribe({
@@ -200,5 +208,24 @@ export class TvShowsComponent implements OnInit {
     //   next: () => console.log('Added to watchlist successfully'),
     //   error: (error) => console.error('Failed to add to watchlist:', error)
     // });
+  }
+
+
+  loadCertification(countryCode = "US") {
+    this.tmdbService.getTvCertificationByCountry(countryCode).subscribe({
+      next: (certifications) => {
+        this.certifications = certifications;
+      },
+      error: (error) => {
+        console.log(error);
+        this.alertService.warning(`No certification found the country with the code:${countryCode}, the default certification will be used.`, {
+          title: "No certification found"
+        });
+      }
+    })
+  }
+
+  onCountryChange(countryCode: string) {
+    this.loadCertification(countryCode);
   }
 }

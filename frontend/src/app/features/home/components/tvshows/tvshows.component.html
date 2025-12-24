@@ -1,9 +1,11 @@
 <div class="space-y-6">
   <!-- Filters Section -->
   <app-movie-filters
+    [certifications]="certifications"
     [genreList]="genres"
     [contentType]="contentType"
-    (filtersChange)="onFiltersChange($event)">
+    (filtersChange)="onFiltersChange($event)"
+    (onCountryCodeChange)="onCountryChange($event)">
   </app-movie-filters>
 
   <!-- Loading State -->

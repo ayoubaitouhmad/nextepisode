@@ -7,9 +7,10 @@ import {ContentGridComponent} from '../content-grid/content-grid.component';
 import {ContentFilters} from '../../../../core/models/tmdb/request/content-filters';
 import {XMovie} from '../../../../core/models/common/movie.model';
 import {ContentFiltersComponent} from '../content-filters/content-filters.component';
-import {GenreList} from '../../../../core/models/common/shared-dtos';
+import {Certification, GenreList} from '../../../../core/models/common/shared-dtos';
 import {_TmdbService} from '../../../../core/services/tmdb/_-tmdb.service';
 import {MovieService} from '../../../../core/services/tmdb/movie.service';
+import {AlertService} from '../../../../shared/components/alert/alert.service';
 
 
 @Component({
@@ -27,6 +28,11 @@ export class MoviesComponent implements OnInit {
   private authService = inject(AuthService);
   private router = inject(Router);
 
+
+  constructor(private alertService: AlertService) {
+  }
+
+
   items: XMovie[] = [];
   loading = false;
   error: string | null = null;
@@ -34,6 +40,8 @@ export class MoviesComponent implements OnInit {
   totalPages = 1;
   totalResults = 0;
   currentFilters: ContentFilters | null = null;
+  certifications: Certification[] = [];
+
 
   genres: GenreList = {
     total: 0,
@@ -47,8 +55,23 @@ export class MoviesComponent implements OnInit {
   ngOnInit(): void {
     this.loadGenres();
     this.loadMovies();
+    this.loadCertification();
   }
 
+
+  loadCertification(countryCode = "US") {
+    this.tmdbService.getMoviesCertificationByCountry(countryCode).subscribe({
+      next: (certifications) => {
+        this.certifications = certifications;
+      },
+      error: (error) => {
+        console.log(error);
+        this.alertService.warning(`No certification found the country with the code:${countryCode}, the default certification will be used.`, {
+          title: "No certification found"
+        });
+      }
+    })
+  }
 
   private loadGenres() {
     this._tmdbService.getMoviesGenres().subscribe({
@@ -204,5 +227,9 @@ export class MoviesComponent implements OnInit {
       next: () => console.log('Added to watchlist successfully'),
       error: (error) => console.error('Failed to add to watchlist:', error)
     });
+  }
+
+  onCountryChange(countryCode: string) {
+    this.loadCertification(countryCode);
   }
 }

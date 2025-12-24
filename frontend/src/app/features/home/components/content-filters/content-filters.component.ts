@@ -4,6 +4,7 @@ import {FormsModule} from '@angular/forms';
 import {AutocompleteComponent} from '../../../../shared/components/auto-complete-component/AutocompleteComponent';
 import {ContentFilters} from '../../../../core/models/tmdb/request/content-filters';
 import {
+  Certification,
   Genre,
   GenreList,
   Language,
@@ -15,6 +16,7 @@ import {
 import {_TmdbService} from '../../../../core/services/tmdb/_-tmdb.service';
 import {RuntimeResponse} from '../../../../core/models/tmdb/runtime';
 import {capitalizeFirstLetter} from '../../../../shared/utils';
+
 
 @Component({
   selector: 'app-movie-filters',
@@ -35,6 +37,8 @@ export class ContentFiltersComponent implements OnInit, OnChanges {
   };
   @Input() contentType: 'movie' | 'tv' = 'movie';
   @Output() filtersChange = new EventEmitter<ContentFilters>();
+  @Output() onCountryCodeChange = new EventEmitter<string>();
+  @Input() certifications: Certification[] = [];
 
 
   filters: ContentFilters = {
@@ -47,7 +51,7 @@ export class ContentFiltersComponent implements OnInit, OnChanges {
     castAndCrew: '',
     keyword: '',
     lookFor: 'High Rated',
-    ageFilter: 'No Filter',
+    ageFilter: "No Filter",
     streamingServices: [],
     country: 'US'
   };
@@ -84,6 +88,15 @@ export class ContentFiltersComponent implements OnInit, OnChanges {
         console.log(`Key: ${name}, Value: ${score}`);
       }
     });
+    // this.tmdbService.getMoviesCertificationByCountry("us").subscribe((value) => {
+    //   console.log(value)
+    // });
+    // this.tmdbService.getTvCertificationByCountry("us").subscribe((value) => {
+    //   console.log(value)
+    // });
+
+
+    console.log(this.certifications)
 
 
   }
@@ -103,6 +116,11 @@ export class ContentFiltersComponent implements OnInit, OnChanges {
       this.filters.genres = [];
       this.emitFilters();
     }
+
+    if (changes['certifications']) {
+      console.log(`certifications changed in child component at ${new Date()}`)
+      this.certifications = changes['certifications'].currentValue as Certification[];
+    }
   }
 
   getServiceName(serviceId: number): string {
@@ -116,6 +134,7 @@ export class ContentFiltersComponent implements OnInit, OnChanges {
   }
 
   private emitFilters(): void {
+    console.log(this.filters)
     this.filtersChange.emit({...this.filters});
   }
 
@@ -172,6 +191,7 @@ export class ContentFiltersComponent implements OnInit, OnChanges {
 
   onCountryChange(countryCode: string): void {
     this.filters.country = countryCode;
+    this.onCountryCodeChange.emit(countryCode);
     // this.tmdbService.getStreamingServices(countryCode).subscribe(s =>
     //   this.streamingServices = s.slice(0, this.maxShowedStreamingServices)
     // );
