@@ -7,7 +7,7 @@ import {ContentGridComponent} from '../content-grid/content-grid.component';
 import {ContentFilters} from '../../../../core/models/tmdb/request/content-filters';
 import {XMovie} from '../../../../core/models/common/movie.model';
 import {ContentFiltersComponent} from '../content-filters/content-filters.component';
-import {Certification, GenreList} from '../../../../core/models/common/shared-dtos';
+import {Certification, GenreList, WatchProvider} from '../../../../core/models/common/shared-dtos';
 import {_TmdbService} from '../../../../core/services/tmdb/_-tmdb.service';
 import {MovieService} from '../../../../core/services/tmdb/movie.service';
 import {AlertService} from '../../../../shared/components/alert/alert.service';
@@ -41,7 +41,7 @@ export class MoviesComponent implements OnInit {
   totalResults = 0;
   currentFilters: ContentFilters | null = null;
   certifications: Certification[] = [];
-
+  streamingServices: WatchProvider[] = [];
 
   genres: GenreList = {
     total: 0,
@@ -56,8 +56,18 @@ export class MoviesComponent implements OnInit {
     this.loadGenres();
     this.loadMovies();
     this.loadCertification();
+    this.loadWatchProviders();
+
   }
 
+  loadWatchProviders(coutryCode = "us"): void {
+    this.tmdbService.getMovieWatchProvidersByCountry(coutryCode).subscribe({
+      next: data => {
+        this.streamingServices = data.results.slice(0, 20)
+      },
+      error: error => this.alertService.error(error),
+    })
+  }
 
   loadCertification(countryCode = "US") {
     this.tmdbService.getMoviesCertificationByCountry(countryCode).subscribe({
@@ -66,9 +76,9 @@ export class MoviesComponent implements OnInit {
       },
       error: (error) => {
         console.log(error);
-        this.alertService.warning(`No certification found the country with the code:${countryCode}, the default certification will be used.`, {
-          title: "No certification found"
-        });
+        // this.alertService.warning(`No certification found the country with the code:${countryCode}, the default certification will be used.`, {
+        //   title: "No certification found"
+        // });
       }
     })
   }
@@ -231,5 +241,6 @@ export class MoviesComponent implements OnInit {
 
   onCountryChange(countryCode: string) {
     this.loadCertification(countryCode);
+    this.loadWatchProviders(countryCode);
   }
 }

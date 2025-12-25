@@ -7,7 +7,7 @@ import {TvSeriesService} from '../../../../core/services/tmdb/tv-series.service'
 import {AuthService} from '../../../../core/services/auth/auth-service';
 import {TvSeries} from '../../../../core/models/common/tv.model';
 import {XMovie} from '../../../../core/models/common/movie.model';
-import {Certification, GenreList} from '../../../../core/models/common/shared-dtos';
+import {Certification, GenreList, WatchProvider} from '../../../../core/models/common/shared-dtos';
 import {_TmdbService} from '../../../../core/services/tmdb/_-tmdb.service';
 import {AlertService} from '../../../../shared/components/alert/alert.service';
 
@@ -37,6 +37,7 @@ export class TvShowsComponent implements OnInit {
   totalResults = 0;
   currentFilters: ContentFilters | null = null;
   certifications: Certification[] = [];
+  streamingServices: WatchProvider[] = [];
 
   readonly contentType = 'tv' as const;
 
@@ -51,8 +52,18 @@ export class TvShowsComponent implements OnInit {
     this.loadGenres();
     this.loadTvShows();
     this.loadCertification();
+    this.loadWatchProviders();
+
   }
 
+  loadWatchProviders(countryCode = "us"): void {
+    this.tmdbService.getTvWatchProvidersByCountry(countryCode).subscribe({
+      next: data => {
+        this.streamingServices = data.results.slice(0, 20)
+      },
+      error: error => this.alertService.error(error),
+    })
+  }
 
   private loadGenres() {
     this.tmdbService.getTvShowsGenres().subscribe({
@@ -218,14 +229,15 @@ export class TvShowsComponent implements OnInit {
       },
       error: (error) => {
         console.log(error);
-        this.alertService.warning(`No certification found the country with the code:${countryCode}, the default certification will be used.`, {
-          title: "No certification found"
-        });
+        // this.alertService.warning(`No certification found the country with the code:${countryCode}, the default certification will be used.`, {
+        //   title: "No certification found"
+        // });
       }
     })
   }
 
   onCountryChange(countryCode: string) {
     this.loadCertification(countryCode);
+    this.loadWatchProviders(countryCode);
   }
 }

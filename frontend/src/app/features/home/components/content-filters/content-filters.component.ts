@@ -39,7 +39,7 @@ export class ContentFiltersComponent implements OnInit, OnChanges {
   @Output() filtersChange = new EventEmitter<ContentFilters>();
   @Output() onCountryCodeChange = new EventEmitter<string>();
   @Input() certifications: Certification[] = [];
-
+  @Input() streamingServices: WatchProvider[] = [];
 
   filters: ContentFilters = {
     type: 'movie',
@@ -59,7 +59,7 @@ export class ContentFiltersComponent implements OnInit, OnChanges {
   languages: Language[] = [];
 
   genres: Genre[] = [];
-  streamingServices: WatchProvider[] = [];
+
   regions: Region[] = [];
   people: PersonList = {
     page: 0,
@@ -76,29 +76,13 @@ export class ContentFiltersComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.tmdbService.getLanguages().subscribe(languages => this.languages = languages.languages)
     this.tmdbService.getRegions().subscribe(regionList => this.regions = regionList.results);
-    this.tmdbService.getMovieWatchProviders().subscribe(list => this.streamingServices = list.results.slice(0, this.maxShowedStreamingServices));
     this.filters.type = this.contentType;
     this.emitFilters();
 
 
     this.tmdbService.getRuntimes().subscribe((value: RuntimeResponse) => {
       this.runtimes = value;
-
-      for (const [name, score] of Object.entries(value)) {
-        console.log(`Key: ${name}, Value: ${score}`);
-      }
     });
-    // this.tmdbService.getMoviesCertificationByCountry("us").subscribe((value) => {
-    //   console.log(value)
-    // });
-    // this.tmdbService.getTvCertificationByCountry("us").subscribe((value) => {
-    //   console.log(value)
-    // });
-
-
-    console.log(this.certifications)
-
-
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -107,7 +91,6 @@ export class ContentFiltersComponent implements OnInit, OnChanges {
 
       if (newGenreList && newGenreList.genres && newGenreList.genres.length > 0) {
         this.genres = newGenreList.genres;
-        console.log('Genres updated in child component:', this.genres.length);
       }
     }
 
@@ -118,7 +101,6 @@ export class ContentFiltersComponent implements OnInit, OnChanges {
     }
 
     if (changes['certifications']) {
-      console.log(`certifications changed in child component at ${new Date()}`)
       this.certifications = changes['certifications'].currentValue as Certification[];
     }
   }
@@ -134,7 +116,6 @@ export class ContentFiltersComponent implements OnInit, OnChanges {
   }
 
   private emitFilters(): void {
-    console.log(this.filters)
     this.filtersChange.emit({...this.filters});
   }
 
