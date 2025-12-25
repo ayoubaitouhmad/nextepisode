@@ -87,10 +87,21 @@ export class _TmdbService extends Service {
   /**
    * Get current user profile
    */
-  getMovieWatchProviders(): Observable<WatchProviderList> {
+  getMovieWatchProvidersByCountry(countryCode = 'us'): Observable<WatchProviderList> {
     return this.http.get<WatchProviderList>(`${this.apiUrl}/watch-providers/movie`, {
       params: {
-        "region": "US"
+        "region": countryCode
+      }
+    });
+  }
+
+  /**
+   * Get current user profile
+   */
+  getTvWatchProvidersByCountry(countryCode = 'us'): Observable<WatchProviderList> {
+    return this.http.get<WatchProviderList>(`${this.apiUrl}/watch-providers/tv-show`, {
+      params: {
+        "region": countryCode
       }
     });
   }
