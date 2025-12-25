@@ -42,9 +42,6 @@ import {GenreList, Person, PersonList} from '../../../core/models/common/shared-
 })
 export class AutocompleteComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['personList']) {
-      console.log(this.personList.results.length)
-    }
   }
 
   /**
