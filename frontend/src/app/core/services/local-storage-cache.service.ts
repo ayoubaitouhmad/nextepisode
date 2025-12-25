@@ -27,7 +27,7 @@ export class LocalStorageCacheService {
       const cacheItem: CacheItem<T> = JSON.parse(item);
 
       if (this.isCacheValid(cacheItem.timestamp)) {
-        console.log(`Getting cache data for ${key}`);
+        console.info(`Getting cache data for ${key}`);
         return cacheItem.data;
       } else {
         this.remove(key);
