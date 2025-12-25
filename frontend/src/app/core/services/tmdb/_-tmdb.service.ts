@@ -9,6 +9,7 @@ import {
   LanguageList,
   PersonList,
   RegionList,
+  SortOptionsDto,
   WatchProviderList
 } from '../../models/common/shared-dtos';
 import {LocalStorageCacheService} from '../local-storage-cache.service';
@@ -146,4 +147,7 @@ export class _TmdbService extends Service {
     return this.http.get<Certification[]>(`${this.apiUrl}/certifications/tv/${countryCode}`);
   }
 
+  getSortOptions(): Observable<SortOptionsDto> {
+    return this.http.get<SortOptionsDto>(`${this.apiUrl}/configuration/sorting`);
+  }
 }
