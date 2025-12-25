@@ -66,12 +66,14 @@
            (ngModelChange)="onKeywordChange($event)"/>
   </div>
   <div>
-    <label>Rechercher</label>
+    <label>Sort by:</label>
     <select class="w-full bg-gray-600 rounded p-2"
             [(ngModel)]="filters.lookFor"
             (ngModelChange)="onLookForChange($event)">
-      <option>Mieux noté</option>
-      <option>Populaire</option>
+      <option value="">Default filter</option>
+      <option value="{{ item.key }}" *ngFor="let item of sortOptions | keyvalue">
+        {{ capitalizeFirstLetter(item.value) }}
+      </option>
     </select>
   </div>
   <div>

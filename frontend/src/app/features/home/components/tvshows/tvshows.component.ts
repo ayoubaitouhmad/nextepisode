@@ -107,7 +107,7 @@ export class TvShowsComponent implements OnInit {
       yearFrom: filters.yearFrom,
       yearTo: filters.yearTo,
       genres: filters.genres,
-      sortBy: this.getSortBy(filters.lookFor),
+      sortBy: filters.lookFor,
       page: this.currentPage,
       language: filters.language === 'Any' ? undefined : filters.language,
       with_watch_providers: filters.streamingServices,
@@ -148,20 +148,6 @@ export class TvShowsComponent implements OnInit {
       this.onFiltersChange(this.currentFilters);
     } else {
       this.loadTvShows();
-    }
-  }
-
-  private getSortBy(lookFor: string): 'first_air_date.desc' | 'popularity.desc' | 'vote_average.desc' {
-    switch (lookFor) {
-      case 'High Rated':
-      case 'Mieux noté':
-        return 'vote_average.desc';
-      case 'Most Popular':
-      case 'Populaire':
-        return 'popularity.desc';
-      case 'Newest':
-      default:
-        return 'first_air_date.desc';
     }
   }
 

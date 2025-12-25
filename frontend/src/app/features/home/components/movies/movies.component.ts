@@ -129,7 +129,7 @@ export class MoviesComponent implements OnInit {
       yearFrom: filters.yearFrom,
       yearTo: filters.yearTo,
       genres: filters.genres,
-      sortBy: this.getSortBy(filters.lookFor),
+      sortBy: filters.lookFor,
       page: this.currentPage,
       language: filters.language === 'Any' ? undefined : filters.language,
       with_watch_providers: filters.streamingServices,
@@ -170,20 +170,6 @@ export class MoviesComponent implements OnInit {
       this.onFiltersChange(this.currentFilters);
     } else {
       this.loadMovies();
-    }
-  }
-
-  private getSortBy(lookFor: string): 'release_date.desc' | 'popularity.desc' | 'vote_average.desc' {
-    switch (lookFor) {
-      case 'High Rated':
-      case 'Mieux noté':
-        return 'vote_average.desc';
-      case 'Most Popular':
-      case 'Populaire':
-        return 'popularity.desc';
-      case 'Newest':
-      default:
-        return 'release_date.desc';
     }
   }
 

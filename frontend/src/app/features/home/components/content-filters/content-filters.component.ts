@@ -72,10 +72,13 @@ export class ContentFiltersComponent implements OnInit, OnChanges {
     data: {} as any
   };
 
+  sortOptions: {} = {};
+
 
   ngOnInit(): void {
     this.tmdbService.getLanguages().subscribe(languages => this.languages = languages.languages)
     this.tmdbService.getRegions().subscribe(regionList => this.regions = regionList.results);
+    this.tmdbService.getSortOptions().subscribe(options => this.sortOptions = options);
     this.filters.type = this.contentType;
     this.emitFilters();
 
