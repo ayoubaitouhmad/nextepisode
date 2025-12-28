@@ -27,8 +27,8 @@ import {capitalizeFirstLetter} from '../../../../shared/utils';
 })
 export class ContentFiltersComponent implements OnInit, OnChanges {
   private maxShowedStreamingServices = 15;
-  private tmdbService: _TmdbService = inject(_TmdbService);
 
+  private tmdbService: _TmdbService = inject(_TmdbService);
 
   @Input({required: true}) genreList: GenreList = {
     total: 0,
@@ -44,16 +44,18 @@ export class ContentFiltersComponent implements OnInit, OnChanges {
   filters: ContentFilters = {
     type: 'movie',
     genres: [],
-    yearFrom: 1975,
-    yearTo: 2025,
+    includeAdult: false,
+    year: new Date().getFullYear(),
+    yearFrom: undefined,
+    yearTo: undefined,
     language: 'en',
-    runtime: 'Any',
-    castAndCrew: '',
-    keyword: '',
-    lookFor: 'High Rated',
-    ageFilter: "No Filter",
-    streamingServices: [],
-    country: 'US'
+    runtime: '2',
+    castAndCrew: 'Will smith',
+    keyword: 'the killing',
+    sortBy: 'POPULARITY_DESC',
+    certification: "PG",
+    watchProviders: [],
+    region: 'US'
   };
 
   languages: Language[] = [];
@@ -72,6 +74,7 @@ export class ContentFiltersComponent implements OnInit, OnChanges {
     data: {} as any
   };
 
+  years: Number[] = [];
   sortOptions: {} = {};
 
 
@@ -79,6 +82,7 @@ export class ContentFiltersComponent implements OnInit, OnChanges {
     this.tmdbService.getLanguages().subscribe(languages => this.languages = languages.languages)
     this.tmdbService.getRegions().subscribe(regionList => this.regions = regionList.results);
     this.tmdbService.getSortOptions().subscribe(options => this.sortOptions = options);
+    this.tmdbService.getYears().subscribe(years => this.years = years);
     this.filters.type = this.contentType;
     this.emitFilters();
 
@@ -114,7 +118,7 @@ export class ContentFiltersComponent implements OnInit, OnChanges {
   }
 
   clearStreamingServices(): void {
-    this.filters.streamingServices = [];
+    this.filters.watchProviders = [];
     this.emitFilters();
   }
 
@@ -129,6 +133,15 @@ export class ContentFiltersComponent implements OnInit, OnChanges {
     } else {
       this.filters.genres.push(genre.id);
     }
+    this.emitFilters();
+  }
+
+  onYearChange(year: number): void {
+    if (this.filters.yearFrom || this.filters.yearTo) {
+      this.filters.yearFrom = undefined;
+      this.filters.yearTo = undefined;
+    }
+    this.filters.year = year;
     this.emitFilters();
   }
 
@@ -149,7 +162,6 @@ export class ContentFiltersComponent implements OnInit, OnChanges {
 
   onRuntimeChange(rt: string): void {
     this.filters.runtime = rt;
-    console.log(rt)
     this.emitFilters();
   }
 
@@ -164,17 +176,22 @@ export class ContentFiltersComponent implements OnInit, OnChanges {
   }
 
   onLookForChange(value: string): void {
-    this.filters.lookFor = value;
+    this.filters.sortBy = value;
     this.emitFilters();
   }
 
   onAgeFilterChange(value: string): void {
-    this.filters.ageFilter = value;
+    this.filters.certification = value;
+    this.emitFilters();
+  }
+
+  onIncludeAdultChange(value: boolean): void {
+    this.filters.includeAdult = value;
     this.emitFilters();
   }
 
   onCountryChange(countryCode: string): void {
-    this.filters.country = countryCode;
+    this.filters.region = countryCode;
     this.onCountryCodeChange.emit(countryCode);
     // this.tmdbService.getStreamingServices(countryCode).subscribe(s =>
     //   this.streamingServices = s.slice(0, this.maxShowedStreamingServices)
@@ -183,11 +200,11 @@ export class ContentFiltersComponent implements OnInit, OnChanges {
   }
 
   onStreamingServiceToggle(serviceId: number): void {
-    const idx = this.filters.streamingServices.indexOf(serviceId);
+    const idx = this.filters.watchProviders.indexOf(serviceId);
     if (idx > -1) {
-      this.filters.streamingServices.splice(idx, 1);
+      this.filters.watchProviders.splice(idx, 1);
     } else {
-      this.filters.streamingServices.push(serviceId);
+      this.filters.watchProviders.push(serviceId);
     }
     this.emitFilters();
   }
@@ -197,9 +214,17 @@ export class ContentFiltersComponent implements OnInit, OnChanges {
     this.tmdbService.searchPerson(text).subscribe(list => this.people = list);
   }
 
-  onSelected(item: Person): void {
-    console.log('User selected:', item);
+  onSelected(person: Person): void {
+    this.filters.castAndCrew = person.name;
+    this.emitFilters();
   }
 
-  protected readonly capitalizeFirstLetter = capitalizeFirstLetter;
+  protected chackYearAvailability: boolean = false;
+
+
+  capitalizeFirstLetter(text: string) {
+    return capitalizeFirstLetter(text);
+  }
+
+
 }
