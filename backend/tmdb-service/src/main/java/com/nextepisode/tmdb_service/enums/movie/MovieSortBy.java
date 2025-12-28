@@ -1,7 +1,9 @@
 package com.nextepisode.tmdb_service.enums.movie;
 
 import com.fasterxml.jackson.annotation.JsonValue;
+import lombok.Getter;
 
+@Getter
 public enum MovieSortBy {
     ORIGINAL_TITLE_ASC("original_title.asc", "Original Title (A-Z)"),
     ORIGINAL_TITLE_DESC("original_title.desc", "Original Title (Z-A)"),
