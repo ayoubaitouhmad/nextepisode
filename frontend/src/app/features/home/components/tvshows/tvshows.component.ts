@@ -107,11 +107,11 @@ export class TvShowsComponent implements OnInit {
       yearFrom: filters.yearFrom,
       yearTo: filters.yearTo,
       genres: filters.genres,
-      sortBy: filters.lookFor,
+      sortBy: filters.sortBy,
       page: this.currentPage,
       language: filters.language === 'Any' ? undefined : filters.language,
-      with_watch_providers: filters.streamingServices,
-      watch_region: filters.country
+      with_watch_providers: filters.watchProviders,
+      watch_region: filters.region
     };
 
     this.tvSeriesService.discoverSeries(filterParams).subscribe({
