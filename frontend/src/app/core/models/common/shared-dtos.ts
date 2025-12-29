@@ -108,3 +108,22 @@ export interface Certification {
 export interface CertificationList {
   certification: Certification[]
 }
+
+
+export type SortOptionKey =
+  | 'VOTE_COUNT_DESC'
+  | 'VOTE_AVERAGE_ASC'
+  | 'POPULARITY_ASC'
+  | 'PRIMARY_RELEASE_DATE_DESC'
+  | 'TITLE_DESC'
+  | 'REVENUE_ASC'
+  | 'ORIGINAL_TITLE_DESC'
+  | 'PRIMARY_RELEASE_DATE_ASC'
+  | 'VOTE_COUNT_ASC'
+  | 'TITLE_ASC'
+  | 'ORIGINAL_TITLE_ASC'
+  | 'VOTE_AVERAGE_DESC'
+  | 'POPULARITY_DESC'
+  | 'REVENUE_DESC';
+
+export type SortOptionsDto = Record<SortOptionKey, string>;

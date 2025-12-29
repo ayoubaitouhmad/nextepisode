@@ -23,8 +23,8 @@ export interface TMDBTvSeries {
   name: string;  // TV shows use 'name' instead of 'title'
   original_name: string;
   overview: string;
-  poster_path: string | null;
-  backdrop_path: string | null;
+  poster_path: string;
+  backdrop_path: string;
   first_air_date: string;  // Instead of release_date
   vote_average: number;
   vote_count: number;
@@ -48,8 +48,8 @@ export interface TvSeries {
   year: number;
   genres: Genre[];
   overview: string;
-  imageUrl: string;
-  backdropUrl: string;
+  backdrop_path: string;
+  poster_path: string;
   releaseDate: string;
   voteCount: number;
   originalLanguage: string;

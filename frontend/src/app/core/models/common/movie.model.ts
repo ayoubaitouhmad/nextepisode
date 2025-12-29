@@ -50,16 +50,19 @@ export function getUserMovieGenreAsString(genres: Genre[]) {
 export interface XMovie {
   id: string;
   title: string;
+  adult: boolean;
   rating: number;
+  popularity: number;
   year: number;
   genres: Genre[];
   overview: string;
-  imageUrl: string;
-  backdropUrl: string;
-  releaseDate: string;
-  voteCount: number;
-  originalLanguage: string;
+  backdrop_path: string;
+  poster_path: string;
+  release_date: string;
+  vote_count: number;
+  original_language: string;
   streamingService?: StreamingService;
+  video: boolean;
 }
 
 export interface TMDBMovie {
@@ -84,3 +87,13 @@ export interface TMDBMovieResponse {
   total_pages: number;
   total_results: number;
 }
+
+export interface MovieList {
+  page: number;
+  results: XMovie[];
+  total_pages: number;
+  total_results: number;
+}
+
+
+
