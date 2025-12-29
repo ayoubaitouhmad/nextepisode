@@ -6,7 +6,7 @@
     <groupId>com.nextepisode</groupId>
     <artifactId>user-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>test-service</name>
+    <name>user-service</name>
     <description>Private test microservice secured by JWT</description>
     <packaging>jar</packaging>
 
