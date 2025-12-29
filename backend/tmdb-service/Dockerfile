@@ -8,11 +8,16 @@ WORKDIR /app
 # Copy pom first to cache dependencies
 COPY pom.xml .
 
+# Add opentelemetry
+ADD https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/download/v2.8.0/opentelemetry-javaagent.jar /otel/opentelemetry-javaagent.jar
+
 # Download dependencies (keeps future builds faster)
 RUN mvn dependency:go-offline -B
 
 # Copy source code
 COPY src ./src
+
+
 
 # Expose gateway port
 EXPOSE 8083
