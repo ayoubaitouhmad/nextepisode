@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {Service} from './service';
 import {Observable, of} from 'rxjs';
 import {
@@ -9,11 +9,13 @@ import {
   LanguageList,
   PersonList,
   RegionList,
+  SortOptionsDto,
   WatchProviderList
 } from '../../models/common/shared-dtos';
 import {LocalStorageCacheService} from '../local-storage-cache.service';
 import {tap} from 'rxjs/operators';
 import {RuntimeResponse} from '../../models/tmdb/runtime';
+import {MovieList} from '../../models/common/movie.model';
 
 
 @Injectable({
@@ -123,6 +125,10 @@ export class _TmdbService extends Service {
     return this.http.get<RuntimeResponse>(`${this.apiUrl}/configuration/runtimes`);
   }
 
+  getYears(): Observable<Number[]> {
+    return this.http.get<Number[]>(`${this.apiUrl}/configuration/years`);
+  }
+
 
   getMoviesCertification() {
     return this.http.get<CertificationList | Certification[]>(`${this.apiUrl}/certifications/movies`);
@@ -144,6 +150,66 @@ export class _TmdbService extends Service {
       countryCode = countryCode.toLowerCase();
     }
     return this.http.get<Certification[]>(`${this.apiUrl}/certifications/tv/${countryCode}`);
+  }
+
+  getSortOptions(): Observable<SortOptionsDto> {
+    return this.http.get<SortOptionsDto>(`${this.apiUrl}/configuration/sorting`);
+  }
+
+  /**
+   * Discover movies with advanced filters
+   */
+  discoverMovies(filters: {
+    type?: string;
+    year?: number;
+    yearFrom?: number;
+    with_watch_providers?: number[];
+    yearTo?: number;
+    genres?: number[];
+    sortBy?: string;
+    page?: number;
+    language?: string;
+    includeAdult?: boolean;
+    watch_region?: string;
+  } = {}): Observable<MovieList> {
+
+    let params = new HttpParams()
+      .set('page', filters.page || 1)
+      .set('sort_by', filters.sortBy || 'vote_average.desc')
+      .set('vote_count.gte', '50')
+      .set('include_adult', (filters.includeAdult || false).toString())
+      .set("watch_region", filters.watch_region || "US");
+
+    // Add year filters
+    if (filters.year) {
+      params = params
+        .set('primary_release_year', filters.year.toString());
+    } else {
+      if (filters.yearFrom) {
+        params = params.set('primary_release_date.gte', `${filters.yearFrom}-01-01`);
+      }
+      if (filters.yearTo) {
+        params = params.set('primary_release_date.lte', `${filters.yearTo}-12-31`);
+      }
+    }
+
+    if (filters.with_watch_providers) {
+      params = params.set('with_watch_providers', filters.with_watch_providers.join('|'));
+    }
+
+    // Add genre filters
+    if (filters.genres && filters.genres.length > 0) {
+      params = params.set('with_genres', filters.genres.join(','));
+    }
+
+    // Add language filter
+    if (filters.language && filters.language !== 'Any') {
+      params = params.set('with_original_language', filters.language.toLowerCase());
+    }
+
+    console.log(filters)
+
+    return this.http.get<MovieList>(`${this.apiUrl}/movies/discover`, {params});
   }
 
 }
