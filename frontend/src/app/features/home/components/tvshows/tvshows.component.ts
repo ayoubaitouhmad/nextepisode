@@ -104,14 +104,14 @@ export class TvShowsComponent implements OnInit {
     this.error = null;
 
     const filterParams = {
-      yearFrom: filters.yearFrom,
-      yearTo: filters.yearTo,
-      genres: filters.genres,
-      sortBy: filters.sortBy,
-      page: this.currentPage,
-      language: filters.language === 'Any' ? undefined : filters.language,
-      with_watch_providers: filters.watchProviders,
-      watch_region: filters.region
+      // yearFrom: filters.yearFrom,
+      // yearTo: filters.yearTo,
+      // genres: filters.genres,
+      // sortBy: this.getSortBy(filters.lookFor),
+      // page: this.currentPage,
+      // language: filters.language === 'Any' ? undefined : filters.language,
+      // with_watch_providers: filters.streamingServices,
+      // watch_region: filters.country
     };
 
     this.tvSeriesService.discoverSeries(filterParams).subscribe({
@@ -148,6 +148,20 @@ export class TvShowsComponent implements OnInit {
       this.onFiltersChange(this.currentFilters);
     } else {
       this.loadTvShows();
+    }
+  }
+
+  private getSortBy(lookFor: string): 'first_air_date.desc' | 'popularity.desc' | 'vote_average.desc' {
+    switch (lookFor) {
+      case 'High Rated':
+      case 'Mieux noté':
+        return 'vote_average.desc';
+      case 'Most Popular':
+      case 'Populaire':
+        return 'popularity.desc';
+      case 'Newest':
+      default:
+        return 'first_air_date.desc';
     }
   }
 

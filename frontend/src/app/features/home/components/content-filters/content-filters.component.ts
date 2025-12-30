@@ -27,8 +27,8 @@ import {capitalizeFirstLetter} from '../../../../shared/utils';
 })
 export class ContentFiltersComponent implements OnInit, OnChanges {
   private maxShowedStreamingServices = 15;
-
   private tmdbService: _TmdbService = inject(_TmdbService);
+
 
   @Input({required: true}) genreList: GenreList = {
     total: 0,
@@ -162,6 +162,7 @@ export class ContentFiltersComponent implements OnInit, OnChanges {
 
   onRuntimeChange(rt: string): void {
     this.filters.runtime = rt;
+    console.log(rt)
     this.emitFilters();
   }
 
@@ -219,12 +220,10 @@ export class ContentFiltersComponent implements OnInit, OnChanges {
     this.emitFilters();
   }
 
-  protected chackYearAvailability: boolean = false;
 
+  protected chackYearAvailability: boolean = false;
 
   capitalizeFirstLetter(text: string) {
     return capitalizeFirstLetter(text);
   }
-
-
 }

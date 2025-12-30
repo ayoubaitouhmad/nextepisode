@@ -4,7 +4,6 @@ import {ActivatedRoute} from '@angular/router';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {environment} from '../../../environments/environment';
 import {SafeUrlPipe} from '../../shared/pipes/safe-url.pipe';
-import {MovieService} from '../../core/services/tmdb/movie.service';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 
@@ -26,7 +25,6 @@ interface rESponse {
 export class ContentDetailsComponent {
   private route = inject(ActivatedRoute);
   private http = inject(HttpClient);
-  private movieService = inject(MovieService);
 
   region: string = "US";
   regions: any[] = [];
@@ -68,11 +66,11 @@ export class ContentDetailsComponent {
 
 
   loadWatchProviders() {
-    this.movieService.getWatchProviders(parseInt(this.id)).subscribe(resp => {
-      const r = resp.results?.[this.region] || {};
-      this.tmdbWatchLink = r?.link || null;
-      this.providers = r?.flatrate ?? r?.free ?? r?.ads ?? r?.rent ?? r?.buy ?? [];
-    });
+    // this.movieService.getWatchProviders(parseInt(this.id)).subscribe(resp => {
+    //   const r = resp.results?.[this.region] || {};
+    //   this.tmdbWatchLink = r?.link || null;
+    //   this.providers = r?.flatrate ?? r?.free ?? r?.ads ?? r?.rent ?? r?.buy ?? [];
+    // });
   }
 
 
