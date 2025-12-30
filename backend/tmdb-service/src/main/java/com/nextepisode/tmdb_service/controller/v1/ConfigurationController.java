@@ -44,11 +44,8 @@ public class ConfigurationController {
         return list;
     }
 
-    @PostMapping("/runtimes")
-    public void vdfccs(
-            @RequestParam ContentRuntime runtime
-    ) {
-        log.info("name:{} value:{}", runtime.getName(), runtime.getRuntime());
+    @GetMapping("/sorting")
+    public Map<String, String> sorting() {
+        return tmdbConfigurationService.getSortByOptions();
     }
-
 }
