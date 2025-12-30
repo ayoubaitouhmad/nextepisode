@@ -9,7 +9,6 @@ import {XMovie} from '../../../../core/models/common/movie.model';
 import {ContentFiltersComponent} from '../content-filters/content-filters.component';
 import {Certification, GenreList, WatchProvider} from '../../../../core/models/common/shared-dtos';
 import {_TmdbService} from '../../../../core/services/tmdb/_-tmdb.service';
-import {MovieService} from '../../../../core/services/tmdb/movie.service';
 import {AlertService} from '../../../../shared/components/alert/alert.service';
 
 
@@ -22,7 +21,6 @@ import {AlertService} from '../../../../shared/components/alert/alert.service';
 })
 export class MoviesComponent implements OnInit {
   private tmdbService = inject(_TmdbService);
-  private movieService = inject(MovieService);
   private userMovieService = inject(UserMovieService);
   private _tmdbService: _TmdbService = inject(_TmdbService);
   private authService = inject(AuthService);
@@ -124,7 +122,6 @@ export class MoviesComponent implements OnInit {
     this.loading = true;
     this.error = null;
 
-
     const filterParams = {
       genres: filters.genres,
       year: filters.year,
@@ -144,7 +141,7 @@ export class MoviesComponent implements OnInit {
     this._tmdbService.discoverMovies(filterParams).subscribe({
       next: (response) => {
         this.items = response.results;
-        this.totalPages = response.total_results;
+        this.totalPages = response.total_pages;
         this.totalResults = response.total_results;
         this.loading = false;
       },
@@ -179,16 +176,16 @@ export class MoviesComponent implements OnInit {
   }
 
   onShareContent(movie: any): void {
-    // const shareUrl = `https://www.themoviedb.org/movie/${movie.id}`;
-    // if (navigator.share) {
-    //   navigator.share({
-    //     title: movie.title,
-    //     text: `Check out ${movie.title} (${movie.year})`,
-    //     url: shareUrl
-    //   });
-    // } else {
-    //   navigator.clipboard.writeText(shareUrl);
-    // }
+    const shareUrl = `https://www.themoviedb.org/movie/${movie.id}`;
+    if (navigator.share) {
+      navigator.share({
+        title: movie.title,
+        text: `Check out ${movie.title} (${movie.year})`,
+        url: shareUrl
+      });
+    } else {
+      navigator.clipboard.writeText(shareUrl);
+    }
   }
 
   onAddToFavorites(content: any): void {
@@ -222,6 +219,7 @@ export class MoviesComponent implements OnInit {
       console.log('User not authenticated');
       return;
     }
+
 
     const tmdbId = parseInt(content.id);
     this.userMovieService.addToWatchlist(tmdbId).subscribe({
