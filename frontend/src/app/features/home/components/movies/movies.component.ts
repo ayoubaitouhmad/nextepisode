@@ -93,7 +93,7 @@ export class MoviesComponent implements OnInit {
   }
 
 
-  onOpenDetails(item: XMovie): void {
+  onOpenDetails(item: any): void {
     this.router.navigate(['/movie', item.id]);
   }
 
@@ -101,14 +101,14 @@ export class MoviesComponent implements OnInit {
     this.loading = true;
     this.error = null;
 
-    this.movieService.discoverMovies({
+    this._tmdbService.discoverMovies({
       sortBy: 'popularity.desc',
       page: this.currentPage
     }).subscribe({
       next: (response) => {
-        this.items = response.movies;
-        this.totalPages = response.totalPages;
-        this.totalResults = response.totalResults;
+        this.items = response.results;
+        this.totalPages = response.total_pages;
+        this.totalResults = response.total_results;
         this.loading = false;
       },
       error: (error) => {
@@ -121,26 +121,31 @@ export class MoviesComponent implements OnInit {
 
   onFiltersChange(filters: ContentFilters): void {
     this.currentFilters = filters;
-    this.currentPage = 1;
     this.loading = true;
     this.error = null;
 
+
     const filterParams = {
+      genres: filters.genres,
+      year: filters.year,
+      includeAdult: filters.includeAdult,
       yearFrom: filters.yearFrom,
       yearTo: filters.yearTo,
-      genres: filters.genres,
-      sortBy: this.getSortBy(filters.lookFor),
-      page: this.currentPage,
-      language: filters.language === 'Any' ? undefined : filters.language,
-      with_watch_providers: filters.streamingServices,
-      watch_region: filters.country
+      language: filters.language,
+      runtime: filters.runtime,
+      castAndCrew: filters.castAndCrew,
+      keyword: filters.keyword,
+      sortBy: filters.sortBy,
+      certification: filters.certification,
+      watchProviders: filters.watchProviders,
+      region: filters.region,
     };
 
-    this.movieService.discoverMovies(filterParams).subscribe({
+    this._tmdbService.discoverMovies(filterParams).subscribe({
       next: (response) => {
-        this.items = response.movies;
-        this.totalPages = response.totalPages;
-        this.totalResults = response.totalResults;
+        this.items = response.results;
+        this.totalPages = response.total_results;
+        this.totalResults = response.total_results;
         this.loading = false;
       },
       error: (error) => {
@@ -173,34 +178,20 @@ export class MoviesComponent implements OnInit {
     }
   }
 
-  private getSortBy(lookFor: string): 'release_date.desc' | 'popularity.desc' | 'vote_average.desc' {
-    switch (lookFor) {
-      case 'High Rated':
-      case 'Mieux noté':
-        return 'vote_average.desc';
-      case 'Most Popular':
-      case 'Populaire':
-        return 'popularity.desc';
-      case 'Newest':
-      default:
-        return 'release_date.desc';
-    }
+  onShareContent(movie: any): void {
+    // const shareUrl = `https://www.themoviedb.org/movie/${movie.id}`;
+    // if (navigator.share) {
+    //   navigator.share({
+    //     title: movie.title,
+    //     text: `Check out ${movie.title} (${movie.year})`,
+    //     url: shareUrl
+    //   });
+    // } else {
+    //   navigator.clipboard.writeText(shareUrl);
+    // }
   }
 
-  onShareContent(movie: XMovie): void {
-    const shareUrl = `https://www.themoviedb.org/movie/${movie.id}`;
-    if (navigator.share) {
-      navigator.share({
-        title: movie.title,
-        text: `Check out ${movie.title} (${movie.year})`,
-        url: shareUrl
-      });
-    } else {
-      navigator.clipboard.writeText(shareUrl);
-    }
-  }
-
-  onAddToFavorites(content: XMovie): void {
+  onAddToFavorites(content: any): void {
     if (!this.authService.isAuthenticated()) {
       console.log('User not authenticated');
       return;
@@ -213,7 +204,7 @@ export class MoviesComponent implements OnInit {
     });
   }
 
-  onAddToWatched(content: XMovie): void {
+  onAddToWatched(content: any): void {
     if (!this.authService.isAuthenticated()) {
       console.log('User not authenticated');
       return;
@@ -226,7 +217,7 @@ export class MoviesComponent implements OnInit {
     });
   }
 
-  onAddToWatchlist(content: XMovie): void {
+  onAddToWatchlist(content: any): void {
     if (!this.authService.isAuthenticated()) {
       console.log('User not authenticated');
       return;

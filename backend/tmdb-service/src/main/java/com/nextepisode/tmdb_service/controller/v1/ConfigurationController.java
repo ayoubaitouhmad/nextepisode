@@ -51,4 +51,8 @@ public class ConfigurationController {
         log.info("name:{} value:{}", runtime.getName(), runtime.getRuntime());
     }
 
+    @GetMapping("/sorting")
+    public Map<String, String> sorting() {
+        return tmdbConfigurationService.getSortByOptions();
+    }
 }

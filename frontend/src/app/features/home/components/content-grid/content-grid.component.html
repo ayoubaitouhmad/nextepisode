@@ -12,7 +12,7 @@
       <!-- List View -->
       <article class="bg-neutral-800 rounded-lg p-4 flex gap-4 hover:bg-neutral-700 cursor-pointer transition-colors"
                (click)="onContentClick(content)">
-        <img [src]="content.imageUrl" [alt]="content.title" class="w-24 h-36 object-cover rounded">
+      <img [src]="content.backdrop_path" [alt]="content.title" class="w-24 h-36 object-cover rounded">
 
         <div class="flex-1">
           <div class="flex items-start justify-between">

@@ -1,15 +1,17 @@
 export interface ContentFilters {
   type: 'movie' | 'tv';
   genres: number[];
-  yearFrom: number;
-  yearTo: number;
+  year: number;
+  includeAdult: boolean;
+  yearFrom?: number;
+  yearTo?: number;
   language: string;
   runtime: string;
   castAndCrew: string;
   keyword: string;
-  lookFor: string;
-  ageFilter: string;
-  streamingServices: number[];
-  country: string;
+  sortBy: string;
+  certification: string;
+  watchProviders: number[];
+  region: string;
 }
 

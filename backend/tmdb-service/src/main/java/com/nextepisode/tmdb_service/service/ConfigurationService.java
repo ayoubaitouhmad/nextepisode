@@ -2,6 +2,7 @@ package com.nextepisode.tmdb_service.service;
 
 
 import com.nextepisode.tmdb_service.config.CacheConfig;
+import com.nextepisode.tmdb_service.enums.movie.MovieSortBy;
 import com.nextepisode.tmdb_service.service.utll.DateHelper;
 import com.nextepisode.tmdb_service.tmdb.common.Language;
 import com.nextepisode.tmdb_service.tmdb.response.LanguageList;
@@ -11,7 +12,9 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -50,4 +53,11 @@ public class ConfigurationService extends BaseService {
     }
 
 
+    public Map<String, String> getSortByOptions() {
+        Map<String, String> list = new HashMap<>();
+        for (MovieSortBy rt : MovieSortBy.values()) {
+            list.put( rt.name() , rt.getDisplayName());
+        }
+        return list;
+    }
 }

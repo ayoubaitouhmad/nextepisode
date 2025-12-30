@@ -89,12 +89,8 @@ export class TvSeriesService extends TMDBService {
       year: tmdbSeries.first_air_date ? new Date(tmdbSeries.first_air_date).getFullYear() : 0,
       genres: this.transformGenres(tmdbSeries.genre_ids),
       overview: tmdbSeries.overview,
-      imageUrl: tmdbSeries.poster_path
-        ? `${this.imageBaseUrl}/original${tmdbSeries.poster_path}`
-        : 'assets/images/no-poster.jpg',
-      backdropUrl: tmdbSeries.backdrop_path
-        ? `${this.imageBaseUrl}/w1280${tmdbSeries.backdrop_path}`
-        : '',
+      poster_path: tmdbSeries.poster_path,
+      backdrop_path: tmdbSeries.backdrop_path,
       releaseDate: tmdbSeries.first_air_date,
       voteCount: tmdbSeries.vote_count,
       originalLanguage: tmdbSeries.original_language,
