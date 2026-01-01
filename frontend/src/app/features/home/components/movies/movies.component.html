@@ -33,7 +33,7 @@
   }
 
   <!-- Content Grid -->
-  <app-content-grid
+  <app-movie-grid
     [items]="items"
     [loading]="loading"
     (shareItem)="onShareContent($event)"
@@ -41,7 +41,7 @@
     (addToWatched)="onAddToWatched($event)"
     (addToWatchlist)="onAddToWatchlist($event)"
     (movieClick)="onOpenDetails($event)">
-  </app-content-grid>
+  </app-movie-grid>
 
   <!-- Pagination -->
   @if (!loading && totalPages > 1) {
