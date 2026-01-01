@@ -5,8 +5,8 @@
     <button *ngFor="let genre of genres" (click)="onGenreToggle(genre)"
             class="px-4 py-2 rounded-full text-sm font-medium transition"
             [ngClass]="{
-              'bg-blue-600 text-white': filters.genres.includes(genre.id),
-              'bg-gray-700 text-white hover:bg-gray-600': !filters.genres.includes(genre.id)
+              'bg-blue-600 text-white': filters.genres?.includes(genre.id),
+              'bg-gray-700 text-white hover:bg-gray-600': !filters.genres?.includes(genre.id)
             }">
       {{ genre.name }}
     </button>
@@ -21,6 +21,7 @@
             [(ngModel)]="filters.year"
             (ngModelChange)="onYearChange($event)"
     >
+      <option [value]="undefined">Any</option>
       <option *ngFor="let y of years" [value]="y">{{ y }}</option>
     </select>
   </div>
@@ -30,8 +31,8 @@
     <select class="w-full bg-gray-600 rounded p-2"
             [(ngModel)]="filters.yearFrom"
             (ngModelChange)="onYearFromChange($event)"
-            [disabled]="chackYearAvailability"
     >
+      <option [value]="undefined">Any</option>
       <option *ngFor="let y of years" [value]="y">{{ y }}</option>
     </select>
   </div>
@@ -40,8 +41,8 @@
     <select class="w-full bg-gray-600 rounded p-2"
             [(ngModel)]="filters.yearTo"
             (ngModelChange)="onYearToChange($event)"
-            [disabled]="chackYearAvailability"
     >
+      <option [value]="undefined">Any</option>
       <option *ngFor="let y of years" [value]="y">{{ y }}</option>
     </select>
   </div>
@@ -50,6 +51,7 @@
     <select class="w-full bg-gray-600 rounded p-2"
             [(ngModel)]="filters.language"
             (ngModelChange)="onLanguageChange($event)">
+      <option [value]="undefined">Any</option>
       <option *ngFor="let language of languages" [value]="language.iso_639_1">{{ language.english_name }}</option>
     </select>
   </div>
@@ -59,7 +61,7 @@
             [(ngModel)]="filters.runtime"
             (ngModelChange)="onRuntimeChange($event)">
 
-      <option value="">Any</option>
+      <option [value]="undefined">Any</option>
       <option value="{{ item.value }}" *ngFor="let item of runtimes | keyvalue">
         {{ capitalizeFirstLetter(item.key) }}
       </option>
@@ -85,7 +87,7 @@
     <select class="w-full bg-gray-600 rounded p-2"
             [(ngModel)]="filters.sortBy"
             (ngModelChange)="onLookForChange($event)">
-      <option value="">Default filter</option>
+      <option [value]="undefined">Default filter</option>
       <option value="{{ item.key }}" *ngFor="let item of sortOptions | keyvalue">
         {{ capitalizeFirstLetter(item.value) }}
       </option>
@@ -96,7 +98,7 @@
     <select class="w-full bg-gray-600 rounded p-2"
             [(ngModel)]="filters.certification"
             (ngModelChange)="onAgeFilterChange($event)">
-      <option>No Filter</option>
+      <option [value]="undefined">Any</option>
       <option *ngFor="let certificaton of certifications"
               [value]="certificaton.certification"
               [attr.data-descrption]="certificaton.meaning"
@@ -142,8 +144,8 @@
       <div
         class="relative bg-gray-800/50 backdrop-blur-sm rounded-lg px-4 py-3 border border-gray-700/50 hover:border-gray-600/70 transition-all duration-300"
         [ngClass]="{
-             'bg-blue-900/30 border-blue-500/50 ring-1 ring-blue-400/30': filters.watchProviders.includes(service.provider_id),
-             'hover:bg-gray-700/30': !filters.watchProviders.includes(service.provider_id)
+             'bg-blue-900/30 border-blue-500/50 ring-1 ring-blue-400/30': filters.watchProviders?.includes(service.provider_id),
+             'hover:bg-gray-700/30': !filters.watchProviders?.includes(service.provider_id)
            }">
 
         <div class="flex items-center gap-3 relative min-w-0">
@@ -156,11 +158,11 @@
 
           <span
             class="text-sm font-medium text-gray-300 group-hover:text-white transition-colors duration-300 whitespace-nowrap"
-            [ngClass]="{'text-blue-300': filters.watchProviders.includes(service.provider_id)}">
+            [ngClass]="{'text-blue-300': filters.watchProviders?.includes(service.provider_id)}">
             {{ service.provider_name }}
           </span>
 
-          <div *ngIf="filters.watchProviders.includes(service.provider_id)"
+          <div *ngIf="filters.watchProviders?.includes(service.provider_id)"
                class="flex-shrink-0 w-4 h-4 bg-blue-500 rounded-full flex items-center justify-center ml-2">
             <svg class="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 20 20">
               <path fill-rule="evenodd"
@@ -173,7 +175,7 @@
     </div>
   </div>
 
-  <div *ngIf="filters.watchProviders.length > 0" class="mt-4 flex items-center gap-2 text-sm">
+  <div *ngIf="filters.watchProviders && filters.watchProviders.length > 0" class="mt-4 flex items-center gap-2 text-sm">
     <span class="text-gray-400">Sélectionné :</span>
     <div class="flex flex-wrap gap-1">
       <span *ngFor="let serviceId of filters.watchProviders; let last = last"

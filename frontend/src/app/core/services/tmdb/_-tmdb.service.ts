@@ -16,6 +16,7 @@ import {LocalStorageCacheService} from '../local-storage-cache.service';
 import {tap} from 'rxjs/operators';
 import {RuntimeResponse} from '../../models/tmdb/runtime';
 import {MovieList} from '../../models/common/movie.model';
+import {MovieFilters} from '../../models/tmdb/request/content-filters';
 
 
 @Injectable({
@@ -160,56 +161,114 @@ export class _TmdbService extends Service {
   /**
    * Discover movies with advanced filters
    */
-  discoverMovies(filters: {
-    type?: string;
-    year?: number;
-    yearFrom?: number;
-    with_watch_providers?: number[];
-    yearTo?: number;
-    genres?: number[];
-    sortBy?: string;
-    page?: number;
-    language?: string;
-    includeAdult?: boolean;
-    watch_region?: string;
-  } = {}): Observable<MovieList> {
+  discoverMovies(filters: any): Observable<MovieList> {
+    console.info('[Movies] Discover movies request');
 
-    let params = new HttpParams()
-      .set('page', filters.page || 1)
-      .set('sort_by', filters.sortBy || 'vote_average.desc')
-      .set('vote_count.gte', '50')
-      .set('include_adult', (filters.includeAdult || false).toString())
-      .set("watch_region", filters.watch_region || "US");
+    const filterParams = this.transformContentFilterToMovieFilters(filters);
+    console.debug('[Movies] Transformed filters', filterParams);
+
+    const params = this.buildDiscoverHttpParams(filterParams);
+    console.debug('[Movies] HTTP params', params.toString());
+
+    return this.http.get<MovieList>(`${this.apiUrl}/movies/discover`, {params});
+  }
+
+  /**
+   * Transform the given ContentFilters object to the MovieFilters
+   * */
+  private transformContentFilterToMovieFilters(filters: any): MovieFilters {
+    console.debug('[Movies] Transforming content filters', filters);
+
+    return {
+      page: filters.page || 1,
+      genres: filters.genres,
+      year: filters.year,
+      includeAdult: filters.includeAdult !== undefined ? filters.includeAdult : false,
+      yearFrom: filters.yearFrom,
+      yearTo: filters.yearTo,
+      language: filters.language || 'en',
+      runtime: filters.runtime,
+      castAndCrew: filters.castAndCrew,
+      keyword: filters.keyword,
+      sortBy: filters.sortBy || 'popularity.desc',
+      certification: filters.certification,
+      watchProviders: filters.watchProviders,
+      region: filters.region || 'US',
+    }
+  }
+
+  /**
+   * Build HttpParams from a given HttpParams object for http request
+   */
+  private buildDiscoverHttpParams(filters: MovieFilters): HttpParams {
+    console.debug('[Movies] Building HTTP params from filters', filters);
+
+    let params = new HttpParams();
+
+    // Always add required parameters with defaults
+    params = params.set('page', filters.page?.toString() || '1');
+
+    // Only add optional parameters if they have valid values
+    if (filters.sortBy) {
+      params = params.set('sortBy', filters.sortBy);
+    }
+
+    if (filters.includeAdult !== undefined && filters.includeAdult !== null) {
+      params = params.set('includeAdult', filters.includeAdult.toString());
+    }
+
+    if (filters.region) {
+      params = params.set('region', filters.region);
+    }
 
     // Add year filters
     if (filters.year) {
-      params = params
-        .set('primary_release_year', filters.year.toString());
+      params = params.set('year', filters.year.toString());
     } else {
       if (filters.yearFrom) {
-        params = params.set('primary_release_date.gte', `${filters.yearFrom}-01-01`);
+        params = params.set('yearFrom', filters.yearFrom);
       }
       if (filters.yearTo) {
-        params = params.set('primary_release_date.lte', `${filters.yearTo}-12-31`);
+        params = params.set('yearTo', filters.yearTo);
       }
     }
 
-    if (filters.with_watch_providers) {
-      params = params.set('with_watch_providers', filters.with_watch_providers.join('|'));
+    if (filters.watchProviders && filters.watchProviders.length > 0) {
+      params = params.set('watchProviders', filters.watchProviders.join('|'));
     }
 
     // Add genre filters
     if (filters.genres && filters.genres.length > 0) {
-      params = params.set('with_genres', filters.genres.join(','));
+      params = params.set('genres', filters.genres.join(','));
     }
 
     // Add language filter
-    if (filters.language && filters.language !== 'Any') {
-      params = params.set('with_original_language', filters.language.toLowerCase());
+    if (filters.language) {
+      params = params.set('language', filters.language);
     }
 
-    console.log(filters)
+    // Add runtime filter
+    if (filters.runtime) {
+      params = params.set('runtime', filters.runtime);
+    }
 
-    return this.http.get<MovieList>(`${this.apiUrl}/movies/discover`, {params});
+    // Add cast and crew filter
+    if (filters.castAndCrew) {
+      params = params.set('castAndCrew', filters.castAndCrew);
+    }
+
+    // Add keyword filter
+    if (filters.keyword) {
+      params = params.set('keyword', filters.keyword);
+    }
+
+    // Add certification filter
+    if (filters.certification) {
+      params = params.set('certification', filters.certification);
+    }
+
+    console.debug('[Movies] Final HTTP params', params.toString());
+
+    return params;
   }
 }
