@@ -1,10 +1,10 @@
 package com.nextepisode.tmdb_service.service;
 
 import com.nextepisode.tmdb_service.config.CacheConfig;
+import com.nextepisode.tmdb_service.service.core.BaseService;
 import com.nextepisode.tmdb_service.tmdb.common.Certification;
 import com.nextepisode.tmdb_service.tmdb.response.CertificationList;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.aop.framework.AopContext;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;

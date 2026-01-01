@@ -19,6 +19,10 @@ public class CacheConfig {
     public final static String YEARS = "years";
     public final static String MOVIE_CERTIFICATIONS = "movies.certifications";
     public final static String TVSHOWS_CERTIFICATIONS = "tvshows.certifications";
+    public final static String MOVIE_MOVIE_DETAIL = "movie.movie_details";
+    public final static String MOVIE_TOP_RATED = "movie.top_rated";
+    public final static String MOVIE_POPULAR = "movie.polular";
+    public final static String MOVIE_WATCH_PROVIDER = "movie.watch_provider";
 
 
     @Bean
@@ -46,6 +50,10 @@ public class CacheConfig {
                 YEARS,
                 MOVIE_CERTIFICATIONS,
                 TVSHOWS_CERTIFICATIONS,
+                MOVIE_MOVIE_DETAIL,
+                MOVIE_TOP_RATED,
+                MOVIE_POPULAR,
+                MOVIE_WATCH_PROVIDER
         };
     }
 }

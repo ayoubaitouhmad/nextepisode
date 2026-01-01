@@ -1,5 +1,6 @@
 package com.nextepisode.tmdb_service.service;
 
+import com.nextepisode.tmdb_service.service.core.BaseService;
 import com.nextepisode.tmdb_service.tmdb.response.GenreList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;

@@ -32,14 +32,15 @@ public class MovieDiscoverFilters {
     private Boolean includeVideos = false;
 
     @Builder.Default
-    private String watchRegion = "US";
+    private String region = "US";
 
     private Integer year;
     private Integer yearFrom;
     private Integer yearTo;
     private List<Integer> genres;
     private List<Integer> watchProviders;
-
+    private List<String> keywords;
+    private String certification;
 
     public String getGenreIdsAsString() {
         if (genres == null ) {

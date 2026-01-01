@@ -1,5 +1,6 @@
 package com.nextepisode.tmdb_service.service;
 
+import com.nextepisode.tmdb_service.service.core.BaseService;
 import com.nextepisode.tmdb_service.tmdb.response.PersonList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -7,7 +8,7 @@ import org.springframework.web.client.RestClient;
 
 @Slf4j
 @Service
-public class SearchService  extends BaseService{
+public class SearchService  extends BaseService {
     public SearchService(RestClient tmdbClient) {
         super(tmdbClient);
     }

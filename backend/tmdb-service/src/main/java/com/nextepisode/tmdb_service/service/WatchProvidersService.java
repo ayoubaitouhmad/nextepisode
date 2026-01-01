@@ -1,8 +1,10 @@
 package com.nextepisode.tmdb_service.service;
 
 
-import com.nextepisode.tmdb_service.tmdb.response.CountryList;
-import com.nextepisode.tmdb_service.tmdb.response.WatchProviderList;
+import com.nextepisode.tmdb_service.exception.ErrorCode;
+import com.nextepisode.tmdb_service.exception.TmdbApiException;
+import com.nextepisode.tmdb_service.service.core.BaseService;
+import com.nextepisode.tmdb_service.tmdb.response.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -97,5 +99,21 @@ public class WatchProvidersService extends BaseService {
             throw new RuntimeException("Failed to get countries: ", e);
         }
     }
+    /**
+     * Extracts region-specific watch providers from the full provider list.
+     */
+    public Watching getRegionSpecificProviders(
+            MovieWatchProviderList providerList,
+            String region,
+            Long movieId
+    ) {
+        CountryWatchProviderList regionProviders = providerList.getWatchProviderByRegion(region);
 
+        if (regionProviders == null || !regionProviders.hasProviders()) {
+            log.warn("No watch providers found for movie {} in region {}", movieId, region);
+            throw new TmdbApiException(ErrorCode.REGION_INVALID_CODE, region);
+        }
+
+        return regionProviders;
+    }
 }

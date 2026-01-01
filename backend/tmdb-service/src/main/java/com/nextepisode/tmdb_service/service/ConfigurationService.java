@@ -3,6 +3,7 @@ package com.nextepisode.tmdb_service.service;
 
 import com.nextepisode.tmdb_service.config.CacheConfig;
 import com.nextepisode.tmdb_service.enums.movie.MovieSortBy;
+import com.nextepisode.tmdb_service.service.core.BaseService;
 import com.nextepisode.tmdb_service.service.utll.DateHelper;
 import com.nextepisode.tmdb_service.tmdb.common.Language;
 import com.nextepisode.tmdb_service.tmdb.response.LanguageList;
@@ -56,7 +57,7 @@ public class ConfigurationService extends BaseService {
     public Map<String, String> getSortByOptions() {
         Map<String, String> list = new HashMap<>();
         for (MovieSortBy rt : MovieSortBy.values()) {
-            list.put( rt.name() , rt.getDisplayName());
+            list.put( rt.getValue() , rt.getDisplayName());
         }
         return list;
     }
