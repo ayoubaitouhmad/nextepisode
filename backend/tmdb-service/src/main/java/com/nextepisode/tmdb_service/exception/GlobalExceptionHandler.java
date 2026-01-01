@@ -167,7 +167,7 @@ public class GlobalExceptionHandler {
         ));
 
         ErrorResponse errorResponse = buildErrorResponseWithFieldErrors(
-                ErrorCode.FIELD_REQUIRED,
+                ErrorCode.VALIDATION_FIELD_REQUIRED,
                 HttpStatus.BAD_REQUEST,
                 getRequestPath(request),
                 null,
@@ -194,7 +194,7 @@ public class GlobalExceptionHandler {
         String traceId = UUID.randomUUID().toString();
 
         ErrorResponse errorResponse = buildErrorResponse(
-                ErrorCode.INTERNAL_SERVER_ERROR,
+                ErrorCode.GENERAL_INTERNAL_ERROR,
                 HttpStatus.INTERNAL_SERVER_ERROR,
                 getRequestPath(request),
                 traceId
