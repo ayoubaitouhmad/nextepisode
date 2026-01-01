@@ -16,7 +16,6 @@ export class MovieGridComponent {
   @Input() items: XMovie[] = [];
   @Input() loading = false;
   @Input() viewMode: 'grid' | 'list' = 'grid';
-  @Input() contentType: 'movie' | 'tv' = 'movie';
   @Output() addToFavorites = new EventEmitter<XMovie>();
   @Output() addToWatched = new EventEmitter<XMovie>();
   @Output() addToWatchlist = new EventEmitter<XMovie>();
