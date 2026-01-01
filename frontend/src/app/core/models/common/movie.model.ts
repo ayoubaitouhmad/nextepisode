@@ -60,6 +60,7 @@ export interface XMovie {
   poster_path: string;
   release_date: string;
   vote_count: number;
+  vote_average: number;
   original_language: string;
   streamingService?: StreamingService;
   video: boolean;
