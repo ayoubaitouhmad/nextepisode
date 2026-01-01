@@ -1,6 +1,7 @@
 package com.nextepisode.tmdb_service.service;
 
 
+import com.nextepisode.tmdb_service.service.core.BaseService;
 import com.nextepisode.tmdb_service.tmdb.response.CountryList;
 import com.nextepisode.tmdb_service.tmdb.response.WatchProviderList;
 import lombok.extern.slf4j.Slf4j;
@@ -97,5 +98,4 @@ public class WatchProvidersService extends BaseService {
             throw new RuntimeException("Failed to get countries: ", e);
         }
     }
-
 }
