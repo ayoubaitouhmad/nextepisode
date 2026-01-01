@@ -35,18 +35,17 @@ public enum MovieSortBy {
             return getDefault();
         }
         for (MovieSortBy sortBy : MovieSortBy.values()) {
-            if (sortBy.value.equalsIgnoreCase(value)) {
+            if (sortBy.value.equals(value.toLowerCase())) {
                 return sortBy;
             }
         }
 
         throw new IllegalArgumentException("Invalid sort_by value: " + value);
-
     }
 
     // Get default sort option
     public static MovieSortBy getDefault() {
-        return VOTE_AVERAGE_DESC;
+        return POPULARITY_DESC;
     }
 
     @Override
