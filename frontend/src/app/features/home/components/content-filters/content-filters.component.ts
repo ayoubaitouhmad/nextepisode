@@ -26,9 +26,7 @@ import {capitalizeFirstLetter} from '../../../../shared/utils';
   styleUrls: ['./content-filters.component.scss']
 })
 export class ContentFiltersComponent implements OnInit, OnChanges {
-  private maxShowedStreamingServices = 15;
   private tmdbService: _TmdbService = inject(_TmdbService);
-
 
   @Input({required: true}) genreList: GenreList = {
     total: 0,
@@ -45,16 +43,9 @@ export class ContentFiltersComponent implements OnInit, OnChanges {
     type: 'movie',
     genres: [],
     includeAdult: false,
-    year: new Date().getFullYear(),
-    yearFrom: undefined,
-    yearTo: undefined,
-    language: 'en',
-    runtime: '2',
-    castAndCrew: 'Will smith',
-    keyword: 'the killing',
-    sortBy: 'POPULARITY_DESC',
-    certification: "PG",
     watchProviders: [],
+    language: 'en',
+    sortBy: 'popularity.desc',
     region: 'US'
   };
 
@@ -77,7 +68,6 @@ export class ContentFiltersComponent implements OnInit, OnChanges {
   years: Number[] = [];
   sortOptions: {} = {};
 
-
   ngOnInit(): void {
     this.tmdbService.getLanguages().subscribe(languages => this.languages = languages.languages)
     this.tmdbService.getRegions().subscribe(regionList => this.regions = regionList.results);
@@ -85,8 +75,6 @@ export class ContentFiltersComponent implements OnInit, OnChanges {
     this.tmdbService.getYears().subscribe(years => this.years = years);
     this.filters.type = this.contentType;
     this.emitFilters();
-
-
     this.tmdbService.getRuntimes().subscribe((value: RuntimeResponse) => {
       this.runtimes = value;
     });
@@ -127,36 +115,38 @@ export class ContentFiltersComponent implements OnInit, OnChanges {
   }
 
   onGenreToggle(genre: Genre): void {
-    const idx = this.filters.genres.indexOf(genre.id);
-    if (idx > -1) {
-      this.filters.genres.splice(idx, 1);
-    } else {
-      this.filters.genres.push(genre.id);
+    if (this.filters.genres != undefined) {
+      const idx = this.filters.genres.indexOf(genre.id);
+      if (idx > -1) {
+        this.filters.genres.splice(idx, 1);
+      } else {
+        this.filters.genres.push(genre.id);
+      }
+      this.emitFilters();
     }
-    this.emitFilters();
   }
 
   onYearChange(year: number): void {
-    if (this.filters.yearFrom || this.filters.yearTo) {
-      this.filters.yearFrom = undefined;
-      this.filters.yearTo = undefined;
-    }
     this.filters.year = year;
+    this.filters.yearFrom = undefined;
+    this.filters.yearTo = undefined;
     this.emitFilters();
   }
 
   onYearFromChange(year: number): void {
     this.filters.yearFrom = year;
+    this.filters.year = undefined;
     this.emitFilters();
   }
 
   onYearToChange(year: number): void {
     this.filters.yearTo = year;
+    this.filters.year = undefined;
     this.emitFilters();
   }
 
   onLanguageChange(lang: string): void {
-    this.filters.language = lang === 'xx' ? '' : lang;
+    this.filters.language = lang;
     this.emitFilters();
   }
 
@@ -201,13 +191,15 @@ export class ContentFiltersComponent implements OnInit, OnChanges {
   }
 
   onStreamingServiceToggle(serviceId: number): void {
-    const idx = this.filters.watchProviders.indexOf(serviceId);
-    if (idx > -1) {
-      this.filters.watchProviders.splice(idx, 1);
-    } else {
-      this.filters.watchProviders.push(serviceId);
+    if (this.filters.watchProviders != undefined) {
+      const idx = this.filters.watchProviders.indexOf(serviceId);
+      if (idx > -1) {
+        this.filters.watchProviders.splice(idx, 1);
+      } else {
+        this.filters.watchProviders.push(serviceId);
+      }
+      this.emitFilters();
     }
-    this.emitFilters();
   }
 
   onSearch(text: string): void {
@@ -219,9 +211,6 @@ export class ContentFiltersComponent implements OnInit, OnChanges {
     this.filters.castAndCrew = person.name;
     this.emitFilters();
   }
-
-
-  protected chackYearAvailability: boolean = false;
 
   capitalizeFirstLetter(text: string) {
     return capitalizeFirstLetter(text);
