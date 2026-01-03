@@ -26,9 +26,9 @@
 
     <div class="mt-auto flex items-center justify-between pt-4 text-sm">
       <div class="rounded-xl">
-        @if (getFirstTwoFlatRate()) {
+        @if (getFirstTwoFlatRate(content)) {
           <div class="flex">
-            <img *ngFor="let provider of getFirstTwoFlatRate()" [src]="provider.logo_path"
+            <img *ngFor="let provider of getFirstTwoFlatRate(content)" [src]="provider.logo_path"
                  [alt]="provider.provider_name" class="h-12 p-1"/>
           </div>
         }

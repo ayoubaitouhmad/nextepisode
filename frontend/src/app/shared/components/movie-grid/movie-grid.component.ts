@@ -2,6 +2,7 @@ import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {XMovie} from '../../../core/models/common/movie.model';
 import {MovieCardComponent} from '../movie-card/movie-card.component';
+import {getFirstTwoFlatRate} from '../../utils/movie.utils';
 
 
 @Component({
@@ -12,6 +13,8 @@ import {MovieCardComponent} from '../movie-card/movie-card.component';
   styleUrl: 'movie-grid.component.scss'
 })
 export class MovieGridComponent {
+
+  protected readonly getFirstTwoFlatRate = getFirstTwoFlatRate;
 
   @Input() items: XMovie[] = [];
   @Input() loading = false;

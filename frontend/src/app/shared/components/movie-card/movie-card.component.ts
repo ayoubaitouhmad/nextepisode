@@ -3,6 +3,7 @@ import {CommonModule} from '@angular/common';
 import {XMovie} from '../../../core/models/common/movie.model';
 import {AuthService} from '../../../core/services/auth/auth-service';
 import {getYearFromDate} from '../../utils';
+import {getFirstTwoFlatRate} from '../../utils/movie.utils';
 
 
 @Component({
@@ -15,8 +16,8 @@ import {getYearFromDate} from '../../utils';
 export class MovieCardComponent implements OnInit {
 
   protected readonly getYearFromDate = getYearFromDate;
-  private readonly MIN_PROVIDER_SIZE: number = 0;
-  private readonly MAX_PROVIDER_SIZE: number = 2;
+  protected readonly getFirstTwoFlatRate = getFirstTwoFlatRate;
+
 
   @Input({required: true}) content!: XMovie;
   @Output() share = new EventEmitter<XMovie>();
@@ -182,13 +183,5 @@ export class MovieCardComponent implements OnInit {
     }
   }
 
-  /*
-   * Get the first two provider
-   */
-  public getFirstTwoFlatRate() {
-    if (this.content && this.content.watch_providers?.flatrate && this.content.watch_providers?.flatrate.length > 0) {
-      return this.content.watch_providers.flatrate.slice(this.MIN_PROVIDER_SIZE, this.MAX_PROVIDER_SIZE);
-    }
-    return undefined
-  }
+
 }
