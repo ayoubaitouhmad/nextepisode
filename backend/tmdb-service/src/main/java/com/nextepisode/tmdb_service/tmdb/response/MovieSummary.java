@@ -32,4 +32,7 @@ public class MovieSummary extends BaseMovie {
     @JsonProperty(value = "genres", access = JsonProperty.Access.READ_ONLY)
     private List<Genre> genres = new ArrayList<>();
 
+    @JsonProperty(value = "watch_providers", access = JsonProperty.Access.READ_ONLY)
+    private CountryWatchProviderList watchProviders = null;
+
 }

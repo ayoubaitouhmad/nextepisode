@@ -13,10 +13,14 @@ public class CountryWatchProviderList extends Watching {
 
     @JsonProperty("buy")
     private List<WatchProvider> buy;
+
     @JsonProperty("rent")
     private List<WatchProvider> rent;
 
+    @JsonProperty("flatrate")
+    private List<WatchProvider> flatrate;
+
     public boolean hasProviders() {
-        return buy != null || rent != null;
+        return buy != null || rent != null || flatrate != null;
     }
 }

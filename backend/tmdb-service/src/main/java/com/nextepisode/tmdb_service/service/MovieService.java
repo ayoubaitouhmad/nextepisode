@@ -6,11 +6,12 @@ import com.nextepisode.tmdb_service.exception.TmdbApiException;
 import com.nextepisode.tmdb_service.service.core.BaseService;
 import com.nextepisode.tmdb_service.service.movie.MovieGenreEnricher;
 import com.nextepisode.tmdb_service.service.movie.MovieUriBuilder;
+import com.nextepisode.tmdb_service.service.movie.MovieWatchProviderEnricher;
 import com.nextepisode.tmdb_service.service.utll.ValidationUtils;
+import com.nextepisode.tmdb_service.tmdb.TmdbConstants;
 import com.nextepisode.tmdb_service.tmdb.request.MovieDiscoverFilters;
 import com.nextepisode.tmdb_service.tmdb.response.MovieDetails;
 import com.nextepisode.tmdb_service.tmdb.response.MovieList;
-import com.nextepisode.tmdb_service.tmdb.response.MovieWatchProviderList;
 import com.nextepisode.tmdb_service.tmdb.response.Watching;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
@@ -26,20 +27,30 @@ import org.springframework.web.client.RestClientException;
 @Service
 public class MovieService extends BaseService {
 
-    private static final String MOVIE_BASE_PATH = "/movie";
+    public static final String MOVIE_BASE_PATH = "/movie";
     private static final String TRENDING_PATH = "/trending/movie";
-
 
     private final MovieGenreEnricher movieGenreEnricher;
     private final MovieUriBuilder movieUriBuilder;
     private final WatchProvidersService watchProvidersService;
+    private final MovieWatchProviderEnricher movieWatchProviderEnricher;
 
-    public MovieService(RestClient tmdbClient, MovieGenreEnricher movieGenreEnricher, MovieUriBuilder movieUriBuilder, WatchProvidersService watchProvidersService, RestClient.Builder builder) {
+    public MovieService(
+            RestClient tmdbClient,
+            MovieGenreEnricher movieGenreEnricher,
+            MovieUriBuilder movieUriBuilder,
+            WatchProvidersService watchProvidersService,
+            MovieWatchProviderEnricher movieWatchProviderEnricher) {
         super(tmdbClient);
         this.movieGenreEnricher = movieGenreEnricher;
         this.movieUriBuilder = movieUriBuilder;
         this.watchProvidersService = watchProvidersService;
+        this.movieWatchProviderEnricher = movieWatchProviderEnricher;
     }
+
+    // ============================================================================
+    // MOVIE DETAILS & LISTS
+    // ============================================================================
 
     /**
      * Retrieves detailed information for a specific movie by ID.
@@ -125,11 +136,18 @@ public class MovieService extends BaseService {
         return fetchMovieList(path, 1, language, "trending");
     }
 
+    // ============================================================================
+    // MOVIE DISCOVERY
+    // ============================================================================
+
     /**
      * Discovers movies based on complex filtering criteria.
+     * Movies are enriched with genres and watch providers (when available).
+     * Missing watch providers for individual movies don't cause failures.
      *
      * @param filters the discovery filters (genres, year, providers, etc.)
-     * @return MovieList containing discovered movies
+     * @return MovieList containing discovered movies with enriched data
+     * @throws TmdbApiException if the discovery API call fails
      */
     public MovieList discoverMovies(MovieDiscoverFilters filters) {
         log.info("Discovering movies with filters: {}", filters);
@@ -145,8 +163,13 @@ public class MovieService extends BaseService {
                 return new MovieList(); // Return empty list instead of null
             }
 
+            // Enrich movies with genres
             movieGenreEnricher.enrichMoviesWithGenres(movieList);
-            log.debug("Successfully discovered {} movies", movieList.getResults().size());
+
+            // Enrich movies with watch providers (gracefully handles missing providers)
+            movieWatchProviderEnricher.enrichMoviesWithWatchProviders(movieList, filters.getRegion());
+
+            log.info("Successfully discovered {} movies", movieList.getResults().size());
             return movieList;
 
         } catch (RestClientException e) {
@@ -159,57 +182,46 @@ public class MovieService extends BaseService {
         }
     }
 
+    // ============================================================================
+    // WATCH PROVIDERS - DUAL APPROACH
+    // ============================================================================
+
+
     /**
      * Retrieves watch provider information for a specific movie.
+     * This is the public API method that enforces data availability.
+     * Throws an exception if no providers are found.
      *
      * @param movieId the TMDB movie ID
-     * @param region  the ISO 3166-1 country code (e.g., "US", "GB")
+     * @param region  the ISO 3166-1 country code (e.g., "US", "GB"), or null for all regions
      * @return Watching object containing provider information
-     * @throws TmdbApiException if movie not found, no providers available, or invalid region
+     * @throws TmdbApiException if movie not found, no providers available, invalid region, or API error
      */
-    @Cacheable(value = CacheConfig.MOVIE_WATCH_PROVIDER, key = "#movieId + '_' + #region")
+//    @Cacheable(value = CacheConfig.MOVIE_WATCH_PROVIDER, key = "#movieId + '_' + #region")
     public Watching getMovieWatchProviders(Long movieId, String region) {
-        log.info("Fetching watch providers for movie ID: {}, region: {}", movieId, region);
+        log.info("Getting watch providers for movie ID: {}, region: {}", movieId, region);
 
-        // Verify movie exists first
+        // Verify movie exists first (throws exception if not found)
         getMovieById(movieId);
 
-        try {
-            MovieWatchProviderList providerList = tmdbClient.get()
-                    .uri(uriBuilder -> uriBuilder
-                            .path(MOVIE_BASE_PATH + "/{id}/watch/providers")
-                            .build(movieId))
-                    .retrieve()
-                    .body(MovieWatchProviderList.class);
+        // Fetch providers
+        Watching providers = watchProvidersService.fetchMovieWatchProviders(movieId, region);
 
-            if (providerList == null || providerList.getProviders().isEmpty()) {
-                throw new TmdbApiException(
-                        ErrorCode.MOVIE_WATCH_PROVIDERS_NOT_FOUND,
-                        movieId.toString()
-                );
-            }
-
-            // Return all providers if no region specified
-            if (region == null || region.isBlank()) {
-                return providerList;
-            }
-
-            // Return region-specific providers
-            return watchProvidersService.getRegionSpecificProviders(providerList, region, movieId);
-
-        } catch (TmdbApiException e) {
-            throw e;
-        } catch (RestClientException e) {
-            log.error("Failed to fetch watch providers for movie ID: {}", movieId, e);
+        // Throw exception if no providers found (strict mode for explicit API calls)
+        if (providers == null) {
             throw new TmdbApiException(
-                    ErrorCode.API_COMMUNICATION_ERROR,
-                    "Failed to fetch watch providers for movie: " + movieId,
-                    e
+                    ErrorCode.MOVIE_WATCH_PROVIDERS_NOT_FOUND,
+                    movieId.toString()
             );
         }
+
+        return providers;
     }
 
-    // ==================== Private Helper Methods ====================
+
+    // ============================================================================
+    // PRIVATE HELPER METHODS
+    // ============================================================================
 
     /**
      * Generic method to fetch movie lists from various endpoints.
@@ -234,6 +246,8 @@ public class MovieService extends BaseService {
             }
 
             movieGenreEnricher.enrichMoviesWithGenres(movieList);
+            // Enrich movies with watch providers (gracefully handles missing providers)
+            movieWatchProviderEnricher.enrichMoviesWithWatchProviders(movieList, TmdbConstants.DEFAULT_REGION);
             log.debug("Successfully fetched {} {} movies", movieList.getResults().size(), listType);
             return movieList;
 
@@ -246,6 +260,5 @@ public class MovieService extends BaseService {
             );
         }
     }
-
 
 }

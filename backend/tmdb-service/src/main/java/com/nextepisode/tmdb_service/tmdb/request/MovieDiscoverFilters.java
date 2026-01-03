@@ -2,6 +2,7 @@ package com.nextepisode.tmdb_service.tmdb.request;
 
 
 import com.nextepisode.tmdb_service.enums.movie.MovieSortBy;
+import com.nextepisode.tmdb_service.tmdb.TmdbConstants;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,19 +21,19 @@ public class MovieDiscoverFilters {
     private MovieSortBy sortBy = MovieSortBy.POPULARITY_DESC;
 
     @Builder.Default
-    private Integer page = 1;
+    private Integer page = TmdbConstants.MIN_PAGE;
 
     @Builder.Default
-    private String language = "en-US";
+    private String language = TmdbConstants.DEFAULT_LANGUAGE;
 
     @Builder.Default
-    private Boolean includeAdult = false;
+    private Boolean includeAdult = TmdbConstants.DEFAULT_INCLUDE_ADULT;
 
     @Builder.Default
-    private Boolean includeVideos = false;
+    private Boolean includeVideos = TmdbConstants.DEFAULT_INCLUDE_VIDEO;
 
     @Builder.Default
-    private String region = "US";
+    private String region = TmdbConstants.DEFAULT_REGION;
 
     private Integer year;
     private Integer yearFrom;
@@ -42,6 +43,10 @@ public class MovieDiscoverFilters {
     private List<String> keywords;
     private String certification;
 
+    /***
+     * Convert the list of movie genres ids to a string joined by comma ','
+     * @return String
+     */
     public String getGenreIdsAsString() {
         if (genres == null ) {
             return "";
@@ -49,11 +54,16 @@ public class MovieDiscoverFilters {
         return genres.stream().map(String::valueOf).collect(Collectors.joining(","));
     }
 
+    /******
+     * Convert the list of movie watch provider ids to a string joined by comma ','
+     * @return String
+     */
     public String getWatchProvidersIdsAsString() {
         if (watchProviders == null ) {
             return "";
         }
-        return watchProviders.stream().map(String::valueOf).collect(Collectors.joining(","));
+        return watchProviders.stream().map(String::valueOf).collect(Collectors.joining("|"));
     }
+
 }
 
