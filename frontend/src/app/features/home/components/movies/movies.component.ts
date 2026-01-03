@@ -156,6 +156,7 @@ export class MoviesComponent implements OnInit {
    */
   onFiltersChange(filters: ContentFilters): void {
     this.currentFilters = filters;
+    this.items = [];
     this.loading = true;
     this.error = null;
 
