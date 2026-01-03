@@ -1,7 +1,5 @@
 import {Component, EventEmitter, inject, OnInit, Output} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {ContentFiltersComponent} from '../../components/content-filters/content-filters.component';
-import {ContentGridComponent} from '../../components/content-grid/content-grid.component';
 import {ContentFilters} from '../../../../core/models/tmdb/request/content-filters';
 import {TvSeriesService} from '../../../../core/services/tmdb/tv-series.service';
 import {AuthService} from '../../../../core/services/auth/auth-service';
@@ -14,7 +12,7 @@ import {AlertService} from '../../../../shared/components/alert/alert.service';
 @Component({
   selector: 'app-tvshows',
   standalone: true,
-  imports: [CommonModule, ContentFiltersComponent, ContentGridComponent],
+  imports: [CommonModule],
   templateUrl: './tvshows.component.html',
   styleUrl: './tvshows.component.scss'
 })

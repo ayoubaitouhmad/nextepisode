@@ -1,13 +1,13 @@
 <div class="space-y-6">
   <!-- Filters Section -->
-  <app-movie-filters
-    [streamingServices]="streamingServices"
-    [certifications]="certifications"
-    [genreList]="genres"
-    [contentType]="contentType"
-    (filtersChange)="onFiltersChange($event)"
-    (onCountryCodeChange)="onCountryChange($event)">
-  </app-movie-filters>
+  <!--  <app-movie-filters-->
+  <!--    [streamingServices]="streamingServices"-->
+  <!--    [certifications]="certifications"-->
+  <!--    [genreList]="genres"-->
+  <!--    [contentType]="contentType"-->
+  <!--    (filtersChange)="onFiltersChange($event)"-->
+  <!--    (onCountryCodeChange)="onCountryChange($event)">-->
+  <!--  </app-movie-filters>-->
 
   <!-- Loading State -->
   @if (loading) {
@@ -32,16 +32,16 @@
   }
 
   <!-- Content Grid -->
-  <app-content-grid
-    [items]="items"
-    [loading]="loading"
-    (shareItem)="onShareContent($event)"
-    (addToFavorites)="onAddToFavorites($event)"
-    (addToWatched)="onAddToWatched($event)"
-    (addToWatchlist)="onAddToWatchlist($event)"
+  <!--  <app-content-grid-->
+  <!--    [items]="items"-->
+  <!--    [loading]="loading"-->
+  <!--    (shareItem)="onShareContent($event)"-->
+  <!--    (addToFavorites)="onAddToFavorites($event)"-->
+  <!--    (addToWatched)="onAddToWatched($event)"-->
+  <!--    (addToWatchlist)="onAddToWatchlist($event)"-->
 
-  >
-  </app-content-grid>
+  <!--  >-->
+  <!--  </app-content-grid>-->
 
   <!-- Pagination -->
   @if (!loading && totalPages > 1) {
