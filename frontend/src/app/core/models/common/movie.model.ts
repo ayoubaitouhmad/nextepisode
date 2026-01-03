@@ -1,4 +1,4 @@
-import {Genre, StreamingService} from './shared-dtos';
+import {Genre, WatchProviderCountry} from './shared-dtos';
 
 // export interface Movie {
 //   id: number;
@@ -62,7 +62,7 @@ export interface XMovie {
   vote_count: number;
   vote_average: number;
   original_language: string;
-  streamingService?: StreamingService;
+  watch_providers?: WatchProviderCountry;
   video: boolean;
 }
 
