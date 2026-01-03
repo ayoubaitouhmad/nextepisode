@@ -26,8 +26,11 @@
 
     <div class="mt-auto flex items-center justify-between pt-4 text-sm">
       <div class="rounded-xl">
-        @if (content.streamingService && content.streamingService.logoUrl) {
-          <img [src]="content.streamingService.logoUrl" [alt]="content.streamingService.name" class="h-12 p-1"/>
+        @if (getFirstTwoFlatRate(content)) {
+          <div class="flex">
+            <img *ngFor="let provider of getFirstTwoFlatRate(content)" [src]="provider.logo_path"
+                 [alt]="provider.provider_name" class="h-12 p-1"/>
+          </div>
         }
       </div>
 

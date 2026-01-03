@@ -234,7 +234,7 @@ export class _TmdbService extends Service {
     }
 
     if (filters.watchProviders && filters.watchProviders.length > 0) {
-      params = params.set('watchProviders', filters.watchProviders.join('|'));
+      params = params.set('watchProviders', filters.watchProviders.join(','));
     }
 
     // Add genre filters

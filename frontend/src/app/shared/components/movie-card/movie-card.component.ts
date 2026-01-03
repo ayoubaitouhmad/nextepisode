@@ -3,6 +3,7 @@ import {CommonModule} from '@angular/common';
 import {XMovie} from '../../../core/models/common/movie.model';
 import {AuthService} from '../../../core/services/auth/auth-service';
 import {getYearFromDate} from '../../utils';
+import {getFirstTwoFlatRate} from '../../utils/movie.utils';
 
 
 @Component({
@@ -13,6 +14,10 @@ import {getYearFromDate} from '../../utils';
   styleUrl: './movie-card.component.scss'
 })
 export class MovieCardComponent implements OnInit {
+
+  protected readonly getYearFromDate = getYearFromDate;
+  protected readonly getFirstTwoFlatRate = getFirstTwoFlatRate;
+
 
   @Input({required: true}) content!: XMovie;
   @Output() share = new EventEmitter<XMovie>();
@@ -178,10 +183,5 @@ export class MovieCardComponent implements OnInit {
     }
   }
 
-  counter(n: number): number[] {
-    return Array(n).fill(0);
-  }
 
-
-  protected readonly getYearFromDate = getYearFromDate;
 }

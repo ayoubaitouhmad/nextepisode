@@ -79,7 +79,12 @@ export interface WatchProvider {
 export interface WatchProviderList {
   total: number;
   results: WatchProvider[]
+}
 
+export interface WatchProviderCountry {
+  buy: WatchProvider[];
+  rent: WatchProvider[];
+  flatrate: WatchProvider[]
 }
 
 export interface Person {
