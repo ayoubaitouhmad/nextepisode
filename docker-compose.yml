@@ -16,6 +16,11 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
     networks:
       - app-network
 
@@ -39,6 +44,11 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
     networks:
       - app-network
 
@@ -87,6 +97,11 @@ services:
         condition: service_healthy
       postgres:
         condition: service_healthy
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+        max-file: "5"
     networks:
       - app-network
 
@@ -135,6 +150,11 @@ services:
         condition: service_healthy
       postgres:
         condition: service_healthy
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+        max-file: "5"
     networks:
       - app-network
 
@@ -168,6 +188,11 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+        max-file: "5"
     networks:
       - app-network
 
@@ -198,6 +223,11 @@ services:
       - auth-service
       - tmdb-service
       - user-service
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+        max-file: "5"
     networks:
       - app-network
 
@@ -216,6 +246,11 @@ services:
     depends_on:
       - api-gateway
     restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "15m"
+        max-file: "3"
     networks:
       - app-network
     stdin_open: true
@@ -229,6 +264,11 @@ services:
       - "16686:16686"
       - "4317:4317"
       - "4318:4318"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
     networks:
       - app-network
 
@@ -244,6 +284,11 @@ services:
       retries: 5
     depends_on:
       - jaeger
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
     networks:
       - app-network
 
