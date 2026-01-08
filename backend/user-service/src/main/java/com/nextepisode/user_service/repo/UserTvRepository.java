@@ -10,9 +10,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface UserTvRepository extends JpaRepository<UserTv, UserTvId> {
-
 
     @Query("SELECT NEW com.nextepisode.user_service.dto.TvResponse(t , ut.createdAt) " +
             "FROM Tv t JOIN UserTv ut ON ut.tv.id = t.id " +
@@ -35,9 +36,5 @@ public interface UserTvRepository extends JpaRepository<UserTv, UserTvId> {
             "SUM(CASE WHEN ut.watched = true THEN 1 ELSE 0 END) AS watchedCount " +
             "FROM UserTv ut WHERE ut.user.username = :username")
     UserMovieTvStats getUserMovieStats(@Param("username") String username);
-
-
-
-
 
 }

@@ -1,6 +1,7 @@
 package com.nextepisode.user_service.repo;
 
 import com.nextepisode.user_service.dto.MovieResponse;
+import com.nextepisode.user_service.dto.MovieStatus;
 import com.nextepisode.user_service.dto.UserMovieTvStats;
 import com.nextepisode.user_service.entity.user.UserMovie;
 import com.nextepisode.user_service.entity.user.UserMovieId;
@@ -9,7 +10,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+import java.util.Optional;
 
+@Repository
 public interface UserMovieRepository extends JpaRepository<UserMovie, UserMovieId> {
 
     @Query("SELECT NEW com.nextepisode.user_service.dto.MovieResponse(m , um.createdAt) " +
@@ -33,5 +37,14 @@ public interface UserMovieRepository extends JpaRepository<UserMovie, UserMovieI
             "SUM(CASE WHEN um.watched = true THEN 1 ELSE 0 END) AS watchedCount " +
             "FROM UserMovie um WHERE um.user.username = :username")
     UserMovieTvStats getUserMovieStats(@Param("username") String username);
+
+    @Query("SELECT new com.nextepisode.user_service.dto.MovieStatus(um.isFavorite, um.watched, um.inWatchlist) " +
+            "FROM UserMovie um WHERE um.movie.id = :movieId AND um.user.username = :username")
+    Optional<MovieStatus> findMovieStatus(@Param("movieId") Long movieId,
+                                          @Param("username") String username);
+
+    Optional<UserMovie> findByMovieIdAndUserUsername(Long movieId, String userUsername);
+
+    boolean existsByUserUsernameAndMovieId(String userUsername, Long movieId);
 
 }

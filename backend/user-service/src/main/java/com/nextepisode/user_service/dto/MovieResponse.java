@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -30,7 +31,7 @@ public class MovieResponse {
     private Instant watchedAt;
 
     @JsonProperty("release_date")
-    private Instant releaseDate;
+    private LocalDate releaseDate;
 
     @JsonProperty("poster_path")
     private String posterPath;

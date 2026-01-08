@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.Instant;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,8 +25,18 @@ public class Movie {
     private String title;
 
     private String posterPath;
+    private LocalDate releaseDate;
+    private Boolean adult;
+    private String originalTitle;
+    @Column(length = 1000)
+    private String overview;
+    private String originalLanguage;
+    private String backdropPath;
+    private String homepage;
+    private Double popularity;
+    private String status;
+    private Integer voteCount;
 
-    private Instant releaseDate;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
@@ -36,15 +46,6 @@ public class Movie {
     )
     private List<MovieGenre> genres = new ArrayList<>();
 
-    public void addGenre(MovieGenre genre) {
-        this.genres.add(genre);
-        genre.getMovies().add(this);
-    }
-
-    public void removeGenre(MovieGenre genre) {
-        this.genres.remove(genre);
-        genre.getMovies().remove(this);
-    }
 
     @Override
     public boolean equals(Object o) {

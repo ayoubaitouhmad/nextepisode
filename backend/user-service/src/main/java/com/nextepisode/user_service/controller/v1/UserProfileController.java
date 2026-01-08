@@ -1,4 +1,4 @@
-package com.nextepisode.user_service.controller;
+package com.nextepisode.user_service.controller.v1;
 
 import com.nextepisode.user_service.config.ApiPaths;
 import com.nextepisode.user_service.dto.UserUpdateProfileRequest;
@@ -14,7 +14,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(ApiPaths.BASE + "/me")
+@RequestMapping(ApiPaths.API_V1 + "/me")
 @Validated
 public class UserProfileController {
 
