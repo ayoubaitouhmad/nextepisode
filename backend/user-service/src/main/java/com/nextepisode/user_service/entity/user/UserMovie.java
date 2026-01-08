@@ -77,4 +77,32 @@ public class UserMovie {
     public int hashCode() {
         return getClass().hashCode();
     }
+
+    /***
+     * Check if this instance has a movie instance
+     * @return
+     */
+    public Boolean hasMovie(){
+        return getMovie() != null;
+    }
+
+    /***
+     * Check if this instance has a user instance
+     * @return
+     */
+    public Boolean hasUser(){
+        return getUser() != null;
+    }
+
+    /***
+     * if this intance doesn't have a movie and a user
+     * the domain will consider it doesn't exist
+     * @return
+     */
+    public Boolean isNull(){
+        return !hasUser() && hasMovie();
+    }
+
+
+
 }

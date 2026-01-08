@@ -1,5 +1,7 @@
-package com.nextepisode.user_service.exception;
+package com.nextepisode.user_service.exception.exceptions;
 
+import com.nextepisode.user_service.exception.codes.BusinessValidationCodes;
+import com.nextepisode.user_service.exception.codes.Code;
 import lombok.Getter;
 
 /**
@@ -30,7 +32,7 @@ public class BusinessValidationException extends ApplicationException {
      * @param message Human-readable description of the rule violation
      */
     public BusinessValidationException(String message) {
-        super(ErrorCode.BUSINESS_RULE_VIOLATION, message);
+        super(BusinessValidationCodes.BUSINESS_RULE_VIOLATION, message);
         this.detail = null;
     }
 
@@ -42,7 +44,7 @@ public class BusinessValidationException extends ApplicationException {
      * @param detail  More specific information or suggestions
      */
     public BusinessValidationException(String message, String detail) {
-        super(ErrorCode.BUSINESS_RULE_VIOLATION, message);
+        super(BusinessValidationCodes.BUSINESS_RULE_VIOLATION, message);
         this.detail = detail;
     }
 
@@ -53,7 +55,7 @@ public class BusinessValidationException extends ApplicationException {
      * @param errorCode   The specific error code for this rule
      * @param messageArgs Arguments to format the error code's message template
      */
-    public BusinessValidationException(ErrorCode errorCode, Object... messageArgs) {
+    public BusinessValidationException(Code errorCode, Object... messageArgs) {
         super(errorCode, messageArgs);
         this.detail = null;
     }
@@ -65,7 +67,7 @@ public class BusinessValidationException extends ApplicationException {
      * @param detail      Additional context
      * @param messageArgs Arguments for the message template
      */
-    public BusinessValidationException(ErrorCode errorCode, String detail, Object... messageArgs) {
+    public BusinessValidationException(Code errorCode, String detail, Object... messageArgs) {
         super(errorCode, messageArgs);
         this.detail = detail;
     }
@@ -77,7 +79,7 @@ public class BusinessValidationException extends ApplicationException {
      * @param cause   The underlying exception
      */
     public BusinessValidationException(String message, Throwable cause) {
-        super(ErrorCode.BUSINESS_RULE_VIOLATION, cause, message);
+        super(BusinessValidationCodes.BUSINESS_RULE_VIOLATION, cause, message);
         this.detail = null;
     }
 }

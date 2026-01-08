@@ -1,4 +1,7 @@
-package com.nextepisode.user_service.exception;
+package com.nextepisode.user_service.exception.exceptions;
+
+import com.nextepisode.user_service.exception.codes.Code;
+import com.nextepisode.user_service.exception.codes.ResourceCodes;
 
 /**
  * Exception thrown when a requested resource cannot be found.
@@ -23,7 +26,7 @@ public class ResourceNotFoundException extends ApplicationException {
      * @param fieldValue   The value that was searched for
      */
     public ResourceNotFoundException(String resourceName, String fieldName, Object fieldValue) {
-        super(ErrorCode.RESOURCE_NOT_FOUND, resourceName, fieldName, fieldValue);
+        super(ResourceCodes.RESOURCE_NOT_FOUND, resourceName, fieldName, fieldValue);
     }
 
     /**
@@ -33,7 +36,7 @@ public class ResourceNotFoundException extends ApplicationException {
      * @param errorCode   Specific error code for this resource type
      * @param messageArgs Arguments to format the error message
      */
-    public ResourceNotFoundException(ErrorCode errorCode, Object... messageArgs) {
+    public ResourceNotFoundException(Code errorCode, Object... messageArgs) {
         super(errorCode, messageArgs);
     }
 
@@ -47,6 +50,6 @@ public class ResourceNotFoundException extends ApplicationException {
      * @param cause        The underlying exception
      */
     public ResourceNotFoundException(String resourceName, String fieldName, Object fieldValue, Throwable cause) {
-        super(ErrorCode.RESOURCE_NOT_FOUND, cause, resourceName, fieldName, fieldValue);
+        super(ResourceCodes.RESOURCE_NOT_FOUND, cause, resourceName, fieldName, fieldValue);
     }
 }

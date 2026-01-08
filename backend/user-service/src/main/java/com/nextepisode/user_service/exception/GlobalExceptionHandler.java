@@ -1,5 +1,9 @@
 package com.nextepisode.user_service.exception;
 
+import com.nextepisode.user_service.exception.codes.*;
+import com.nextepisode.user_service.exception.exceptions.ApplicationException;
+import com.nextepisode.user_service.exception.exceptions.BusinessValidationException;
+import com.nextepisode.user_service.exception.exceptions.ValidationException;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import jakarta.validation.ConstraintViolationException;
@@ -168,7 +172,7 @@ public class GlobalExceptionHandler {
                 .timestamp(Instant.now())
                 .status(HttpStatus.BAD_REQUEST.value())
                 .type("VALIDATION_ERROR")
-                .code(ErrorCode.VALIDATION_FAILED.getCode())
+                .code(ValidationCodes.VALIDATION_FAILED.getCode())
                 .message(message)
                 .detail(detail)
                 .path(path)
@@ -214,7 +218,7 @@ public class GlobalExceptionHandler {
                 .timestamp(Instant.now())
                 .status(HttpStatus.BAD_REQUEST.value())
                 .type("VALIDATION_ERROR")
-                .code(ErrorCode.VALIDATION_FAILED.getCode())
+                .code(ValidationCodes.VALIDATION_FAILED.getCode())
                 .message("Request validation failed")
                 .fieldErrors(fieldErrors)
                 .path(path)
@@ -256,7 +260,7 @@ public class GlobalExceptionHandler {
                 .timestamp(Instant.now())
                 .status(HttpStatus.BAD_REQUEST.value())
                 .type("VALIDATION_ERROR")
-                .code(ErrorCode.VALIDATION_FAILED.getCode())
+                .code(ValidationCodes.VALIDATION_FAILED.getCode())
                 .message("Constraint validation failed")
                 .fieldErrors(fieldErrors)
                 .path(path)
@@ -290,7 +294,7 @@ public class GlobalExceptionHandler {
                 .timestamp(Instant.now())
                 .status(HttpStatus.UNAUTHORIZED.value())
                 .type("AUTHENTICATION_ERROR")
-                .code(ErrorCode.TOKEN_EXPIRED.getCode())
+                .code(AuthenticationCodes.TOKEN_EXPIRED.getCode())
                 .message("Your session has expired. Please log in again.")
                 .path(path)
                 .traceId(traceId)
@@ -319,7 +323,7 @@ public class GlobalExceptionHandler {
                 .timestamp(Instant.now())
                 .status(HttpStatus.UNAUTHORIZED.value())
                 .type("AUTHENTICATION_ERROR")
-                .code(ErrorCode.TOKEN_INVALID.getCode())
+                .code(AuthenticationCodes.TOKEN_INVALID.getCode())
                 .message("Invalid authentication token")
                 .path(path)
                 .traceId(traceId)
@@ -349,7 +353,7 @@ public class GlobalExceptionHandler {
         // Attempt to provide a more helpful message based on the constraint
         String message = "Data integrity constraint violated";
         String detail = null;
-        String code = ErrorCode.DATA_INTEGRITY_VIOLATION.getCode();
+        String code = DatabaseCodes.DATA_INTEGRITY_VIOLATION.getCode();
 
         if (ex.getMessage() != null) {
             String rootMessage = ex.getMessage().toLowerCase();
@@ -357,15 +361,15 @@ public class GlobalExceptionHandler {
             if (rootMessage.contains("email")) {
                 if (rootMessage.contains("duplicate") || rootMessage.contains("unique")) {
                     message = "Email already exists";
-                    code = ErrorCode.EMAIL_TAKEN.getCode();
+                    code = ResourceCodes.EMAIL_TAKEN.getCode();
                 } else if (rootMessage.contains("null")) {
                     message = "Email is required";
-                    code = ErrorCode.FIELD_REQUIRED.getCode();
+                    code = ValidationCodes.FIELD_REQUIRED.getCode();
                 }
             } else if (rootMessage.contains("username")) {
                 if (rootMessage.contains("duplicate") || rootMessage.contains("unique")) {
                     message = "Username already taken";
-                    code = ErrorCode.USERNAME_TAKEN.getCode();
+                    code = ResourceCodes.USERNAME_TAKEN.getCode();
                 }
             }
 
@@ -414,7 +418,7 @@ public class GlobalExceptionHandler {
                 .timestamp(Instant.now())
                 .status(HttpStatus.BAD_REQUEST.value())
                 .type("CLIENT_ERROR")
-                .code(ErrorCode.INVALID_INPUT.getCode())
+                .code(ValidationCodes.INVALID_INPUT.getCode())
                 .message(ex.getMessage())
                 .path(path)
                 .traceId(traceId)
@@ -446,7 +450,7 @@ public class GlobalExceptionHandler {
                 .timestamp(Instant.now())
                 .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
                 .type("INTERNAL_ERROR")
-                .code(ErrorCode.INTERNAL_ERROR.getCode())
+                .code(SystemCodes.INTERNAL_ERROR.getCode())
                 .message("An unexpected error occurred. Please try again later.")
                 .path(path)
                 .traceId(traceId)
