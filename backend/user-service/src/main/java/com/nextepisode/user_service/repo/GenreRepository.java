@@ -26,4 +26,6 @@ public interface GenreRepository extends JpaRepository<MovieGenre, Long> {
 
     boolean existsByName(String name);
 
+    @Query("SELECT mg FROM MovieGenre mg WHERE LOWER(mg.name) IN :names")
+    List<MovieGenre> findByNamesIgnoreCase(@Param("names") List<String> names);
 }
