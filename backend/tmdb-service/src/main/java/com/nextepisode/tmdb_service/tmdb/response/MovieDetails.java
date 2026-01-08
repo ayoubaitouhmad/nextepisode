@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.util.List;
+import java.util.Objects;
 
 @Data
 @SuperBuilder
@@ -55,4 +56,18 @@ public class MovieDetails extends BaseMovie {
 
     @JsonProperty("tagline")
     private String tagline;
+
+
+    /***
+     * Get list of lowercase genres names
+     * @return
+     */
+    public List<String> getLowercaseGenreNames() {
+        return genres
+                .stream()
+                .map(Genre::getName)
+                .filter(Objects::nonNull)
+                .map(String::toLowerCase)
+                .toList();
+    }
 }
