@@ -48,7 +48,7 @@ export function getUserMovieGenreAsString(genres: Genre[]) {
 }
 
 export interface XMovie {
-  id: string;
+  id: number;
   title: string;
   adult: boolean;
   rating: number;
@@ -98,6 +98,27 @@ export interface MovieList {
   total_results: number;
 }
 
+export interface MovieStatus {
+  isFavorite: boolean,
+  watched: boolean,
+  inWatchlist: boolean
+}
 
+export interface MovieStatusRequest {
+  movieId: number;
+  category: MovieStatusCategory.favorite | MovieStatusCategory.watched | MovieStatusCategory.watchlist;
+  action: MovieStatusAction.add | MovieStatusAction.remove;
+}
+
+export enum MovieStatusCategory {
+  favorite = 'FAVORITE',
+  watched = 'WATCHED',
+  watchlist = 'WATCHLIST',
+}
+
+export enum MovieStatusAction {
+  add = 'ADD',
+  remove = 'REMOVE'
+}
 
 
