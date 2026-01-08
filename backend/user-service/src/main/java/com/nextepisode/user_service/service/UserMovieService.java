@@ -10,9 +10,8 @@ import com.nextepisode.user_service.entity.user.User;
 import com.nextepisode.user_service.entity.user.UserMovie;
 import com.nextepisode.user_service.events.movie.MovieEnrichedStatusEvent;
 import com.nextepisode.user_service.events.movie.UserMovieEventPublisher;
-import com.nextepisode.user_service.exception.BusinessValidationException;
-import com.nextepisode.user_service.exception.ErrorCode;
-import com.nextepisode.user_service.exception.ValidationException;
+import com.nextepisode.user_service.exception.codes.BusinessValidationCodes;
+import com.nextepisode.user_service.exception.exceptions.BusinessValidationException;
 import com.nextepisode.user_service.repo.UserMovieRepository;
 import jakarta.persistence.PersistenceException;
 import lombok.RequiredArgsConstructor;
@@ -43,6 +42,16 @@ public class UserMovieService {
     @Transactional
     public UserMovie create(UserMovie userMovie) {
         log.debug("Start saving user movie record record:{}", userMovie);
+
+        // chek
+        if (!userMovie.hasMovie()) {
+            throw new BusinessValidationException(BusinessValidationCodes.MOVIE_REQUIRED);
+        }
+
+        if (!userMovie.hasUser()) {
+            throw new BusinessValidationException(BusinessValidationCodes.USER_REQUIRED);
+        }
+
         try {
             UserMovie savedUserMovie = userMovieRepository.save(userMovie);
             log.debug("Movie with id:{} saved successfully ", userMovie.getId());
@@ -195,7 +204,7 @@ public class UserMovieService {
      */
     @Transactional
     protected MovieStatus createNewUserMovie(MovieStatusRequest movieStatusRequest, String username) {
-        log.debug("Start creating new user movie record for user:{}, movie:{} , action:{}, category:{}", username, movieStatusRequest.getMovieId() ,movieStatusRequest.getAction() ,movieStatusRequest.getCategory() );
+        log.debug("Start creating new user movie record for user:{}, movie:{} , action:{}, category:{}", username, movieStatusRequest.getMovieId(), movieStatusRequest.getAction(), movieStatusRequest.getCategory());
 
         User user = userService.getUserByUsername(username);
         Optional<Movie> movie = movieService.findById(movieStatusRequest.getMovieId());
