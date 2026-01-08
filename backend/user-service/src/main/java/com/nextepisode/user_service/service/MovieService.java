@@ -3,8 +3,8 @@ package com.nextepisode.user_service.service;
 import com.nextepisode.user_service.entity.movie.Movie;
 import com.nextepisode.user_service.entity.movie.MovieGenre;
 import com.nextepisode.user_service.events.movie.MovieEnrichedStatusEvent;
-import com.nextepisode.user_service.exception.ErrorCode;
-import com.nextepisode.user_service.exception.ResourceNotFoundException;
+import com.nextepisode.user_service.exception.exceptions.ResourceNotFoundException;
+import com.nextepisode.user_service.exception.codes.ResourceCodes;
 import com.nextepisode.user_service.repo.GenreRepository;
 import com.nextepisode.user_service.repo.MovieRepository;
 import jakarta.persistence.PersistenceException;
@@ -41,7 +41,7 @@ public class MovieService {
     public Movie getMovieBId(Long id) {
         log.debug("Getting user by username: {}", id);
         return movieRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(ErrorCode.RESOURCE_NOT_FOUND, "movie", id));
+                .orElseThrow(() -> new ResourceNotFoundException(ResourceCodes.RESOURCE_NOT_FOUND, "movie", id));
     }
 
     @Transactional

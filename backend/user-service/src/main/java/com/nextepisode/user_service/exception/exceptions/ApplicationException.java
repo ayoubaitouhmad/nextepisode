@@ -1,5 +1,6 @@
-package com.nextepisode.user_service.exception;
+package com.nextepisode.user_service.exception.exceptions;
 
+import com.nextepisode.user_service.exception.codes.Code;
 import lombok.Getter;
 
 /**
@@ -18,7 +19,7 @@ import lombok.Getter;
 @Getter
 public abstract class ApplicationException extends RuntimeException {
 
-    private final ErrorCode errorCode;
+    private final Code errorCode;
     private final Object[] messageArgs;
 
     /**
@@ -27,7 +28,7 @@ public abstract class ApplicationException extends RuntimeException {
      * @param errorCode   The error code defining this exception's type
      * @param messageArgs Arguments to format the error message template
      */
-    protected ApplicationException(ErrorCode errorCode, Object... messageArgs) {
+    protected ApplicationException(Code errorCode, Object... messageArgs) {
         super(errorCode.getMessage(messageArgs));
         this.errorCode = errorCode;
         this.messageArgs = messageArgs != null ? messageArgs : new Object[0];
@@ -41,7 +42,7 @@ public abstract class ApplicationException extends RuntimeException {
      * @param cause       The underlying exception that caused this one
      * @param messageArgs Arguments to format the error message template
      */
-    protected ApplicationException(ErrorCode errorCode, Throwable cause, Object... messageArgs) {
+    protected ApplicationException(Code errorCode, Throwable cause, Object... messageArgs) {
         super(errorCode.getMessage(messageArgs), cause);
         this.errorCode = errorCode;
         this.messageArgs = messageArgs != null ? messageArgs : new Object[0];

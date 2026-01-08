@@ -1,5 +1,6 @@
-package com.nextepisode.user_service.exception;
+package com.nextepisode.user_service.exception.exceptions;
 
+import com.nextepisode.user_service.exception.codes.Code;
 import lombok.Getter;
 
 import java.util.Collections;
@@ -18,14 +19,14 @@ import java.util.Map;
  *
  * Example usage:
  *   // Single field error
- *   throw new ValidationException(ErrorCode.INVALID_EMAIL, "email", "Must be a valid email");
+ *   throw new ValidationException(Code.INVALID_EMAIL, "email", "Must be a valid email");
  *
  *   // Multiple field errors
  *   Map<String, String> errors = Map.of(
  *       "email", "Invalid format",
  *       "password", "Too weak"
  *   );
- *   throw new ValidationException(ErrorCode.VALIDATION_FAILED, errors);
+ *   throw new ValidationException(Code.VALIDATION_FAILED, errors);
  */
 @Getter
 public class ValidationException extends ApplicationException {
@@ -40,7 +41,7 @@ public class ValidationException extends ApplicationException {
      * @param errorCode   The validation error code
      * @param messageArgs Arguments to format the error message
      */
-    public ValidationException(ErrorCode errorCode, Object... messageArgs) {
+    public ValidationException(Code errorCode, Object... messageArgs) {
         super(errorCode, messageArgs);
         this.fieldErrors = Collections.emptyMap();
     }
@@ -53,7 +54,7 @@ public class ValidationException extends ApplicationException {
      * @param fieldName  The field that failed validation
      * @param fieldError The error message for that field
      */
-    public ValidationException(ErrorCode errorCode, String fieldName, String fieldError) {
+    public ValidationException(Code errorCode, String fieldName, String fieldError) {
         super(errorCode);
         this.fieldErrors = Map.of(fieldName, fieldError);
     }
@@ -65,7 +66,7 @@ public class ValidationException extends ApplicationException {
      * @param errorCode   The validation error code
      * @param fieldErrors Map of field names to their error messages
      */
-    public ValidationException(ErrorCode errorCode, Map<String, String> fieldErrors) {
+    public ValidationException(Code errorCode, Map<String, String> fieldErrors) {
         super(errorCode);
         // Create defensive copy to ensure immutability
         this.fieldErrors = fieldErrors != null
@@ -80,7 +81,7 @@ public class ValidationException extends ApplicationException {
      * @param cause       The underlying exception
      * @param messageArgs Arguments to format the error message
      */
-    public ValidationException(ErrorCode errorCode, Throwable cause, Object... messageArgs) {
+    public ValidationException(Code errorCode, Throwable cause, Object... messageArgs) {
         super(errorCode, cause, messageArgs);
         this.fieldErrors = Collections.emptyMap();
     }
