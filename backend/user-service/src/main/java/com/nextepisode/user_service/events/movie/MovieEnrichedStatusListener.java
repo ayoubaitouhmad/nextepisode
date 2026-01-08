@@ -40,7 +40,7 @@ public class MovieEnrichedStatusListener {
             User user = userService.getUserByUsername(event.getUserId());
 
             // create user movie record
-            userMovieService.create(movie, user, event);
+            userMovieService.createFromMovieEnrichedEvent(movie, user, event);
 
             log.info("Favorite enriched successfully for userId={}, movieId={}", event.getUserId(), event.getMovieId());
 
