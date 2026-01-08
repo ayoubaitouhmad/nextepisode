@@ -4,11 +4,13 @@ import com.nextepisode.user_service.entity.movie.MovieGenre;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+@Repository
 public interface GenreRepository extends JpaRepository<MovieGenre, Long> {
 
     Optional<MovieGenre> findByName(String name);
@@ -23,4 +25,5 @@ public interface GenreRepository extends JpaRepository<MovieGenre, Long> {
     List<MovieGenre> findByMovieId(@Param("movieId") Long movieId);
 
     boolean existsByName(String name);
+
 }
