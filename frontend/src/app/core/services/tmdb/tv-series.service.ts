@@ -83,7 +83,7 @@ export class TvSeriesService extends TMDBService {
   private transformSeries(tmdbSeries: TMDBTvSeries): TvSeries {
 
     const series: TvSeries = {
-      id: tmdbSeries.id.toString(),
+      id: tmdbSeries.id,
       title: tmdbSeries.name,  // Using name as title for consistency
       rating: Math.round(tmdbSeries.vote_average * 10) / 10,
       year: tmdbSeries.first_air_date ? new Date(tmdbSeries.first_air_date).getFullYear() : 0,
