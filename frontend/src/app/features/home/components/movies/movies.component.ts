@@ -4,11 +4,11 @@ import {CommonModule} from '@angular/common';
 import {UserMovieService} from '../../../../core/services/user/movie/user-movie.service';
 import {AuthService} from '../../../../core/services/auth/auth-service';
 import {ContentFilters} from '../../../../core/models/tmdb/request/content-filters';
-import {XMovie} from '../../../../core/models/common/movie.model';
+import {MovieStatusRequest, XMovie} from '../../../../core/models/common/movie.model';
 import {ContentFiltersComponent} from '../content-filters/content-filters.component';
 import {Certification, GenreList, WatchProvider} from '../../../../core/models/common/shared-dtos';
 import {_TmdbService} from '../../../../core/services/tmdb/_-tmdb.service';
-import {MovieGridComponent} from '../../../../shared/components/movie-grid/movie-grid.component';
+import {MovieCardComponent} from '../../../../shared/components/movie-card/movie-card.component';
 
 /**
  * Component responsible for displaying a grid of movies with filtering capabilities.
@@ -18,7 +18,7 @@ import {MovieGridComponent} from '../../../../shared/components/movie-grid/movie
 @Component({
   selector: 'app-movies',
   standalone: true,
-  imports: [CommonModule, ContentFiltersComponent, MovieGridComponent],
+  imports: [CommonModule, ContentFiltersComponent, MovieCardComponent],
   templateUrl: './movies.component.html',
   styleUrl: './movies.component.scss'
 })
@@ -227,19 +227,10 @@ export class MoviesComponent implements OnInit {
   /**
    * Adds a movie to the user's favorites list.
    * Requires authentication.
-   * @param content The movie content to add.
+   * @param moviestatusrequest The movie content to add.
    */
-  onAddToFavorites(content: any): void {
-    if (!this.authService.isAuthenticated()) {
-      console.log('User not authenticated');
-      return;
-    }
-
-    const tmdbId = parseInt(content.id);
-    this.userMovieService.addToFavorites(tmdbId).subscribe({
-      next: () => console.log('Added to favorites successfully'),
-      error: (error) => console.error('Failed to add to favorites:', error)
-    });
+  onAddToFavorites(moviestatusrequest: MovieStatusRequest): void {
+    console.log(`[MoviesComponent] movie with id:${moviestatusrequest.movieId} has a ${moviestatusrequest.action} to favorite movies`);
   }
 
   /**
@@ -287,4 +278,5 @@ export class MoviesComponent implements OnInit {
     this.loadCertification(countryCode);
     this.loadWatchProviders(countryCode);
   }
+
 }
