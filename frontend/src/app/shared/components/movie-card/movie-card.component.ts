@@ -1,9 +1,16 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {XMovie} from '../../../core/models/common/movie.model';
+import {
+  MovieStatus,
+  MovieStatusAction,
+  MovieStatusCategory,
+  MovieStatusRequest,
+  XMovie
+} from '../../../core/models/common/movie.model';
 import {AuthService} from '../../../core/services/auth/auth-service';
 import {getYearFromDate} from '../../utils';
 import {getFirstTwoFlatRate} from '../../utils/movie.utils';
+import {UserMovieService} from '../../../core/services/user/movie/user-movie.service';
 
 
 @Component({
@@ -15,20 +22,22 @@ import {getFirstTwoFlatRate} from '../../utils/movie.utils';
 })
 export class MovieCardComponent implements OnInit {
 
+  private userMovieService: UserMovieService = inject(UserMovieService);
+
   protected readonly getYearFromDate = getYearFromDate;
   protected readonly getFirstTwoFlatRate = getFirstTwoFlatRate;
 
-
   @Input({required: true}) content!: XMovie;
   @Output() share = new EventEmitter<XMovie>();
-  @Output() addToFavorites = new EventEmitter<XMovie>();
-  @Output() addToWatched = new EventEmitter<XMovie>();
-  @Output() addToWatchlist = new EventEmitter<XMovie>();
+  @Output() addToFavorites = new EventEmitter<MovieStatusRequest>();
+  @Output() addToWatched = new EventEmitter<MovieStatusRequest>();
+  @Output() addToWatchlist = new EventEmitter<MovieStatusRequest>();
 
-  // State properties for visual feedback
-  isInFavorites = false;
-  isInWatched = false;
-  isInWatchlist = false;
+  movieStatus: MovieStatus = {
+    inWatchlist: false,
+    isFavorite: false,
+    watched: false,
+  }
 
   // Debouncing properties to prevent rapid clicks
   private isProcessingFavorites = false;
@@ -39,6 +48,29 @@ export class MovieCardComponent implements OnInit {
   constructor(public auth: AuthService) {
   }
 
+
+  ngOnInit() {
+    this.checkUserLists();
+  }
+
+  /**
+   * Check movie listing state depend on the logged user
+   * @private
+   */
+  private checkUserLists(): void {
+    console.log("[MovieCardComponent] Check user movie status")
+
+    if (this.content && 'id' in this.content) {
+      this.userMovieService.checkMovieStatus(this.content.id).subscribe({
+        next: (status: MovieStatus) => {
+          this.movieStatus = status;
+        },
+        error: (error) => {
+          console.error('Error checking user movie status:', error);
+        }
+      });
+    }
+  }
 
   onShare(): void {
     this.share.emit(this.content as XMovie);
@@ -52,32 +84,42 @@ export class MovieCardComponent implements OnInit {
 
     this.isProcessingFavorites = true;
 
-    if (this.isInFavorites) {
-      // this.userMovieService.removeFromFavorites(parseInt(this.content.id)).subscribe({
-      //   next: () => {
-      //     this.isInFavorites = false;
-      //     this.addClickAnimation('favorite');
-      //     this.isProcessingFavorites = false;
-      //   },
-      //   error: (error) => {
-      //     console.error('Error removing from favorites:', error);
-      //     this.isProcessingFavorites = false;
-      //   }
-      // });
+    if (this.movieStatus.isFavorite) {
+      this.userMovieService.removeFromFavorites(this.content.id).subscribe({
+        next: () => {
+          this.movieStatus.isFavorite = false;
+          this.addClickAnimation('favorite');
+          this.isProcessingFavorites = false;
+          this.addToFavorites.emit({
+            movieId: this.content.id,
+            category: MovieStatusCategory.favorite,
+            action: MovieStatusAction.remove
+          });
+
+        },
+        error: (error) => {
+          console.error('Error removing from favorites:', error);
+          this.isProcessingFavorites = false;
+        }
+      });
     } else {
-      // this.userMovieService.addToFavorites(parseInt(this.content.id)).subscribe({
-      //   next: () => {
-      //     this.isInFavorites = true;
-      //     this.addClickAnimation('favorite');
-      //     this.isProcessingFavorites = false;
-      //   },
-      //   error: (error) => {
-      //     console.error('Error adding to favorites:', error);
-      //     this.isProcessingFavorites = false;
-      //   }
-      // });
+      this.userMovieService.addToFavorites(this.content.id).subscribe({
+        next: () => {
+          this.movieStatus.isFavorite = true;
+          this.addClickAnimation('favorite');
+          this.isProcessingFavorites = false;
+          this.addToFavorites.emit({
+            movieId: this.content.id,
+            category: MovieStatusCategory.favorite,
+            action: MovieStatusAction.add
+          });
+        },
+        error: (error) => {
+          console.error('Error adding to favorites:', error);
+          this.isProcessingFavorites = false;
+        }
+      });
     }
-    this.addToFavorites.emit(this.content as XMovie);
   }
 
   onAddToWatched(): void {
@@ -88,7 +130,7 @@ export class MovieCardComponent implements OnInit {
 
     this.isProcessingWatched = true;
 
-    if (this.isInWatched) {
+    if (this.movieStatus.inWatchlist) {
       // this.userMovieService.removeFromWatched(parseInt(this.content.id)).subscribe({
       //   next: () => {
       //     this.isInWatched = false;
@@ -113,7 +155,7 @@ export class MovieCardComponent implements OnInit {
       //   }
       // });
     }
-    this.addToWatched.emit(this.content as XMovie);
+    // this.addToWatched.emit(this.movieStatus);
   }
 
   onAddToWatchlist(): void {
@@ -124,7 +166,7 @@ export class MovieCardComponent implements OnInit {
 
     this.isProcessingWatchlist = true;
 
-    if (this.isInWatchlist) {
+    if (this.movieStatus.watched) {
       // this.userMovieService.removeFromWatchlist(parseInt(this.content.id)).subscribe({
       //   next: () => {
       //     this.isInWatchlist = false;
@@ -138,39 +180,20 @@ export class MovieCardComponent implements OnInit {
       // });
     } else {
       // this.userMovieService.addToWatchlist(parseInt(this.content.id)).subscribe({
-      //   next: () => {
-      //     this.isInWatchlist = true;
-      //     this.addClickAnimation('watchlist');
-      //     this.isProcessingWatchlist = false;
-      //   },
-      //   error: (error) => {
-      //     console.error('Error adding to watchlist:', error);
-      //     this.isProcessingWatchlist = false;
-      //   }
+      // next: () => {
+      //   this.isInWatchlist = true;
+      //   this.addClickAnimation('watchlist');
+      //   this.isProcessingWatchlist = false;
+      // },
+      // error: (error) => {
+      //   console.error('Error adding to watchlist:', error);
+      //   this.isProcessingWatchlist = false;
+      // }
       // });
     }
-    this.addToWatchlist.emit(this.content as XMovie);
+    // this.addToWatchlist.emit(this.movieStatus);
   }
 
-  ngOnInit() {
-    this.checkUserLists();
-  }
-
-  private checkUserLists(): void {
-    // Check if movie is in user's lists by calling the backend API
-    if (this.content && 'id' in this.content) {
-      // this.userMovieService.checkMovieStatus(parseInt(this.content.id)).subscribe({
-      //   next: (status: any) => {
-      //     this.isInFavorites = status.isFavorite;
-      //     this.isInWatched = status.isWatched;
-      //     this.isInWatchlist = status.isInWatchlist;
-      //   },
-      //   error: (error) => {
-      //     console.error('Error checking movie status:', error);
-      //   }
-      // });
-    }
-  }
 
   private addClickAnimation(buttonType: 'favorite' | 'watched' | 'watchlist'): void {
     // Add click animation class
@@ -182,6 +205,5 @@ export class MovieCardComponent implements OnInit {
       }, 300);
     }
   }
-
 
 }
