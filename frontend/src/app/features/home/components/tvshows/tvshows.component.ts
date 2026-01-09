@@ -186,7 +186,7 @@ export class TvShowsComponent implements OnInit {
       return;
     }
 
-    const tmdbId = parseInt(item.id);
+    const tmdbId = item.id;
     // this.userTvService.addToFavorites(tmdbId).subscribe({
     //   next: () => console.log('Added to favorites successfully'),
     //   error: (error) => console.error('Failed to add to favorites:', error)
@@ -199,7 +199,7 @@ export class TvShowsComponent implements OnInit {
       return;
     }
 
-    const tmdbId = parseInt(item.id);
+    const tmdbId = item.id;
     // this.userTvService.addToWatched(tmdbId).subscribe({
     //   next: () => console.log('Added to watched successfully'),
     //   error: (error) => console.error('Failed to add to watched:', error)
@@ -212,7 +212,7 @@ export class TvShowsComponent implements OnInit {
       return;
     }
 
-    const tmdbId = parseInt(item.id);
+    const tmdbId = item.id;
     // this.userTvService.addToWatchlist(tmdbId).subscribe({
     //   next: () => console.log('Added to watchlist successfully'),
     //   error: (error) => console.error('Failed to add to watchlist:', error)
