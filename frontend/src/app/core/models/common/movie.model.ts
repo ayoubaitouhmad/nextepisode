@@ -121,4 +121,7 @@ export enum MovieStatusAction {
   remove = 'REMOVE'
 }
 
+export interface MoviesStatus {
+  moviesStatus: Map<number, MovieStatus>;
+}
 
