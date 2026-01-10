@@ -1,7 +1,14 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {UserMovieList} from '../../../models/common/movie.model';
+import {
+  MoviesStatus,
+  MovieStatus,
+  MovieStatusAction,
+  MovieStatusCategory,
+  MovieStatusRequest,
+  UserMovieList
+} from '../../../models/common/movie.model';
 import {Service} from '../service';
 import {UserMoviesAndTvShowStats} from '../../../models/common/shared-dtos';
 
@@ -52,8 +59,8 @@ export class UserMovieService extends Service {
   /**
    * Add or remove a movie from user's category
    */
-  handleUserMovieRequest(request: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/user-movie`, request);
+  handleUserMovieRequest(request: MovieStatusRequest): Observable<any> {
+    return this.http.post(`${this.apiUrl}/${request.movieId}/statistics`, request);
   }
 
   /**
@@ -87,73 +94,74 @@ export class UserMovieService extends Service {
   /**
    * Check movie status for current user
    */
-  checkMovieStatus(tmdbId: number): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/check-status/${tmdbId}`);
+  checkMovieStatus(tmdbId: number): Observable<MovieStatus> {
+    console.debug(`[UserMovieService] Check movie: ${tmdbId} listing stats`);
+    return this.http.get<MovieStatus>(`${this.apiUrl}/${tmdbId}/stats`);
   }
 
   /**
    * Add movie to favorites
    */
-  addToFavorites(tmdbId: number): Observable<any> {
+  addToFavorites(movieId: number): Observable<any> {
     return this.handleUserMovieRequest({
-      tmdbId,
-      category: 'FAVORITE',
-      action: 'ADD'
+      movieId: movieId,
+      category: MovieStatusCategory.favorite,
+      action: MovieStatusAction.add
     });
   }
 
   /**
    * Remove movie from favorites
    */
-  removeFromFavorites(tmdbId: number): Observable<any> {
+  removeFromFavorites(movieId: number): Observable<any> {
     return this.handleUserMovieRequest({
-      tmdbId,
-      category: 'FAVORITE',
-      action: 'REMOVE'
+      movieId: movieId,
+      category: MovieStatusCategory.favorite,
+      action: MovieStatusAction.remove
     });
   }
 
   /**
    * Add movie to watched
    */
-  addToWatched(tmdbId: number): Observable<any> {
+  addToWatched(movieId: number): Observable<any> {
     return this.handleUserMovieRequest({
-      tmdbId,
-      category: 'WATCHED',
-      action: 'ADD'
+      movieId,
+      category: MovieStatusCategory.watched,
+      action: MovieStatusAction.add
     });
   }
 
   /**
    * Remove movie from watched
    */
-  removeFromWatched(tmdbId: number): Observable<any> {
+  removeFromWatched(movieId: number): Observable<any> {
     return this.handleUserMovieRequest({
-      tmdbId,
-      category: 'WATCHED',
-      action: 'REMOVE'
+      movieId: movieId,
+      category: MovieStatusCategory.watched,
+      action: MovieStatusAction.remove
     });
   }
 
   /**
    * Add movie to watchlist
    */
-  addToWatchlist(tmdbId: number): Observable<any> {
+  addToWatchlist(movieId: number): Observable<any> {
     return this.handleUserMovieRequest({
-      tmdbId,
-      category: 'WATCHLIST',
-      action: 'ADD'
+      movieId: movieId,
+      category: MovieStatusCategory.watchlist,
+      action: MovieStatusAction.add
     });
   }
 
   /**
    * Remove movie from watchlist
    */
-  removeFromWatchlist(tmdbId: number): Observable<any> {
+  removeFromWatchlist(movieId: number): Observable<any> {
     return this.handleUserMovieRequest({
-      tmdbId,
-      category: 'WATCHLIST',
-      action: 'REMOVE'
+      movieId: movieId,
+      category: MovieStatusCategory.watchlist,
+      action: MovieStatusAction.remove
     });
   }
 
@@ -178,4 +186,13 @@ export class UserMovieService extends Service {
   cleanupDuplicates(): Observable<any> {
     return this.http.post(`${this.apiUrl}/cleanup-duplicates`, {});
   }
+
+  public checkMultipleMovieStatuses(movieIds: number[]): Observable<MoviesStatus> {
+    console.debug("[UserMovieService] Check movie statuses", movieIds);
+
+    return this.http.post<MoviesStatus>(`${this.apiUrl}/statistics`, {
+      movieIds
+    });
+  }
+
 }

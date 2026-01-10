@@ -47,7 +47,7 @@
 
         @if (auth.isAuthenticated()) {
           <button (click)="onAddToFavorites(); $event.stopPropagation()" class="list-button favorite"
-                  [class.active]="isInFavorites" aria-label="Add to favorites">
+                  [class.active]="movieStatus.isFavorite" aria-label="Add to favorites">
             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
               <path d="M12 2l3.09 8.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
             </svg>
@@ -55,7 +55,7 @@
 
           <!-- Watched Button -->
           <button (click)="onAddToWatched(); $event.stopPropagation()" class="list-button watched"
-                  [class.active]="isInWatched" aria-label="Mark as watched">
+                  [class.active]="movieStatus.watched" aria-label="Mark as watched">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
@@ -64,7 +64,7 @@
 
           <!-- Watchlist Button -->
           <button (click)="onAddToWatchlist(); $event.stopPropagation()" class="list-button watchlist"
-                  [class.active]="isInWatchlist" aria-label="Add to watchlist">
+                  [class.active]="movieStatus.inWatchlist" aria-label="Add to watchlist">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>

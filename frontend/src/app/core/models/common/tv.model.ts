@@ -42,7 +42,7 @@ export interface TMDBTvSeriesResponse {
 }
 
 export interface TvSeries {
-  id: string;
+  id: number;
   title: string;  // We'll use 'title' for consistency with Movie interface
   rating: number;
   year: number;
