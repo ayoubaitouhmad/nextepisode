@@ -36,9 +36,6 @@
     @for (content of items; track content.id) {
       <app-movie-card
         [content]="content"
-        (addToFavorites)="onAddToFavorites($event)"
-        (addToWatched)="onAddToWatched($event)"
-        (addToWatchlist)="onAddToWatchlist($event)"
         class="cursor-pointer transform transition-transform hover:scale-105">
         >
       </app-movie-card>

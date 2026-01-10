@@ -1,16 +1,12 @@
 import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {
-  MovieStatus,
-  MovieStatusAction,
-  MovieStatusCategory,
-  MovieStatusRequest,
-  XMovie
-} from '../../../core/models/common/movie.model';
+import {MovieStatus, XMovie} from '../../../core/models/common/movie.model';
 import {AuthService} from '../../../core/services/auth/auth-service';
 import {getYearFromDate} from '../../utils';
 import {getFirstTwoFlatRate} from '../../utils/movie.utils';
 import {UserMovieService} from '../../../core/services/user/movie/user-movie.service';
+import {AlertService} from '../alert/alert.service';
+import {MovieStatusCacheService} from '../../../core/services/user/movie/movie-status-cache.service';
 
 
 @Component({
@@ -23,15 +19,13 @@ import {UserMovieService} from '../../../core/services/user/movie/user-movie.ser
 export class MovieCardComponent implements OnInit {
 
   private userMovieService: UserMovieService = inject(UserMovieService);
+  private movieStatusCacheService = inject(MovieStatusCacheService);
 
   protected readonly getYearFromDate = getYearFromDate;
   protected readonly getFirstTwoFlatRate = getFirstTwoFlatRate;
 
   @Input({required: true}) content!: XMovie;
   @Output() share = new EventEmitter<XMovie>();
-  @Output() addToFavorites = new EventEmitter<MovieStatusRequest>();
-  @Output() addToWatched = new EventEmitter<MovieStatusRequest>();
-  @Output() addToWatchlist = new EventEmitter<MovieStatusRequest>();
 
   movieStatus: MovieStatus = {
     inWatchlist: false,
@@ -44,13 +38,21 @@ export class MovieCardComponent implements OnInit {
   private isProcessingWatched = false;
   private isProcessingWatchlist = false;
 
-
-  constructor(public auth: AuthService) {
+  constructor(
+    public auth: AuthService,
+    private alertService: AlertService) {
   }
 
-
   ngOnInit() {
-    this.checkUserLists();
+    this.movieStatusCacheService.getStatus(this.content.id)
+      .subscribe(status => {
+        this.movieStatus = status;
+      });
+
+    // Check if we need to load (cache miss)
+    if (!this.movieStatusCacheService.hasStatus(this.content.id)) {
+      this.checkUserLists();
+    }
   }
 
   /**
@@ -58,7 +60,7 @@ export class MovieCardComponent implements OnInit {
    * @private
    */
   private checkUserLists(): void {
-    console.log("[MovieCardComponent] Check user movie status")
+    console.log("[MovieCardComponent] Check user movies status")
 
     if (this.content && 'id' in this.content) {
       this.userMovieService.checkMovieStatus(this.content.id).subscribe({
@@ -77,8 +79,11 @@ export class MovieCardComponent implements OnInit {
   }
 
   onAddToFavorites(): void {
+    console.debug(`[MovieCardComponent] favorite request requested for movie:${this.content.id}`);
+
     if (this.isProcessingFavorites) {
-      console.log('Already processing favorites request');
+      console.debug('[MovieCardComponent] Already processing favorites request');
+      this.alertService.warning("Already processing favorites request")
       return;
     }
 
@@ -90,15 +95,13 @@ export class MovieCardComponent implements OnInit {
           this.movieStatus.isFavorite = false;
           this.addClickAnimation('favorite');
           this.isProcessingFavorites = false;
-          this.addToFavorites.emit({
-            movieId: this.content.id,
-            category: MovieStatusCategory.favorite,
-            action: MovieStatusAction.remove
-          });
+          this.movieStatusCacheService.updateStatus(this.content.id, {isFavorite: false});
 
+          console.debug(`[MovieCardComponent] The movie with id:${this.content.id} removed successfully from favorites.`, this.content);
+          this.alertService.success(`${this.content.title} removed from favorites.`);
         },
         error: (error) => {
-          console.error('Error removing from favorites:', error);
+          console.error('[MovieCardComponent] Error removing from favorites:', error);
           this.isProcessingFavorites = false;
         }
       });
@@ -108,90 +111,112 @@ export class MovieCardComponent implements OnInit {
           this.movieStatus.isFavorite = true;
           this.addClickAnimation('favorite');
           this.isProcessingFavorites = false;
-          this.addToFavorites.emit({
-            movieId: this.content.id,
-            category: MovieStatusCategory.favorite,
-            action: MovieStatusAction.add
-          });
+          this.movieStatusCacheService.updateStatus(this.content.id, {isFavorite: true});
+
+          console.debug(`[MovieCardComponent] The movie with id:${this.content.id} added successfully to favorites.`, this.content);
+          this.alertService.success(`${this.content.title} added to favorites.`);
         },
         error: (error) => {
-          console.error('Error adding to favorites:', error);
+          console.error('[MovieCardComponent]Error adding to favorites:', error);
+          this.isProcessingFavorites = false;
+        }
+      });
+    }
+
+  }
+
+  onAddToWatched(): void {
+    console.debug(`[MovieCardComponent] watched request requested for movie:${this.content.id}`);
+
+
+    if (this.isProcessingWatched) {
+      console.debug('[MovieCardComponent] Already processing watched request');
+      this.alertService.warning("Already processing watched request")
+      return;
+    }
+
+    this.isProcessingWatched = true;
+
+    if (this.movieStatus.watched) {
+      this.userMovieService.removeFromWatched(this.content.id).subscribe({
+        next: () => {
+          this.movieStatus.watched = false;
+          this.addClickAnimation('watched');
+          this.isProcessingWatched = false;
+          this.movieStatusCacheService.updateStatus(this.content.id, {watched: false});
+
+          console.debug(`[MovieCardComponent] The movie with id:${this.content.id} removed successfully from watched list.`, this.content);
+          this.alertService.success(`${this.content.title} removed from watched list.`);
+        },
+        error: (error) => {
+          console.error(`[MovieCardComponent] Error removing movie with id:${this.content.id} from watched list:`, error, this.content);
+          this.isProcessingFavorites = false;
+        }
+      });
+    } else {
+      this.userMovieService.addToWatched(this.content.id).subscribe({
+        next: () => {
+          this.movieStatus.watched = true;
+          this.addClickAnimation('watched');
+          this.isProcessingWatched = false;
+          this.movieStatusCacheService.updateStatus(this.content.id, {watched: true});
+
+          console.debug(`[MovieCardComponent] The movie with id:${this.content.id} added successfully to watched list.`, this.content);
+          this.alertService.success(`${this.content.title} added to watched list.`);
+        },
+        error: (error) => {
+          console.error(`[MovieCardComponent] Error adding movie with id:${this.content.id} to watched list:`, error, this.content);
           this.isProcessingFavorites = false;
         }
       });
     }
   }
 
-  onAddToWatched(): void {
-    if (this.isProcessingWatched) {
-      console.log('Already processing watched request');
-      return;
-    }
-
-    this.isProcessingWatched = true;
-
-    if (this.movieStatus.inWatchlist) {
-      // this.userMovieService.removeFromWatched(parseInt(this.content.id)).subscribe({
-      //   next: () => {
-      //     this.isInWatched = false;
-      //     this.addClickAnimation('watched');
-      //     this.isProcessingWatched = false;
-      //   },
-      //   error: (error) => {
-      //     console.error('Error removing from watched:', error);
-      //     this.isProcessingWatched = false;
-      //   }
-      // });
-    } else {
-      // this.userMovieService.addToWatched(parseInt(this.content.id)).subscribe({
-      //   next: () => {
-      //     this.isInWatched = true;
-      //     this.addClickAnimation('watched');
-      //     this.isProcessingWatched = false;
-      //   },
-      //   error: (error) => {
-      //     console.error('Error adding to watched:', error);
-      //     this.isProcessingWatched = false;
-      //   }
-      // });
-    }
-    // this.addToWatched.emit(this.movieStatus);
-  }
-
   onAddToWatchlist(): void {
+    console.debug(`[MovieCardComponent] watch list request requested for movie:${this.content.id}`);
+
+
     if (this.isProcessingWatchlist) {
-      console.log('Already processing watchlist request');
+      console.debug('[MovieCardComponent] Already processing watch list request');
+      this.alertService.warning("Already processing watch list request")
       return;
     }
 
     this.isProcessingWatchlist = true;
 
-    if (this.movieStatus.watched) {
-      // this.userMovieService.removeFromWatchlist(parseInt(this.content.id)).subscribe({
-      //   next: () => {
-      //     this.isInWatchlist = false;
-      //     this.addClickAnimation('watchlist');
-      //     this.isProcessingWatchlist = false;
-      //   },
-      //   error: (error) => {
-      //     console.error('Error removing from watchlist:', error);
-      //     this.isProcessingWatchlist = false;
-      //   }
-      // });
+    if (this.movieStatus.inWatchlist) {
+      this.userMovieService.removeFromWatchlist(this.content.id).subscribe({
+        next: () => {
+          this.movieStatus.inWatchlist = false;
+          this.addClickAnimation('watchlist');
+          this.isProcessingWatchlist = false;
+          this.movieStatusCacheService.updateStatus(this.content.id, {inWatchlist: false});
+
+          console.debug(`[MovieCardComponent] The movie with id:${this.content.id} removed successfully from watch list.`, this.content);
+          this.alertService.success(`${this.content.title} removed from watch list.`);
+        },
+        error: (error) => {
+          console.error(`[MovieCardComponent] Error removing movie with id:${this.content.id} from watch list:`, error, this.content);
+          this.isProcessingWatchlist = false;
+        }
+      });
     } else {
-      // this.userMovieService.addToWatchlist(parseInt(this.content.id)).subscribe({
-      // next: () => {
-      //   this.isInWatchlist = true;
-      //   this.addClickAnimation('watchlist');
-      //   this.isProcessingWatchlist = false;
-      // },
-      // error: (error) => {
-      //   console.error('Error adding to watchlist:', error);
-      //   this.isProcessingWatchlist = false;
-      // }
-      // });
+      this.userMovieService.addToWatchlist(this.content.id).subscribe({
+        next: () => {
+          this.movieStatus.inWatchlist = true;
+          this.addClickAnimation('watchlist');
+          this.isProcessingWatchlist = false;
+          this.movieStatusCacheService.updateStatus(this.content.id, {inWatchlist: true});
+
+          console.debug(`[MovieCardComponent] The movie with id:${this.content.id} added successfully to watch list.`, this.content);
+          this.alertService.success(`${this.content.title} added from watch list.`);
+        },
+        error: (error) => {
+          console.error(`[MovieCardComponent] Error adding movie with id:${this.content.id} to watch list:`, error, this.content);
+          this.isProcessingFavorites = false;
+        }
+      });
     }
-    // this.addToWatchlist.emit(this.movieStatus);
   }
 
 

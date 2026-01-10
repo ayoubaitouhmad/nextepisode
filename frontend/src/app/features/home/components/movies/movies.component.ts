@@ -2,13 +2,13 @@ import {Component, inject, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {CommonModule} from '@angular/common';
 import {UserMovieService} from '../../../../core/services/user/movie/user-movie.service';
-import {AuthService} from '../../../../core/services/auth/auth-service';
 import {ContentFilters} from '../../../../core/models/tmdb/request/content-filters';
-import {MovieStatusRequest, XMovie} from '../../../../core/models/common/movie.model';
+import {XMovie} from '../../../../core/models/common/movie.model';
 import {ContentFiltersComponent} from '../content-filters/content-filters.component';
 import {Certification, GenreList, WatchProvider} from '../../../../core/models/common/shared-dtos';
 import {_TmdbService} from '../../../../core/services/tmdb/_-tmdb.service';
 import {MovieCardComponent} from '../../../../shared/components/movie-card/movie-card.component';
+import {MovieStatusCacheService} from '../../../../core/services/user/movie/movie-status-cache.service';
 
 /**
  * Component responsible for displaying a grid of movies with filtering capabilities.
@@ -26,8 +26,8 @@ export class MoviesComponent implements OnInit {
   private tmdbService = inject(_TmdbService);
   private userMovieService = inject(UserMovieService);
   private _tmdbService: _TmdbService = inject(_TmdbService);
-  private authService = inject(AuthService);
   private router = inject(Router);
+  private movieStatusCacheService = inject(MovieStatusCacheService);
   readonly contentType = 'movie' as const;
 
   // List of movies to display
@@ -63,6 +63,7 @@ export class MoviesComponent implements OnInit {
     this.loadCertification();
     this.loadWatchProviders();
     this.loadMovies();
+
   }
 
   /**
@@ -123,7 +124,7 @@ export class MoviesComponent implements OnInit {
    * Loads the initial list of movies (discover) sorted by popularity.
    */
   loadMovies(): void {
-    console.info('[MoviesPage] Load movies');
+    console.info('[MoviesComponent] Load movies');
 
     this.loading = true;
     this.error = null;
@@ -133,6 +134,9 @@ export class MoviesComponent implements OnInit {
         this.totalPages = response.total_pages;
         this.totalResults = response.total_results;
         this.loading = false;
+        let ids: number[] = response.results.map(value => value.id);
+
+        this.loadBatchMoviesStatus(ids);
       },
       error: (error) => {
         console.error('[MoviesComponent] Failed to Load movies', error);
@@ -140,6 +144,23 @@ export class MoviesComponent implements OnInit {
         this.loading = false;
       }
     });
+  }
+
+  private loadBatchMoviesStatus(movieIds: number[]) {
+    console.debug('[MoviesComponent] Load movies status');
+
+    if (movieIds.length > 0) {
+      this.userMovieService.checkMultipleMovieStatuses(movieIds).subscribe({
+        next: (result) => {
+          this.movieStatusCacheService.updateMultiple(result.moviesStatus);
+          console.debug('[MoviesComponent] movies status loaded successfully', result.moviesStatus);
+        },
+        error: error => {
+          console.debug("[MoviesComponent] can't load movies", error);
+          console.log(error)
+        }
+      })
+    }
   }
 
   /**
@@ -222,52 +243,6 @@ export class MoviesComponent implements OnInit {
     } else {
       navigator.clipboard.writeText(shareUrl);
     }
-  }
-
-  /**
-   * Adds a movie to the user's favorites list.
-   * Requires authentication.
-   * @param moviestatusrequest The movie content to add.
-   */
-  onAddToFavorites(moviestatusrequest: MovieStatusRequest): void {
-    console.log(`[MoviesComponent] movie with id:${moviestatusrequest.movieId} has a ${moviestatusrequest.action} to favorite movies`);
-  }
-
-  /**
-   * Adds a movie to the user's watched list.
-   * Requires authentication.
-   * @param content The movie content to add.
-   */
-  onAddToWatched(content: any): void {
-    if (!this.authService.isAuthenticated()) {
-      console.log('User not authenticated');
-      return;
-    }
-
-    const tmdbId = parseInt(content.id);
-    this.userMovieService.addToWatched(tmdbId).subscribe({
-      next: () => console.log('Added to watched successfully'),
-      error: (error) => console.error('Failed to add to watched:', error)
-    });
-  }
-
-  /**
-   * Adds a movie to the user's watchlist.
-   * Requires authentication.
-   * @param content The movie content to add.
-   */
-  onAddToWatchlist(content: any): void {
-    if (!this.authService.isAuthenticated()) {
-      console.log('User not authenticated');
-      return;
-    }
-
-
-    const tmdbId = parseInt(content.id);
-    this.userMovieService.addToWatchlist(tmdbId).subscribe({
-      next: () => console.log('Added to watchlist successfully'),
-      error: (error) => console.error('Failed to add to watchlist:', error)
-    });
   }
 
   /**
