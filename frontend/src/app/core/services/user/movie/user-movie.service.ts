@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {
+  MoviesStatus,
   MovieStatus,
   MovieStatusAction,
   MovieStatusCategory,
@@ -59,7 +60,7 @@ export class UserMovieService extends Service {
    * Add or remove a movie from user's category
    */
   handleUserMovieRequest(request: MovieStatusRequest): Observable<any> {
-    return this.http.post(`${this.apiUrl}/status`, request);
+    return this.http.post(`${this.apiUrl}/${request.movieId}/statistics`, request);
   }
 
   /**
@@ -185,4 +186,13 @@ export class UserMovieService extends Service {
   cleanupDuplicates(): Observable<any> {
     return this.http.post(`${this.apiUrl}/cleanup-duplicates`, {});
   }
+
+  public checkMultipleMovieStatuses(movieIds: number[]): Observable<MoviesStatus> {
+    console.debug("[UserMovieService] Check movie statuses", movieIds);
+
+    return this.http.post<MoviesStatus>(`${this.apiUrl}/statistics`, {
+      movieIds
+    });
+  }
+
 }
