@@ -11,6 +11,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -46,5 +48,11 @@ public interface UserMovieRepository extends JpaRepository<UserMovie, UserMovieI
     Optional<UserMovie> findByMovieIdAndUserUsername(Long movieId, String userUsername);
 
     boolean existsByUserUsernameAndMovieId(String userUsername, Long movieId);
+
+    @Query("SELECT um from UserMovie um  WHERE um.user.username = :username AND um.movie.id IN :movieIds")
+    List<UserMovie> findByUserUsernameAndMovieIdIn(
+            String username,
+            List<Integer> movieIds
+    );
 
 }
