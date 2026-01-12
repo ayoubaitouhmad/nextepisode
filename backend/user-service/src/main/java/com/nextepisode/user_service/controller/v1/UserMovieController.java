@@ -3,11 +3,14 @@ package com.nextepisode.user_service.controller.v1;
 import com.nextepisode.user_service.config.ApiPaths;
 import com.nextepisode.user_service.dto.MovieListResponse;
 import com.nextepisode.user_service.dto.MovieStatus;
+import com.nextepisode.user_service.dto.MovieStatusList;
 import com.nextepisode.user_service.dto.UserMovieTvStats;
 import com.nextepisode.user_service.dto.request.MovieStatusRequest;
+import com.nextepisode.user_service.dto.request.MovieIds;
 import com.nextepisode.user_service.service.UserMovieService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -40,21 +43,27 @@ public class UserMovieController {
         return userMovieService.getUserWatchlistMovies(username, pageable);
     }
 
-    @GetMapping("/stats")
-    public UserMovieTvStats watchlistMovies(@AuthenticationPrincipal String username) {
+    @GetMapping("/statistics")
+    public UserMovieTvStats movieStatistics(@AuthenticationPrincipal String username) {
         return userMovieService.getUserMoviesStats(username);
     }
 
-    @GetMapping("/{id}/stats")
+    @PostMapping("/statistics")
+    public MovieStatusList movieStatisticsByIds(
+            @AuthenticationPrincipal String username,
+            @Valid @RequestBody MovieIds movieIds
+    ) {
+        return userMovieService.findByUsernameAndMovieIds(username,movieIds.getMovieIds());
+    }
+
+    @GetMapping("/{id}/statistics")
     public MovieStatus watchlistMovies(@AuthenticationPrincipal String username, @PathVariable Long id) {
         return userMovieService.getUserMoviesStats(id, username);
     }
-
-    @PostMapping("/status")
+    @PostMapping("/{id}/statistics")
     public ResponseEntity<MovieStatus> updateMovieStatus(
             @Valid @RequestBody MovieStatusRequest request,
             @AuthenticationPrincipal String username) {
-//        log.info("Update movie status request: {}", request);
         MovieStatus movieStatus = userMovieService.changeMovieStatus(request, username);
         return ResponseEntity.ok(movieStatus);
     }
