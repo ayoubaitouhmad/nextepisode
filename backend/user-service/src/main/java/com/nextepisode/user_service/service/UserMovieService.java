@@ -1,9 +1,6 @@
 package com.nextepisode.user_service.service;
 
-import com.nextepisode.user_service.dto.MovieListResponse;
-import com.nextepisode.user_service.dto.MovieResponse;
-import com.nextepisode.user_service.dto.MovieStatus;
-import com.nextepisode.user_service.dto.UserMovieTvStats;
+import com.nextepisode.user_service.dto.*;
 import com.nextepisode.user_service.dto.request.MovieStatusRequest;
 import com.nextepisode.user_service.entity.movie.Movie;
 import com.nextepisode.user_service.entity.user.User;
@@ -21,6 +18,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
@@ -189,6 +189,11 @@ public class UserMovieService {
                     userMovie.get().setInWatchlist(isAdding);
                     break;
             }
+
+            if (!userMovie.get().isFavorite() && !userMovie.get().isWatched() && !userMovie.get().isInWatchlist()) {
+                userMovieRepository.delete(userMovie.get());
+                return MovieStatus.defaultStatus();
+            }
             UserMovie saved = userMovieRepository.save(userMovie.get());
             return new MovieStatus(saved.isFavorite(), saved.isWatched(), saved.isInWatchlist());
         }
@@ -237,6 +242,32 @@ public class UserMovieService {
             case WATCHED -> new MovieStatus(false, isAdding, false);
             case WATCHLIST -> new MovieStatus(false, false, isAdding);
         };
+    }
+
+
+    public MovieStatusList findByUsernameAndMovieIds(String username, List<Integer> movieIds) {
+        log.debug("Start getting movies status for user:{}, movies:{}", username, movieIds);
+
+        try {
+            List<UserMovie> userMovies = userMovieRepository
+                    .findByUserUsernameAndMovieIdIn(username, movieIds);
+
+            Map<Long, MovieStatus> statusMap = new HashMap<>();
+            userMovies.forEach(userMovie -> {
+                statusMap.put(userMovie.getMovie().getId(), new MovieStatus(
+                        userMovie.isFavorite(), userMovie.isWatched(), userMovie.isInWatchlist()
+                ));
+            });
+            log.debug("Getting movies status successfully for user:{}, movies:{}", username, movieIds);
+
+            return new MovieStatusList(statusMap);
+
+        } catch (PersistenceException e) {
+            log.error("Failed to get movies status for user:{}, movies:{}", username, movieIds);
+            throw e;
+        }
+
+
     }
 
 
