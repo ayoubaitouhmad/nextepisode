@@ -1,6 +1,6 @@
 import {Routes} from '@angular/router';
-import {AuthGuard} from './guards/auth.guard';
 import {NoAuthGuard} from './guards/no-auth.guard';
+import {authGuard} from './guards/auth.guard';
 
 export const routes: Routes = [
   {
@@ -9,8 +9,8 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-
-        loadChildren: () => import('./features/home/home.routes').then(m => m.MOVIE_ROUTES)
+        loadChildren: () => import('./features/home/home.routes').then(m => m.MOVIE_ROUTES),
+        canActivate: [authGuard]
       },
       {
         path: 'about',
@@ -23,7 +23,6 @@ export const routes: Routes = [
       },
       {
         path: '',
-        canActivate: [AuthGuard],
         loadChildren: () => import('./features/user/user.routes').then(m => m.AUTH_ROUTES)
       }
     ]

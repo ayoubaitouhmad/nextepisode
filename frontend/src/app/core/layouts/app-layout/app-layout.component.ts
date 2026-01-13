@@ -1,10 +1,8 @@
 import {Component, HostListener, OnDestroy, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {Router, RouterLink, RouterLinkActive, RouterOutlet} from '@angular/router';
-import {SearchBarComponent} from '../../../shared/components/search-bar/search-bar.component';
-import {AuthService} from '../../services/auth/auth-service';
-import {routes} from '../../../app.routes';
 import {Subscription} from 'rxjs';
+import {AuthManagerService} from '../../services/auth-manager.service';
 
 @Component({
   selector: 'app-layout',
@@ -20,7 +18,7 @@ export class AppLayoutComponent implements OnInit, OnDestroy {
 
   open = false;
 
-  constructor(private auth: AuthService, private router: Router) {
+  constructor(private auth: AuthManagerService, private router: Router) {
     this.username = auth.getUser()?.username || '';
     this.isAuthenticated = auth.isAuthenticated();
   }

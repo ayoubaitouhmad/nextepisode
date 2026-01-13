@@ -1,31 +1,24 @@
 // auth.service.ts
-import {Injectable} from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {Observable} from 'rxjs';
 import {tap} from 'rxjs/operators';
 import {User} from '../../models/user/user.model';
-import {LoginRequest, LoginResponse, PasswordChangeRequest, SignupRequest} from '../../models/auth/auth.model';
+import {LoginRequest, LoginResponse, SignupRequest} from '../../models/auth/auth.model';
 import {Service} from './service';
+import {AuthManagerService} from '../auth-manager.service';
 
 
 @Injectable({providedIn: 'root'})
 export class AuthService extends Service {
+  private authManager: AuthManagerService = inject(AuthManagerService);
+
   protected apiUrl: string;
-
-  private _loggedIn$ = new BehaviorSubject<boolean>(!!this.getToken());
-  public loggedIn$ = this._loggedIn$.asObservable();
-
 
   constructor(http: HttpClient) {
     super(http);
     this.apiUrl = `${this.baseServiceApiUrl}`;
   }
-
-  isAuthenticated(): boolean {
-    // you could also decode the JWT and check exp here
-    return !!this.getToken();
-  }
-
 
   /** Create a new user */
   register(req: SignupRequest): Observable<User> {
@@ -46,39 +39,27 @@ export class AuthService extends Service {
       {headers: new HttpHeaders({'Content-Type': 'application/json'})}
     ).pipe(
       tap(res => {
-        localStorage.setItem('jwt', res.token);
-        localStorage.setItem("user", JSON.stringify(res.user));
-        this._loggedIn$.next(true);
+        this.authManager.login(res.token, JSON.stringify(res.user))
+
       })
     );
   }
 
   logout() {
-    localStorage.removeItem('jwt');
-    localStorage.removeItem('user');
-    this._loggedIn$.next(false);
+    this.authManager.logout();
+  }
 
+
+  isAuthenticated() {
+    return this.authManager.isAuthenticated();
   }
 
   getToken() {
-    return localStorage.getItem('jwt');
+    return this.authManager.getToken();
   }
 
   getUser() {
-    return JSON.parse(localStorage.getItem("user")!);
+    return this.authManager.getUser();
   }
 
-  /**
-   * Change user password
-   */
-  changePassword(passwordData: PasswordChangeRequest): Observable<any> {
-    const token = this.getToken();
-    const headers =
-      new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      });
-
-    return this.http.patch(`${this.apiUrl}/change-password`, passwordData, {headers});
-  }
 }

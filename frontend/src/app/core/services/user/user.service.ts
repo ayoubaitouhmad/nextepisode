@@ -10,6 +10,7 @@ import {
   UserProfile
 } from '../../models/user/user.model';
 import {Service} from './service';
+import {PasswordChangeRequest} from '../../models/auth/auth.model';
 
 
 @Injectable({
@@ -27,6 +28,12 @@ export class UserService extends Service {
     this.apiUrl = `${this.baseServiceApiUrl}`;
   }
 
+  /**
+   * Change user password
+   */
+  changePassword(passwordData: PasswordChangeRequest): Observable<any> {
+    return this.http.patch(`${this.apiUrl}/change-password`, passwordData);
+  }
 
   /**
    * Get current user profile
