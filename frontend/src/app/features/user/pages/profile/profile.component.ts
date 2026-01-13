@@ -237,7 +237,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.clearMessages();
 
-    this.authService.changePassword(this.passwordData).subscribe({
+    this.userService.changePassword(this.passwordData).subscribe({
       next: () => {
         this.isChangingPassword = false;
         this.passwordData = {
