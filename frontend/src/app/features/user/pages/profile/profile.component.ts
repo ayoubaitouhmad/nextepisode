@@ -1,7 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {NgIf} from '@angular/common';
 import {FormsModule} from '@angular/forms';
-import {Router} from '@angular/router';
 import {Subscription} from 'rxjs';
 
 
@@ -10,7 +9,6 @@ import {FavoritesComponent} from './components/favorites/favorites.component';
 import {SettingsComponent} from './components/settings/settings.component';
 import {UserService} from '../../../../core/services/user/user.service';
 import {UserMovieService} from '../../../../core/services/user/movie/user-movie.service';
-import {AuthService} from '../../../../core/services/auth/auth-service';
 import {UserTvService} from '../../../../core/services/user/tv/user-tv.service';
 import {WatchedComponent} from './components/watched/watched.component';
 import {WatchlistComponent} from './components/watchlist/watchlist.component';
@@ -77,20 +75,15 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   constructor(
     private userService: UserService,
-    private authService: AuthService,
-    private router: Router,
     private userMovieService: UserMovieService,
     private userTvService: UserTvService
   ) {
-    console.clear();
-
   }
 
   ngOnInit(): void {
     this.userSubscription = this.userService.currentUser$.subscribe(user => {
-      this.currentUser = user;
-
       if (user) {
+        this.currentUser = user;
         this.editedProfile = {...user};
 
         this.privacySettingsData.profileVisibility = user.profileVisibility;
@@ -98,17 +91,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
         this.profileNotificationSettingsUpdateRequest.notificationsEnabled = user.notificationsEnabled;
         this.profileNotificationSettingsUpdateRequest.pushNotifications = user.pushNotifications;
-
-
       }
     });
 
-    if (!this.currentUser) {
-      this.loadCurrentUser();
-      this.loadStats();
-    }
-
-
+    this.loadCurrentUser();
+    this.loadStats();
   }
 
   ngOnDestroy(): void {
