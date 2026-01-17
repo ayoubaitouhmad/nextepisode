@@ -29,7 +29,7 @@ export class UserMovieService extends Service {
    * Get user's movie statistics (counts by category)
    */
   getUserMovieStatistics(): Observable<UserMoviesAndTvShowStats> {
-    return this.http.get<UserMoviesAndTvShowStats>(`${this.apiUrl}/stats`);
+    return this.http.get<UserMoviesAndTvShowStats>(`${this.apiUrl}/statistics`);
   }
 
   /**
@@ -96,7 +96,7 @@ export class UserMovieService extends Service {
    */
   checkMovieStatus(tmdbId: number): Observable<MovieStatus> {
     console.debug(`[UserMovieService] Check movie: ${tmdbId} listing stats`);
-    return this.http.get<MovieStatus>(`${this.apiUrl}/${tmdbId}/stats`);
+    return this.http.get<MovieStatus>(`${this.apiUrl}/${tmdbId}/statistics`);
   }
 
   /**
