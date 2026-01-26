@@ -73,11 +73,7 @@ export class ContentFiltersComponent implements OnInit, OnChanges {
     this.tmdbService.getRegions().subscribe(regionList => this.regions = regionList.results);
     this.tmdbService.getSortOptions().subscribe(options => this.sortOptions = options);
     this.tmdbService.getYears().subscribe(years => this.years = years);
-    this.filters.type = this.contentType;
-    this.emitFilters();
-    this.tmdbService.getRuntimes().subscribe((value: RuntimeResponse) => {
-      this.runtimes = value;
-    });
+    this.tmdbService.getRuntimes().subscribe(runtimes => this.runtimes = runtimes);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
