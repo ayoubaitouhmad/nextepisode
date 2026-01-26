@@ -23,15 +23,25 @@ import {MovieFilters} from '../../models/tmdb/request/content-filters';
   providedIn: 'root'
 })
 export class _TmdbService extends Service {
+  private static readonly LOGGER_CLASS = 'TmdbService';
 
-  public static readonly MOVIE_GENRE_CACHE_KEY = `movie-genres`;
-  public static readonly TV_SHOW_CACHE_KEY = `tv-show-genres`;
-  public static readonly LANGUAGES_CACHE_KEY = `languages`;
-  public static readonly REGIONS_CACHE_KEY = `regions`;
+
+  public static readonly MOVIE_GENRE_CACHE_KEY = `MOVIE_GENRES_CACHE`;
+  public static readonly TV_SHOW_CACHE_KEY = `TV_SHOW_GENRES_CACHE`;
+  public static readonly LANGUAGES_CACHE_KEY = `LANGUAGES_CACHE`;
+  public static readonly REGIONS_CACHE_KEY = `REGIONS_CACHE`;
+  public static readonly YEARS_CACHE_KEY = `YEARS_CACHE`;
+  public static readonly SORT_BY_CACHE_KEY = `SORT_BY_CACHE`;
+  public static readonly RUNTIMES_CACHE_KEY = `RUNTIMES_CACHE`;
+
   protected apiUrl: string;
 
-  constructor(http: HttpClient, private localCache: LocalStorageCacheService) {
+  constructor(
+    http: HttpClient,
+    private localCache: LocalStorageCacheService
+  ) {
     super(http);
+    this.logger = this.loggerService.create(_TmdbService.LOGGER_CLASS);
     this.apiUrl = `${this.baseServiceApiUrl}`;
   }
 
@@ -53,7 +63,6 @@ export class _TmdbService extends Service {
 
 
   fetchGenres(path: string, cacheKey: string): Observable<GenreList> {
-    const cached = this.localCache.get<GenreList>(cacheKey);
     return this.fetchDataFromCache(path, cacheKey);
   }
 
@@ -66,11 +75,18 @@ export class _TmdbService extends Service {
   }
 
   fetchDataFromCache<T>(path: string, cacheKey: string): Observable<T> {
+    this.logger.debug(`Start fetching data...`);
+
+
     const cached = this.localCache.get<T>(cacheKey);
     if (cached) {
+      this.logger.debug(`The key:${cacheKey} found in cached data`);
+
       return of(cached);
     }
     {
+      this.logger.debug(`Get data from path:${path} and store in cached data with key:${cacheKey}`);
+
       return this.http.get<T>(`${this.apiUrl}${path}`).pipe(
         tap(list => {
           this.localCache.set(cacheKey, list)
@@ -122,13 +138,17 @@ export class _TmdbService extends Service {
   }
 
 
-  getRuntimes() {
-    return this.http.get<RuntimeResponse>(`${this.apiUrl}/configuration/runtimes`);
+  getRuntimes(): Observable<RuntimeResponse> {
+    this.logger.debug(`Getting runtimes for content filtering`);
+
+    return this.fetchDataFromCache("/configuration/runtimes", _TmdbService.RUNTIMES_CACHE_KEY);
   }
 
 
   getYears(): Observable<Number[]> {
-    return this.http.get<Number[]>(`${this.apiUrl}/configuration/years`);
+    this.logger.debug(`Getting years for content filtering`);
+
+    return this.fetchDataFromCache("/configuration/years", _TmdbService.YEARS_CACHE_KEY);
   }
 
 
@@ -155,20 +175,25 @@ export class _TmdbService extends Service {
   }
 
   getSortOptions(): Observable<SortOptionsDto> {
-    return this.http.get<SortOptionsDto>(`${this.apiUrl}/configuration/sorting`);
+    this.logger.debug(`Getting sort by options for content filtering.`);
+
+    return this.fetchDataFromCache("/configuration/sorting", _TmdbService.SORT_BY_CACHE_KEY);
+
+
+    // return this.http.get<SortOptionsDto>(`${this.apiUrl}/configuration/sorting`);
   }
 
   /**
    * Discover movies with advanced filters
    */
   discoverMovies(filters: any): Observable<MovieList> {
-    console.info('[Movies] Discover movies request');
+    this.logger.info('[Movies] Discover movies request');
 
     const filterParams = this.transformContentFilterToMovieFilters(filters);
-    console.debug('[Movies] Transformed filters', filterParams);
+    this.logger.debug('[Movies] Transformed filters', filterParams);
 
     const params = this.buildDiscoverHttpParams(filterParams);
-    console.debug('[Movies] HTTP params', params.toString());
+    this.logger.debug('[Movies] HTTP params', params.toString());
 
     return this.http.get<MovieList>(`${this.apiUrl}/movies/discover`, {params});
   }
@@ -177,7 +202,7 @@ export class _TmdbService extends Service {
    * Transform the given ContentFilters object to the MovieFilters
    * */
   private transformContentFilterToMovieFilters(filters: any): MovieFilters {
-    console.debug('[Movies] Transforming content filters', filters);
+    this.logger.debug('[Movies] Transforming content filters', filters);
 
     return {
       page: filters.page || 1,
@@ -201,7 +226,7 @@ export class _TmdbService extends Service {
    * Build HttpParams from a given HttpParams object for http request
    */
   private buildDiscoverHttpParams(filters: MovieFilters): HttpParams {
-    console.debug('[Movies] Building HTTP params from filters', filters);
+    this.logger.debug('[Movies] Building HTTP params from filters', filters);
 
     let params = new HttpParams();
 
@@ -267,7 +292,7 @@ export class _TmdbService extends Service {
       params = params.set('certification', filters.certification);
     }
 
-    console.debug('[Movies] Final HTTP params', params.toString());
+    this.logger.debug('[Movies] Final HTTP params', params.toString());
 
     return params;
   }
