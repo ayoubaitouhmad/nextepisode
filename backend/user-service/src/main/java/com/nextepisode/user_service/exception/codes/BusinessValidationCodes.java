@@ -23,6 +23,7 @@ public enum BusinessValidationCodes implements Code {
     USER_REQUIRED("BUS_100", "User must be specified for this operation", HttpStatus.UNPROCESSABLE_ENTITY),
     USER_NOT_ACTIVE("BUS_101", "User account is not active", HttpStatus.UNPROCESSABLE_ENTITY),
     USER_SUSPENDED("BUS_102", "User account is suspended", HttpStatus.FORBIDDEN),
+    USER_ALREADY_EXIST("BUS_103", "User account has already been created", HttpStatus.CONFLICT),
 
     // Movie-related business rules
     MOVIE_REQUIRED("BUS_200", "Movie must be specified for this operation", HttpStatus.UNPROCESSABLE_ENTITY),

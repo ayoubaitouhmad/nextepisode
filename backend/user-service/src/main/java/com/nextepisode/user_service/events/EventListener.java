@@ -1,16 +1,11 @@
 package com.nextepisode.user_service.events;
 
 import com.nextepisode.user_service.config.RabbitMQConfig;
-import com.nextepisode.user_service.entity.user.User;
-import com.nextepisode.user_service.repo.UserRepository;
 import com.nextepisode.user_service.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Service;
-
-import java.time.Instant;
-import java.util.Optional;
 
 /**
  * Listens to events from Auth Service via RabbitMQ.
@@ -24,7 +19,6 @@ import java.util.Optional;
 public class EventListener {
 
     private final UserService userService;
-    private final UserRepository userRepository;
 
     /**
      * Consume user registration event from queue.
@@ -42,29 +36,14 @@ public class EventListener {
             containerFactory = "rabbitListenerContainerFactory"
     )
     public void handleUserRegisteredEvent(UserRegisteredEvent event) throws Exception {
-        log.info("═══════════════════════════════════════════════════════════════");
-        log.info("✅ Received user registered event from RabbitMQ");
-        log.info("   eventId: {}", event.getEventId());
-        log.info("   userId: {}", event.getUserId());
-        log.info("   username: {}", event.getUsername());
-        log.info("   email: {}", event.getEmail());
-        log.info("   sourceService: {}", event.getSourceService());
-        log.info("═══════════════════════════════════════════════════════════════");
-
-
-        String username = event.getUsername();
-        String email = event.getEmail();
-        Instant createdAt = event.getCreatedAt();
-
-        Optional<User> existingUser = userService.findByUsername(username);
-        if (existingUser.isEmpty()) {
-            log.info("═══════════════════════════════════════════════════════════════");
-            log.info("Creating new user");
-            User user = new User();
-            user.setUsername(username);
-            user.setEmail(email);
-            user.setCreatedAt(createdAt);
-            userRepository.save(user);
-        }
+        log.debug("═══════════════════════════════════════════════════════════════");
+        log.debug("✅ Received user registered event from RabbitMQ");
+        log.debug("   eventId: {}", event.getEventId());
+        log.debug("   userId: {}", event.getUserId());
+        log.debug("   username: {}", event.getUsername());
+        log.debug("   email: {}", event.getEmail());
+        log.debug("   sourceService: {}", event.getSourceService());
+        log.debug("═══════════════════════════════════════════════════════════════");
+        userService.createUserFromRegisteredEvent(event.getUsername() , event.getEmail());
     }
 }
