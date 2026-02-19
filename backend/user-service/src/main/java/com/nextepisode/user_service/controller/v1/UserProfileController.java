@@ -31,7 +31,7 @@ public class UserProfileController {
             @Valid @RequestBody UserUpdateProfileRequest request,
             @AuthenticationPrincipal String username
     ) {
-        return userService.updateUser(request, username);
+        return userService.updateUserProfile(request, username);
     }
 
     @GetMapping
@@ -56,5 +56,4 @@ public class UserProfileController {
         userService.changeNotificationSettings(userUpdateNotificationSettingsRequest, username);
         return ResponseEntity.noContent().build();
     }
-
 }

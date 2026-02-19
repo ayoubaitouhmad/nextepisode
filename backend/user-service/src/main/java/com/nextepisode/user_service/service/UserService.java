@@ -4,8 +4,11 @@ import com.nextepisode.user_service.dto.UserUpdateProfileRequest;
 import com.nextepisode.user_service.dto.profile.UserUpdateNotificationSettingsRequest;
 import com.nextepisode.user_service.dto.profile.UserUpdatePrivacySettingsRequest;
 import com.nextepisode.user_service.entity.user.User;
+import com.nextepisode.user_service.exception.codes.BusinessValidationCodes;
+import com.nextepisode.user_service.exception.codes.ValidationCodes;
 import com.nextepisode.user_service.exception.exceptions.BusinessValidationException;
 import com.nextepisode.user_service.exception.exceptions.ResourceNotFoundException;
+import com.nextepisode.user_service.exception.exceptions.ValidationException;
 import com.nextepisode.user_service.repo.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +30,7 @@ public class UserService {
      */
     @Transactional(readOnly = true)
     public Optional<User> findByUsername(String username) {
-        log.debug("Finding user by username: {}", username);
+        log.debug("Fetching user by username: {}", username);
         return repo.findByUsername(username);
     }
 
@@ -36,47 +39,72 @@ public class UserService {
      */
     @Transactional(readOnly = true)
     public User getUserByUsername(String username) {
-        log.debug("Getting user by username: {}", username);
+        log.debug("Retrieving user by username: {}", username);
         return repo.findByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
     }
 
-
     @Transactional()
-    public User createUser(UserUpdateProfileRequest request, String username) {
-        log.info("Creating new user with username: {}", username);
-
+    public User save(User user) {
+        log.debug("Persisting user entity: {}", user);
         try {
-            User user = new User();
-            user.setUsername(username);
-            user.setEmail(request.email());
-            user.setFirstName(request.firstName());
-            user.setLastName(request.lastName());
-            user.setAvatar(request.avatar());
-            user.setBio(request.bio());
-            user.setLocation(request.location());
-            user.setWebsite(request.website());
-            user.setPhone(request.phone());
-            user.setDateOfBirth(request.dateOfBirth());
-            user.setPreferredLanguage(request.preferredLanguage());
-//        user.setTimezone(request.timezone());
-            log.info("Successfully created user with username: {}", username);
-            return repo.save(user);
-
+            User savedUser = repo.save(user);
+            log.debug("User entity persisted successfully: {}", user);
+            return savedUser;
         } catch (Exception e) {
-            log.error("Failed to create user: {}", e.getMessage(), e);
-            throw new BusinessValidationException("Cannot cancel order", "Order has already shipped");
-
+            log.error("Error persisting user entity: {}", e.getMessage(), e);
+            throw new BusinessValidationException("Failed to create user", e);
         }
-
-
     }
 
-    @Transactional
-    public User updateUser(UserUpdateProfileRequest request, String username) {
-        log.info("Updating user with username: {}", username);
-        User existingUser = this.getUserByUsername(username);
+    @Transactional()
+    public User createUser(User user) {
+        log.debug("Processing user creating, user:{}", user);
+
+        if (user.getUsername() == null || user.getUsername().isEmpty()) {
+            throw new ValidationException(ValidationCodes.FIELD_REQUIRED, "username");
+        }
+
+        if (user.getEmail() == null || user.getEmail().isEmpty()) {
+            throw new ValidationException(ValidationCodes.FIELD_REQUIRED, "email");
+        }
+
         try {
+            User savedUser = repo.save(user);
+            log.debug("User created successfully: {}", user);
+            return savedUser;
+        } catch (Exception e) {
+            log.error("Failed to create user:{}", e.getMessage(), e);
+            throw new BusinessValidationException("Failed to create user", e);
+        }
+    }
+
+
+    @Transactional()
+    public void createUserFromRegisteredEvent(String username, String email) {
+        log.debug("Processing creating new user from the registered event, username:{}, email:{}" , username, email);
+
+        Optional<User> existingUser = findByUsername(username);
+        if (existingUser.isEmpty()) {
+            User user = new User();
+            user.setUsername(username);
+            user.setEmail(email);
+            User savedUser = createUser(user);
+
+            log.debug("User created successfully from the registered event, user:{}" , savedUser);
+        }else {
+            throw new BusinessValidationException(BusinessValidationCodes.USER_ALREADY_EXIST);
+        }
+    }
+
+
+
+    @Transactional
+    public User updateUserProfile(UserUpdateProfileRequest request, String username) {
+        log.info("Processing profile update request for user: {}", username);
+
+        try {
+            User existingUser = this.getUserByUsername(username);
 
             existingUser.setEmail(request.email());
             existingUser.setFirstName(request.firstName());
@@ -88,61 +116,50 @@ public class UserService {
             existingUser.setPhone(request.phone());
             existingUser.setDateOfBirth(request.dateOfBirth());
             existingUser.setPreferredLanguage(request.preferredLanguage());
-//          existingUser.setTimezone(request.timezone());
-//            existingUser.setNotificationsEnabled(request.notificationsEnabled());
             existingUser.setIsDirty(true);
-            return repo.save(existingUser);
+
+            User savedUser = save(existingUser);
+            log.info("Profile updated successfully for user: {}", username);
+            return savedUser;
         } catch (Exception e) {
-            log.error("Failed to update user: {}", e.getMessage(), e);
-            throw new BusinessValidationException("Cannot cancel order", "Order has already shipped");
+            log.error("Error updating profile for user {}: {}", username, e.getMessage(), e);
+            throw new BusinessValidationException("Error updating profile for user", e);
         }
 
-    }
-
-
-    @Transactional
-    public User createOrUpdateUser(UserUpdateProfileRequest request, String username) {
-        log.info("Creating or updating user with username: {}", username);
-
-        Optional<User> existingUser = repo.findByUsername(username);
-
-        if (existingUser.isPresent()) {
-            return updateUser(request, username);
-        } else {
-            return createUser(request, username);
-        }
     }
 
 
     @Transactional
     public void changeUserPrivacySettings(UserUpdatePrivacySettingsRequest userUpdatePrivacySettingsRequest, String username) {
-        log.info("Changing user privacy settings for user: {}", username);
+        log.info("Processing privacy settings update for user: {}", username);
+
         User existingUser = this.getUserByUsername(username);
         try {
             existingUser.setActivitySharing(userUpdatePrivacySettingsRequest.activitySharing());
             existingUser.setProfileVisibility(userUpdatePrivacySettingsRequest.profileVisibility());
-            repo.save(existingUser);
-            log.info("Successfully changed user privacy settings for user: {}", username);
+            save(existingUser);
 
+            log.info("Privacy settings updated successfully for user: {}", username);
         } catch (Exception e) {
-            log.error("Failed to change user privacy settings for user: {}", username, e);
-            throw new BusinessValidationException("Failed to change user privacy settings for user", "");
+            log.error("Error updating privacy settings for user {}: {}", username, e.getMessage(), e);
+            throw new BusinessValidationException("Error updating privacy settings for user", e);
         }
 
     }
 
     @Transactional
     public void changeNotificationSettings(UserUpdateNotificationSettingsRequest userUpdateNotificationSettingsRequest, String username) {
-        log.info("Changing notification settings for user: {}", username);
+        log.info("Processing notification settings update for user: {}", username);
         User existingUser = this.getUserByUsername(username);
         try {
             existingUser.setNotificationsEnabled(userUpdateNotificationSettingsRequest.notificationsEnabled());
             existingUser.setPushNotifications(userUpdateNotificationSettingsRequest.pushNotifications());
-            repo.save(existingUser);
-            log.info("Successfully changed notification settings for user: {}", username);
+            save(existingUser);
+
+            log.info("Notification settings updated successfully for user: {}", username);
         } catch (Exception e) {
-            log.error("Failed to change notification settings for user: {}", username, e);
-            throw new BusinessValidationException("Failed to change user notification settings for user", "");
+            log.error("Error updating notification settings for user {}: {}", username, e.getMessage(), e);
+            throw new BusinessValidationException("Error updating notification settings for user", e);
         }
 
     }
